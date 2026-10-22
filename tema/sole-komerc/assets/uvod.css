@@ -23,7 +23,7 @@
 #intro h1 .c::before{content:"";flex:0 0 auto;width:clamp(36px,4.5vw,64px);height:3px;border-radius:2px;background:var(--ember)}
 #intro .cover{position:absolute;left:0;width:100%;top:calc(var(--hh,76px) + var(--tbh,36px));height:calc(100% - var(--hh,76px) - var(--tbh,36px));z-index:4;overflow:visible;pointer-events:none}
 .admin-bar #intro .cover{top:calc(var(--hh,76px) + var(--tbh,36px))}
-#intro .cover text{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.015em}
+#intro .cover text{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.13em}
 #intro .hint{position:absolute;left:50%;bottom:34px;z-index:5;transform:translateX(-50%);opacity:calc(1 - var(--p,0) * 4);pointer-events:none}
 #intro .hint i{display:block;width:2px;height:54px;background:linear-gradient(var(--ink),transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -32,7 +32,7 @@
 #intro .copy h1 .c{--d:.74}
 @media (max-width:640px){
   :root{--tbh:36px}
-  #intro{height:220vh}
+  #intro{height:420vh}
   #intro .veil{background:linear-gradient(0deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.66) 32%,rgba(5,4,3,.14) 62%,rgba(5,4,3,0) 78%),linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%)}
   #intro h1 .a{font-size:clamp(24px,7.2vw,36px)}
   #intro h1 .b{font-size:clamp(70px,21vw,110px)}
