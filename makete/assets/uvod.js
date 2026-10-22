@@ -212,7 +212,7 @@ function smoke(w,h,x,y,z,a,sd){const m=new T.Mesh(new T.PlaneGeometry(w,h),new T
     float m=smoothstep(.42,.82,n)*smoothstep(0.,.3,u.y)*smoothstep(1.,.45,u.y)*smoothstep(0.,.18,u.x)*smoothstep(1.,.82,u.x);
     vec3 c=mix(vec3(.6,.17,.04),vec3(.16,.14,.13),smoothstep(.1,.8,u.y));gl_FragColor=vec4(c,m*uA);}`}));
   m.position.set(x,y,z);scene.add(m);return m}
-smoke(30,7,0,3.6,-5,.3,0);smoke(56,12,0,6.1,-15,.45,7.3);
+const smokes=[[smoke(30,7,0,3.6,-5,.3,0),.3],[smoke(56,12,0,6.1,-15,.45,7.3),.45]];
 
 /* ---- obrada slike: sjaj, boja, vinjeta, zrno ---- */
 const comp=new T.EffectComposer(ren);comp.addPass(new T.RenderPass(scene,cam));
@@ -236,17 +236,18 @@ comp.addPass(grade);
 let W=1,H=1,mx=0,my=0,tx=0,ty=0;
 function size(){const r=hero.getBoundingClientRect();W=r.width;H=r.height;ren.setSize(W,H,false);comp.setSize(W,H);
   const pr=ren.getPixelRatio();grade.uniforms.uRes.value.set(W*pr,H*pr);bloom.resolution.set(W*pr/2,H*pr/2);
-  sparkU.uPx.value=pr*H/800;cam.aspect=W/H;cam.fov=W/H<1?46:30;cam.updateProjectionMatrix()}
+  sparkU.uPx.value=pr*H/800;cam.aspect=W/H;cam.fov=W/H<1?46:30;scene.fog.density=W/H<1?.108:.075;cam.updateProjectionMatrix()}
 hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5});
 hero.addEventListener('pointerleave',()=>{tx=ty=0});
 function place(t){mx+=(tx-mx)*.03;my+=(ty-my)*.03;const port=W/H<1,e=1-Math.pow(window.SOLE_P==null?1:window.SOLE_P,.8);
-  cam.position.set(Math.sin(t*.05)*.7+mx*.7,(port?2.9:2.35)+e*.5+Math.sin(t*.07)*.1-my*.3,8.6+e*2.2+Math.sin(t*.04)*.5);
-  cam.lookAt(port?0:-.8+mx*.3,-.25,0)}
+  cam.position.set(Math.sin(t*.05)*.7+mx*.7,(port?3.5:2.35)+e*.5+Math.sin(t*.07)*.1-my*.3,8.6+e*2.2+Math.sin(t*.04)*.5);
+  cam.lookAt(port?0:-.8+mx*.3,port?-1.2:-.25,port?1.4:0)}
 /* žar: jak na početku (slova se vide kroz vatru), pri skrolu se jako zagasi i ostaju samo poneki plamenovi, više kao ugalj (zbog čitkosti teksta na kraju) */
 const ss=(a,b,x)=>{x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)},mixf=(a,b,k)=>a+(b-a)*k;
 function render(t){U.uTime.value=t;grade.uniforms.uTime.value=t;
   const sp=window.SOLE_P==null?1:window.SOLE_P,k=ss(.1,.6,sp),ph=matchMedia('(max-width:640px)').matches;/* telefon: na kraju još tamnije */
   U.uHeat.value=mixf(1.9,ph?.14:.3,k);U.uFl.value=mixf(1.35,ph?.2:.38,k);U.uSp.value=mixf(1.25,ph?.28:.45,k);bloom.strength=mixf(1.05,ph?.28:.42,k);const em=mixf(1.35,ph?.15:.35,k);
+  const portrait=W/H<1;for(const s of smokes)s[0].material.uniforms.uA.value=s[1]*mixf(1,.3,k)*(portrait?.3:1);
   for(const l of embers){const d=l.userData;l.intensity=em*d.b*(.72+.2*Math.sin(t*d.a+d.p)+.08*Math.sin(t*d.a*3.7+d.p*2.))}
   place(t);comp.render()}
 size();

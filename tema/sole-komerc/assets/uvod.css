@@ -33,6 +33,8 @@
 @media (max-width:640px){
   #intro{height:420vh}
   #intro .veil{background:linear-gradient(0deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.66) 32%,rgba(5,4,3,.14) 62%,rgba(5,4,3,0) 78%),linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%)}
+  #intro .copy{padding-bottom:clamp(60px,24vh,240px)}
+  #intro .copy h1 .a{--d:.46}#intro .copy h1 .b{--d:.49}#intro .copy h1 .c{--d:.52}
   #intro h1 .a{font-size:clamp(24px,7.2vw,36px)}
   #intro h1 .b{font-size:clamp(70px,21vw,110px)}
   #intro h1 .c{letter-spacing:.28em;gap:12px}
