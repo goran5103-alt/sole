@@ -2,6 +2,10 @@
 (function(){
   document.documentElement.classList.add('js');
 
+  /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */
+  var hd=document.getElementById('head');
+  if(hd&&document.body.classList.contains('has-intro')){var sol=function(){hd.classList.toggle('solid',scrollY>40)};addEventListener('scroll',sol,{passive:true});sol()}
+
   /* mega meni: grupa pod mišem (ili fokusom) pokazuje svoje podstavke i sliku; slike se učitavaju pri prvom otvaranju */
   var rail=document.querySelector('.rail');
   if(rail){

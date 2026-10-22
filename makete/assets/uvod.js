@@ -7,26 +7,31 @@
   function inside(){/* tačka zuma: u punom delu slova "SOLE", najbliža sredini reda (da kroz slovo uđemo u žar) */
     const fs=+t1.getAttribute('font-size'),x0=+t1.getAttribute('x'),y0=+t1.getAttribute('y'),k=.25,
           c=document.createElement('canvas'),W=Math.ceil(1600*k),H=Math.ceil(900*k);c.width=W;c.height=H;
-    const g=c.getContext('2d');g.font='800 '+(fs*k)+'px '+getComputedStyle(t1).fontFamily;g.textAlign='center';g.fillText(t1.textContent,x0*k,y0*k);
+    const g=c.getContext('2d');g.font=getComputedStyle(t1).fontWeight+' '+(fs*k)+'px '+getComputedStyle(t1).fontFamily;g.textAlign='center';g.fillText(t1.textContent,x0*k,y0*k);
     const d=g.getImageData(0,0,W,H).data,tx=x0*k,ty=(y0-fs*.36)*k;let best=null,bd=1e9;
     for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>200){const q=(x-tx)**2+(y-ty)**2;if(q<bd){bd=q;best=[x/k,y/k]}}
     return best||[x0,y0-fs*.36]}
   let O=[800,320];
-  /* optičko centriranje: slova se postavljaju po stvarnim ivicama (ne po širini polja slova), pa su oba reda tačno na sredini */
+  /* Raspored reči u maski: oba reda iste širine (reč iznad je viša), po stvarnim ivicama slova, tačno na sredini */
   const t2=document.getElementById('hcT2'),l1=document.getElementById('hcL1'),l2=document.getElementById('hcL2');
   function ink(){
-    const g=document.createElement('canvas').getContext('2d'),fam=getComputedStyle(t1).fontFamily;
-    let L=1e9,R=-1e9,T=1e9,B=-1e9;
-    [[t1,l1],[t2,l2]].forEach(function(p){
-      const t=p[0],fs=+t.getAttribute('font-size'),y=+t.getAttribute('y');
-      g.font='800 '+fs+'px '+fam;g.textAlign='center';
-      const m=g.measureText(t.textContent),x=800-(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2;
-      t.setAttribute('x',x.toFixed(2));if(p[1])p[1].setAttribute('x',x.toFixed(2));
-      L=Math.min(L,x-m.actualBoundingBoxLeft);R=Math.max(R,x+m.actualBoundingBoxRight);
-      T=Math.min(T,y-m.actualBoundingBoxAscent);B=Math.max(B,y+m.actualBoundingBoxDescent)});
-    return{x:L,y:T,width:R-L,height:B-T}}
-  function fit(){const r=stick.getBoundingClientRect(),a=r.width/r.height,b=ink();
-    const vw=Math.max(b.width/(a<1?.9:.72),b.height/(a<1?.5:.7)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
+    const g=document.createElement('canvas').getContext('2d'),cs=getComputedStyle(t1),fam=cs.fontFamily,wt=cs.fontWeight;
+    const fs1=+t1.getAttribute('font-size'),y1=430;
+    g.textAlign='center';
+    const ls=function(fs){if('letterSpacing' in g)g.letterSpacing=(.015*fs)+'px'};
+    ls(fs1);g.font=wt+' '+fs1+'px '+fam;const m1=g.measureText(t1.textContent),w1=m1.actualBoundingBoxLeft+m1.actualBoundingBoxRight;
+    ls(100);g.font=wt+' 100px '+fam;const m0=g.measureText(t2.textContent),w0=m0.actualBoundingBoxLeft+m0.actualBoundingBoxRight;
+    const fs2=Math.min(fs1*1.1,100*w1/w0);
+    ls(fs2);g.font=wt+' '+fs2+'px '+fam;const m2=g.measureText(t2.textContent);
+    const gap=.14*m1.actualBoundingBoxAscent,y2=y1+m1.actualBoundingBoxDescent+gap+m2.actualBoundingBoxAscent;
+    [[t1,l1,m1,fs1,y1],[t2,l2,m2,fs2,y2]].forEach(function(p){const m=p[2],x=(800-(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2).toFixed(2);
+      [p[0],p[1]].forEach(function(e){if(!e)return;e.setAttribute('x',x);e.setAttribute('y',p[4].toFixed(2));e.setAttribute('font-size',p[3].toFixed(2))})});
+    const x1=800-(m1.actualBoundingBoxRight-m1.actualBoundingBoxLeft)/2,x2=800-(m2.actualBoundingBoxRight-m2.actualBoundingBoxLeft)/2;
+    const left=Math.min(x1-m1.actualBoundingBoxLeft,x2-m2.actualBoundingBoxLeft),right=Math.max(x1+m1.actualBoundingBoxRight,x2+m2.actualBoundingBoxRight),
+          top=y1-m1.actualBoundingBoxAscent,bot=y2+m2.actualBoundingBoxDescent;
+    return{x:left,y:top,width:right-left,height:bot-top}}
+  function fit(){const r=svg.getBoundingClientRect(),a=r.width/r.height,b=ink();
+    const vw=Math.max(b.width/(a<1?.88:.5),b.height/(a<1?.6:.72)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
     svg.setAttribute('viewBox',(cx-vw/2).toFixed(1)+' '+(cy-vh/2).toFixed(1)+' '+vw.toFixed(1)+' '+vh.toFixed(1));
     O=inside();word.style.transformOrigin=line.style.transformOrigin=O[0].toFixed(1)+'px '+O[1].toFixed(1)+'px';onScroll()}
   function onScroll(){const r=intro.getBoundingClientRect(),max=intro.offsetHeight-stick.offsetHeight,

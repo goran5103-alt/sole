@@ -1,30 +1,29 @@
 /* Uvod naslovne: tamni sloj sa izrezanom reči (kao na Divljini), skrol uvećava slova, iza je 3D žar */
 #intro{--night:#050403;--ink:#f6f1ea;--muted:#c9b8a6;--ember:#ff6a1a;
   position:relative;height:260vh;background:var(--night);color:var(--ink)}
-#intro .stick{position:sticky;top:var(--hh,0px);height:calc(100vh - var(--hh,0px) - var(--tbh,36px));height:calc(100svh - var(--hh,0px) - var(--tbh,36px));overflow:hidden}
-.admin-bar #intro .stick{top:calc(var(--hh,0px) + 32px);height:calc(100svh - var(--hh,0px) - var(--tbh,36px) - 32px)}
-@media (max-width:782px){.admin-bar #intro .stick{top:calc(var(--hh,0px) + 46px);height:calc(100svh - var(--hh,0px) - var(--tbh,36px) - 46px)}}
+/* uvod počinje na vrhu strane, ispod trake i providnog zaglavlja */
+.has-intro #intro{margin-top:calc(-1 * (var(--hh,76px) + var(--tbh,36px)))}
+#intro .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.admin-bar #intro .stick{top:32px;height:calc(100svh - 32px)}
+@media (max-width:782px){.admin-bar #intro .stick{top:46px;height:calc(100svh - 46px)}}
 #intro .hero{position:absolute;inset:0;overflow:hidden;isolation:isolate;
   background:radial-gradient(120% 70% at 60% 110%,#5a1a04 0%,#1c0904 38%,var(--night) 70%)}
 #intro .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.6s ease}
 #intro .hero.live canvas{opacity:1}
-#intro .veil{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(0deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.7) 24%,rgba(5,4,3,.18) 52%,rgba(5,4,3,0) 70%),
-             linear-gradient(180deg,rgba(5,4,3,.5) 0%,rgba(5,4,3,0) 26%)}
-#intro .copy{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;pointer-events:none;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:clamp(36px,9vh,96px)}
-#intro .copy .in{width:100%;max-width:1240px;margin:0 auto;padding-inline:clamp(0px,3vw,40px)}
-#intro h1{margin:0;font-family:var(--head);font-weight:800;color:var(--ink);text-wrap:balance}
+#intro .veil{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:clamp(0,calc((var(--p,0) - .45) * 3.5),1);
+  background:linear-gradient(0deg,rgba(5,4,3,.92) 0%,rgba(5,4,3,.62) 26%,rgba(5,4,3,.12) 56%,rgba(5,4,3,0) 72%),
+             linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%)}
+#intro .copy{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;pointer-events:none;padding-bottom:clamp(40px,10vh,110px)}
+#intro .copy .in{width:100%;max-width:var(--wrap,1220px);margin:0 auto;padding-inline:max(20px,env(safe-area-inset-left,0px))}
+#intro h1{margin:0;font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;color:#f6f1ea;text-wrap:balance;text-shadow:0 2px 30px rgba(0,0,0,.45)}
 #intro h1 span{display:block}
-#intro h1 .a{display:flex;align-items:center;gap:16px;font-size:clamp(11px,1vw,14px);font-weight:700;letter-spacing:.3em;color:rgba(246,241,234,.86)}
-#intro h1 .a::before{content:"";flex:0 0 auto;width:clamp(36px,5vw,72px);height:3px;border-radius:2px;background:var(--sun);box-shadow:0 0 14px var(--sun)}
-#intro h1 .b{margin-top:.18em;font-size:clamp(54px,9.4vw,164px);line-height:.88;letter-spacing:-.04em;
-  background:linear-gradient(180deg,#fff 8%,#ffe7a1 58%,var(--sun) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 10px 40px rgba(0,0,0,.55))}
-#intro h1 .c{display:inline-flex;margin-top:1.15em;padding:.85em 1.5em .85em 1.7em;border:1px solid rgba(245,197,24,.6);border-radius:999px;background:rgba(245,197,24,.09);
-  font-size:clamp(11px,1vw,14px);font-weight:700;letter-spacing:.38em;color:var(--sun);backdrop-filter:blur(4px)}
-#intro .cover{position:absolute;inset:0;z-index:4;width:100%;height:100%;overflow:visible;pointer-events:none}
-#intro .cover text{font-family:var(--head);font-weight:800}
+#intro h1 .a{font-size:clamp(26px,3.5vw,58px);line-height:1;letter-spacing:.035em}
+#intro h1 .b{margin-top:.06em;font-size:clamp(76px,12vw,200px);line-height:.88;letter-spacing:.012em;color:var(--ember)}
+#intro h1 .c{display:flex;align-items:center;gap:16px;margin-top:clamp(14px,2vw,28px);font-size:clamp(15px,1.5vw,24px);line-height:1;letter-spacing:.34em;color:rgba(246,241,234,.88)}
+#intro h1 .c::before{content:"";flex:0 0 auto;width:clamp(36px,4.5vw,64px);height:3px;border-radius:2px;background:var(--ember)}
+#intro .cover{position:absolute;left:0;width:100%;top:calc(var(--hh,76px) + var(--tbh,36px));height:calc(100% - var(--hh,76px) - var(--tbh,36px));z-index:4;overflow:visible;pointer-events:none}
+.admin-bar #intro .cover{top:calc(var(--hh,76px) + var(--tbh,36px))}
+#intro .cover text{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.015em}
 #intro .hint{position:absolute;left:50%;bottom:34px;z-index:5;transform:translateX(-50%);opacity:calc(1 - var(--p,0) * 4);pointer-events:none}
 #intro .hint i{display:block;width:2px;height:54px;background:linear-gradient(var(--ink),transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -34,12 +33,13 @@
 @media (max-width:640px){
   :root{--tbh:36px}
   #intro{height:220vh}
-  #intro .veil{background:linear-gradient(0deg,rgba(5,4,3,.95) 0%,rgba(5,4,3,.72) 34%,rgba(5,4,3,.15) 62%,rgba(5,4,3,0) 78%),linear-gradient(180deg,rgba(5,4,3,.5) 0%,rgba(5,4,3,0) 24%)}
-  #intro h1 .a{gap:12px;letter-spacing:.24em}
-  #intro h1 .b{font-size:clamp(50px,16vw,84px);letter-spacing:-.035em}
-  #intro h1 .c{letter-spacing:.3em;margin-top:1em}
+  #intro .veil{background:linear-gradient(0deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.66) 32%,rgba(5,4,3,.14) 62%,rgba(5,4,3,0) 78%),linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%)}
+  #intro h1 .a{font-size:clamp(24px,7.2vw,36px)}
+  #intro h1 .b{font-size:clamp(70px,21vw,110px)}
+  #intro h1 .c{letter-spacing:.28em;gap:12px}
 }
 @media (prefers-reduced-motion:reduce){
   #intro{height:auto}#intro .stick{position:relative;height:80vh}#intro .cover,#intro .hint{display:none}
   #intro .copy h1 span{opacity:1;transform:none;filter:none}
+  #intro .veil{opacity:1}
 }

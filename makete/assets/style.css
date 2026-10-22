@@ -19,11 +19,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset
 h1,h2,h3,h4{font-family:var(--head);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
 
 /* ---------- traka i zaglavlje ---------- */
-.topbar{background:#0a0908;color:#cfc6bc;font:600 11.5px/1 var(--head);letter-spacing:.14em}
+.topbar{position:relative;z-index:62;background:var(--blue);color:#fff;font:600 11.5px/1 var(--head);letter-spacing:.14em}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:36px}
 .topbar .tb-tag{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.7;padding-top:1px}
-.topbar .tb-phone{color:var(--sun);text-decoration:none;white-space:nowrap;letter-spacing:.06em}
-.site-head{position:sticky;top:0;z-index:60;background:rgba(20,18,16,.97);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #2a2622}
+.topbar .tb-phone{color:#fff;text-decoration:none;white-space:nowrap;letter-spacing:.06em}
+.site-head{position:sticky;top:0;z-index:60;background:rgba(20,18,16,.97);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #2a2622;transition:background .3s,border-color .3s}
+/* naslovna sa uvodom: zaglavlje je providno preko prvog ekrana, a posle skrola (ili otvorenog menija) postaje puno */
+.has-intro .site-head{background:transparent;backdrop-filter:none;border-bottom-color:transparent}
+.has-intro .site-head.solid,.has-intro .site-head:has(.has-mega:hover),.has-intro .site-head:has(.has-mega:focus-within){background:rgba(20,18,16,.94);backdrop-filter:saturate(1.2) blur(10px);border-bottom-color:#2a2622}
+html:not(.js) .has-intro .site-head{background:rgba(20,18,16,.97)}
 .site-head>.wrap{display:flex;align-items:center;gap:16px;height:var(--hh)}
 .brand{display:flex;align-items:center;flex:0 0 auto;height:var(--hh)}
 .brand img{height:66px;width:auto;margin:0;transform:translateY(-9.4%)}

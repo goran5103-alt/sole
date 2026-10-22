@@ -78,10 +78,11 @@ def head(slug, extra_css=''):
 <title>{E(page_title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="{asset(slug, 'style.css')}">{extra_css}
 </head>
 <body>
+<script>document.documentElement.className+=' js'</script>
 '''
 
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
@@ -400,9 +401,9 @@ def home_page(slug):
 <rect x="-20000" y="-20000" width="40000" height="40000" fill="#fff"></rect>
 <g id="hcWord"><text id="hcT1" x="800" y="430" text-anchor="middle" font-size="300" fill="#000">SOLE</text><text id="hcT2" x="800" y="660" text-anchor="middle" font-size="240" fill="#000">KOMERC</text></g>
 </mask>
-<filter id="hcRing" x="-4%" y="-8%" width="108%" height="116%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.6" result="d"></feMorphology><feComposite in="d" in2="SourceAlpha" operator="out" result="ring"></feComposite><feFlood flood-color="#f5c518" flood-opacity=".75"></feFlood><feComposite in2="ring" operator="in"></feComposite></filter></defs>
-<rect id="hcCover" x="-20000" y="-20000" width="40000" height="40000" fill="#060403" fill-opacity=".8" mask="url(#hcCut)"></rect>
-<g id="hcLine" fill="#fff" filter="url(#hcRing)"><text id="hcL1" x="800" y="430" text-anchor="middle" font-size="300">SOLE</text><text id="hcL2" x="800" y="660" text-anchor="middle" font-size="240">KOMERC</text></g>
+</defs>
+<rect id="hcCover" x="-20000" y="-20000" width="40000" height="40000" fill="#060403" fill-opacity=".97" mask="url(#hcCut)"></rect>
+<g id="hcLine"><text id="hcL1" x="800" y="430" text-anchor="middle" font-size="300" fill="none"></text><text id="hcL2" x="800" y="660" text-anchor="middle" font-size="240" fill="none"></text></g>
 </svg>
 <div class="hint"><i></i></div>
 </div></section>'''
@@ -419,7 +420,7 @@ def home_page(slug):
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="assets/uvod.js"></script>
 '''
-    page = page_shell(slug, intro + welcome, css)
+    page = page_shell(slug, intro + welcome, css).replace('<body>', '<body class="has-intro">', 1)
     return page.replace('</body>', scripts + '</body>')
 
 # ---------------- slaganje ----------------

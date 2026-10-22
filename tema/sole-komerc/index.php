@@ -14,9 +14,9 @@ if ( is_front_page() && sole_opt( 'uvod_ukljucen' ) ) :
 <rect x="-20000" y="-20000" width="40000" height="40000" fill="#fff"></rect>
 <g id="hcWord"><text id="hcT1" x="800" y="430" text-anchor="middle" font-size="300" fill="#000"><?php echo esc_html( sole_opt( 'uvod_rec1' ) ); ?></text><text id="hcT2" x="800" y="660" text-anchor="middle" font-size="240" fill="#000"><?php echo esc_html( sole_opt( 'uvod_rec2' ) ); ?></text></g>
 </mask>
-<filter id="hcRing" x="-4%" y="-8%" width="108%" height="116%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.6" result="d"></feMorphology><feComposite in="d" in2="SourceAlpha" operator="out" result="ring"></feComposite><feFlood flood-color="#f5c518" flood-opacity=".75"></feFlood><feComposite in2="ring" operator="in"></feComposite></filter></defs>
-<rect id="hcCover" x="-20000" y="-20000" width="40000" height="40000" fill="#060403" fill-opacity=".8" mask="url(#hcCut)"></rect>
-<g id="hcLine" fill="#fff" filter="url(#hcRing)"><text id="hcL1" x="800" y="430" text-anchor="middle" font-size="300"><?php echo esc_html( sole_opt( 'uvod_rec1' ) ); ?></text><text id="hcL2" x="800" y="660" text-anchor="middle" font-size="240"><?php echo esc_html( sole_opt( 'uvod_rec2' ) ); ?></text></g>
+</defs>
+<rect id="hcCover" x="-20000" y="-20000" width="40000" height="40000" fill="#060403" fill-opacity=".97" mask="url(#hcCut)"></rect>
+<g id="hcLine"><text id="hcL1" x="800" y="430" text-anchor="middle" font-size="300" fill="none"></text><text id="hcL2" x="800" y="660" text-anchor="middle" font-size="240" fill="none"></text></g>
 </svg>
 <div class="hint"><i></i></div>
 </div></section>
