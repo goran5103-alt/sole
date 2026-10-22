@@ -2,6 +2,23 @@
 (function(){
   document.documentElement.classList.add('js');
 
+  /* naslovna, poglavlja ispod uvoda: pojavljivanje pri skrolu, blaga paralaksa slika, vremenska linija koja se puni */
+  var abs=document.querySelectorAll('.ab');
+  if(abs.length){
+    var rmo=matchMedia('(prefers-reduced-motion: reduce)').matches,els=document.querySelectorAll('.ab h2,.ab p,.ab figure:not(.par),.ab .ab-duo');
+    if(rmo||!('IntersectionObserver' in window)){[].forEach.call(document.querySelectorAll('.ab h2,.ab p,.ab figure,.ab .ab-duo'),function(e){e.classList.add('in')})}
+    else{
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.06});
+      [].forEach.call(els,function(e){e.classList.add('rv');io.observe(e)});
+      [].forEach.call(document.querySelectorAll('.ab figure.par'),function(e){io.observe(e)});
+    }
+    var pars=[].slice.call(document.querySelectorAll('.ab figure.par')),tl=document.querySelector('.ab-time'),tk=0;
+    var upd=function(){tk=0;var vh=innerHeight;
+      if(!rmo)pars.forEach(function(f){var r=f.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;var c=(r.top+r.height/2-vh/2)/vh;f.style.setProperty('--py',(-c*(f.classList.contains('ab-bgimg')?70:34)).toFixed(1)+'px')});
+      if(tl){var r=tl.getBoundingClientRect(),p=Math.min(1,Math.max(0,(vh*.62-r.top)/r.height));tl.style.setProperty('--p',p.toFixed(3))}};
+    addEventListener('scroll',function(){if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);upd();
+  }
+
   /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */
   var hd=document.getElementById('head');
   if(hd&&document.body.classList.contains('has-intro')){var sol=function(){hd.classList.toggle('solid',scrollY>40)};addEventListener('scroll',sol,{passive:true});sol()}

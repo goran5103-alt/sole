@@ -33,18 +33,7 @@ def kontakt(slug):
     return B.banner(slug, B.title(slug)) + f'<section class="page"><div class="wrap"><div class="contact-grid">{boxes}</div>{frm}</div></section>'
 
 def home(slug):
-    b = D[slug]['b']
-    slides = [x for x in b if x[0] == 'img']
-    caps = [x[1] for x in b if x[0] == 't']
-    rest = [x for x in b if x[0] not in ('img', 't')]
-    h2 = rest[0][1]
-    ps = [x[1] for x in rest[1:]]
-    parts = [f'<p class="lead">{E(ps[0])}</p>', f'<p class="addr-line">{E(ps[1])}</p>'] + [f'<p>{E(p)}</p>' for p in ps[2:]]
-    strip = ''.join(f'<figure><a href="{A(B.fix(u))}" data-lb="home"><img src="{A(B.fix(u))}" alt="{A(al)}" loading="lazy"></a><figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>' for i, (_, u, al) in enumerate(slides))
-    cards = ''.join(B.card(slug, g) for g, _ in B.GROUPS)
-    return (f'<section class="welcome"><div class="wrap grid"><div><h2>{E(h2)}</h2></div><div class="prose">{"".join(parts)}</div></div></section>\n'
-            f'<section class="strip"><div class="wrap"><div class="track">{strip}</div></div></section>\n'
-            f'<section class="home-types"><div class="wrap"><div class="sec-h"><h2>{E(B.TOP[1][1])}</h2></div>{B.grid(cards, len(B.GROUPS))}</div></section>')
+    return B.home_body(slug)
 
 def content(slug):
     if slug == '/': h = home(slug)

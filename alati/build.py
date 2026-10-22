@@ -388,17 +388,45 @@ def kontakt_page(slug):
     inner = banner(slug, title(slug)) + f'<section class="page"><div class="wrap"><div class="contact-grid">{boxes}</div>{frm}</div></section>'
     return page_shell(slug, inner)
 
-def home_page(slug):
+def mk(text, phrases=()):
+    """Tekst pasusa neizmenjen; samo se delovi koji nose suštinu uokviruju oznakom <mark> (isticanje, ne novi tekst)."""
+    out = E(text)
+    for ph in phrases:
+        e = E(ph)
+        assert e in out, ph
+        out = out.replace(e, f'<mark>{e}</mark>', 1)
+    return out
+
+def home_body(slug):
+    """Naslovna ispod uvoda: priča o preduzeću u poglavljima (tekst i slike su doslovno iz podaci/sve.json)."""
     b = D[slug]['b']
     slides = [x for x in b if x[0] == 'img']
     caps = [x[1] for x in b if x[0] == 't']
     rest = [x for x in b if x[0] not in ('img', 't')]
     h2 = rest[0][1]
-    ps = [x[1] for x in rest[1:]]
-    # 1. pasus + adresa u isticanju, ostali pasusi redom
-    parts = [f'<p class="lead">{E(ps[0])}</p>', f'<p class="addr-line">{E(ps[1])}</p>'] + [f'<p>{E(p)}</p>' for p in ps[2:]]
-    strip = ''.join(f'<figure><a href="{A(fix(u))}" data-lb="home"><img src="{A(fix(u))}" alt="{A(al)}" loading="lazy"></a><figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>' for i, (_, u, al) in enumerate(slides))
+    P = [x[1] for x in rest[1:]]
+    def fig(i, cls=''):
+        _, u, al = slides[i]
+        return (f'<figure{f" class=\"{cls}\"" if cls else ""}><img src="{A(fix(u))}" alt="{A(al)}" loading="lazy">'
+                f'<figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>')
     cards = ''.join(card(slug, g) for g, _ in GROUPS)
+    return f'''<section class="ab ab-dark ab-intro">{fig(0, 'ab-bgimg par')}<div class="wrap"><h2>{E(h2)}</h2>
+<div class="ab-intro-grid"><p class="ab-lead">{mk(P[0])}</p><p class="ab-addr">{mk(P[1])}</p></div></div></section>
+<section class="ab ab-dark ab-pano">{fig(1, 'par')}</section>
+<section class="ab ab-yard"><div class="wrap">
+<div class="ab-row1"><p class="ab-pull">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p>{fig(6, 'ab-ph par')}</div>
+<div class="ab-row2"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p>
+<div class="ab-duo">{fig(4, 'par')}{fig(5, 'par')}</div></div></div></section>
+<section class="ab ab-dark ab-log">{fig(3, 'ab-bgimg par')}<div class="wrap ab-log-grid">{fig(2, 'ab-inset par')}
+<div class="ab-log-card"><p class="ab-body">{mk(P[4], ['Beograd, Novi Sad, Pančevo i Prahovo', 'Rostov, Novorusijsk, Solun i Izmail', 'železničkog transporta'])}</p><p class="ab-note">{mk(P[5])}</p></div></div></section>
+<section class="ab ab-story"><div class="wrap"><div class="ab-time">
+<p class="ab-node n1">{mk(P[6], ['preko 70 zaposlenih radika'])}</p>
+<p class="ab-node n2">{mk(P[7], ['„Ilić Trgovina“'])}</p>
+<p class="ab-node n3">{mk(P[8], ['Od 2012. godine', '„Mlin Dobrinci“'])}</p></div></div></section>
+<section class="ab ab-dark ab-iso">{fig(7, 'ab-bgimg par')}<div class="wrap ab-iso-grid"><p class="ab-body">{mk(P[9], ['ISO 9001/2008'])}</p><p class="ab-cert">{mk(P[10], ['29.02.2012. godine', 'SRPS ISO 9001:2008'])}</p></div></section>
+<section class="home-types"><div class="wrap"><div class="sec-h"><h2>{E(TOP[1][1])}</h2></div>{grid(cards, len(GROUPS))}</div></section>'''
+
+def home_page(slug):
     intro = '''<section id="intro"><div class="stick" id="stick">
 <div class="hero" id="hero"><canvas id="gl"></canvas><div class="veil"></div>
 <div class="copy"><div class="in"><h1><span class="a">DOBRODOŠLI NA PREZENTACIJU PREDUZEĆA</span> <span class="b">SOLE KOMERC</span> <span class="c">D.O.O. BEOGRAD</span></h1></div></div>
@@ -414,9 +442,6 @@ def home_page(slug):
 </svg>
 <div class="hint"><i></i></div>
 </div></section>'''
-    welcome = f'''<section class="welcome"><div class="wrap grid"><div><h2>{E(h2)}</h2></div><div class="prose">{"".join(parts)}</div></div></section>
-<section class="strip"><div class="wrap"><div class="track">{strip}</div></div></section>
-<section class="home-types"><div class="wrap"><div class="sec-h"><h2>{E(TOP[1][1])}</h2></div>{grid(cards, len(GROUPS))}</div></section>'''
     css = f'\n<link rel="stylesheet" href="{asset(slug, "uvod.css")}">'
     scripts = '''<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
@@ -427,7 +452,7 @@ def home_page(slug):
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="assets/uvod.js"></script>
 '''
-    page = page_shell(slug, intro + welcome, css).replace('<body>', '<body class="has-intro intro-hide-head">', 1)
+    page = page_shell(slug, intro + home_body(slug), css).replace('<body>', '<body class="has-intro intro-hide-head">', 1)
     return page.replace('</body>', scripts + '</body>')
 
 # ---------------- slaganje ----------------

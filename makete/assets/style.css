@@ -105,6 +105,110 @@ html.js .drawer .d-sub,html.js .drawer .d-kids{display:none}
 html.js .drawer .open>.d-sub,html.js .drawer .open>.d-kids{display:block}
 .drawer .d-call{display:flex;justify-content:center;margin-top:22px;background:var(--blue);color:#fff;border-radius:999px;padding:15px;font:700 15px/1 var(--ui)}
 
+/* ---------- naslovna ispod uvoda: priča o preduzeću u poglavljima ---------- */
+.ab{position:relative;--hl:rgba(255,106,26,.34);--ember:#ff6a1a;font-family:var(--ui)}
+.ab-dark{background:#0b0908;color:#f3ede6;--hl:rgba(255,106,26,.55)}
+.ab .wrap{position:relative;z-index:2}
+.ab h2{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.012em;line-height:1.16;margin:0;text-wrap:balance}
+.ab p{margin:0}
+.ab figure{margin:0}
+.ab img{display:block;max-width:none}
+.ab figcaption{font:500 10.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.05em;color:rgba(255,255,255,.55);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.ab mark{background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 94%/100% .36em;color:inherit;padding:0 .08em;margin:0 -.08em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+html.js .ab mark{background-size:0% .36em;transition:background-size 1s cubic-bezier(.2,.7,.2,1) .35s}
+html.js .ab .in mark,html.js .ab mark.in{background-size:100% .36em}
+
+/* slike koje se vuku kroz poglavlje (paralaksa); figcaption je sitna oznaka u uglu */
+.ab figure.par{position:relative;overflow:hidden}
+.ab figure.par>img{width:100%;height:100%;object-fit:cover;transform:translate3d(0,var(--py,0px),0) scale(1.14);will-change:transform}
+.ab figure figcaption{position:absolute;left:16px;bottom:12px;z-index:3;pointer-events:none}
+.ab-bgimg{position:absolute!important;inset:0;z-index:0}
+.ab-bgimg::after{content:"";position:absolute;inset:0;z-index:1}
+
+/* 1. uvod: veliki naslov, uvodna rečenica, adresa kao karta */
+.ab-intro{padding:clamp(96px,13vw,190px) 0 clamp(72px,9vw,130px);overflow:hidden;isolation:isolate}
+.ab-intro .ab-bgimg>img{opacity:.55;filter:saturate(1.15) contrast(1.05)}
+.ab-intro .ab-bgimg::after{background:linear-gradient(180deg,#0b0908 0%,rgba(11,9,8,.58) 38%,rgba(11,9,8,.82) 78%,#0b0908 100%),radial-gradient(60% 70% at 88% 85%,rgba(255,106,26,.28),transparent 70%)}
+.ab-intro h2{font-size:clamp(66px,12vw,200px);max-width:11ch;color:#f6f1ea;margin-bottom:clamp(36px,5.5vw,84px)}
+.ab-intro-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4.2fr);gap:clamp(28px,5vw,88px);align-items:end}
+.ab-lead{font:500 clamp(21px,2.45vw,35px)/1.34 var(--ui);letter-spacing:-.018em;color:rgba(246,241,234,.95)}
+.ab-addr{position:relative;padding:24px 28px 24px 96px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font:700 clamp(17px,1.55vw,22px)/1.35 var(--ui);letter-spacing:-.006em;color:#fff}
+.ab-addr::before{content:"";position:absolute;left:26px;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;background:var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a0b02' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s7-6.2 7-11.2A7 7 0 0 0 5 9.8C5 14.8 12 21 12 21z'/%3E%3Ccircle cx='12' cy='9.8' r='2.6'/%3E%3C/svg%3E") center/24px no-repeat}
+
+/* 2. panorama preko cele širine */
+.ab-pano{padding:0;overflow:hidden}
+.ab-pano figure{height:clamp(240px,40vw,580px)}
+.ab-pano figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0b0908 0%,rgba(11,9,8,0) 24%,rgba(11,9,8,0) 70%,rgba(11,9,8,.55) 100%);pointer-events:none}
+
+/* 3. stovarište: kome služi (veliki iskaz + slika) i čime raspolaže (tekst + dve slike u preklopu) */
+.ab-yard{padding:clamp(84px,11vw,160px) 0;background:var(--paper);color:var(--ink)}
+.ab-row1{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4.6fr);gap:clamp(30px,6vw,100px);align-items:center}
+.ab-pull{font:700 clamp(27px,3.4vw,52px)/1.13 var(--ui);letter-spacing:-.032em;color:#14110e}
+.ab-ph{border-radius:26px;aspect-ratio:4/4.6;box-shadow:0 40px 70px -34px rgba(0,0,0,.55)}
+.ab-row2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6.4fr);gap:clamp(30px,6vw,100px);align-items:start;margin-top:clamp(64px,9vw,140px)}
+.ab-body{font:400 clamp(17px,1.35vw,19.5px)/1.78 var(--ui);color:#3a3631}
+.ab-row2>.ab-body{position:sticky;top:calc(var(--hh) + 36px)}
+.ab-dark .ab-body{color:rgba(243,237,230,.9)}
+.ab-duo{position:relative;padding-bottom:clamp(40px,6vw,90px)}
+.ab-duo figure{border-radius:22px;aspect-ratio:16/10;box-shadow:0 36px 64px -34px rgba(0,0,0,.6);width:76%}
+.ab-duo figure+figure{margin:clamp(-70px,-5vw,-36px) 0 0 auto;border:6px solid var(--paper)}
+
+/* 4. logistika: luke i železnica; slika luke je pozadina, kamion je kartica koja se preklapa */
+.ab-log{padding:clamp(92px,12vw,180px) 0;overflow:hidden;isolation:isolate}
+.ab-log .ab-bgimg>img{opacity:.95;filter:saturate(1.08) contrast(1.04)}
+.ab-log .ab-bgimg::after{background:linear-gradient(90deg,rgba(11,9,8,.2) 0%,rgba(11,9,8,.42) 42%,rgba(11,9,8,.86) 100%),linear-gradient(180deg,#0b0908 0%,rgba(11,9,8,0) 20%,rgba(11,9,8,0) 80%,#0b0908 100%)}
+.ab-log-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6.2fr);gap:clamp(30px,6vw,100px);align-items:center}
+.ab-inset{border-radius:24px;aspect-ratio:4/3.4;transform:rotate(-2.4deg);box-shadow:0 44px 80px -30px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.14)}
+.ab-log-card{padding:clamp(26px,3.6vw,56px);border-radius:28px;background:rgba(14,12,10,.58);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3)}
+.ab-log-card .ab-body{font-size:clamp(18px,1.55vw,22px);line-height:1.7}
+.ab-note{margin-top:clamp(18px,2vw,30px)!important;padding-top:clamp(16px,1.8vw,26px);border-top:1px solid rgba(255,255,255,.16);font:500 clamp(14.5px,1.1vw,16.5px)/1.6 var(--ui);color:rgba(243,237,230,.66)}
+
+/* 5. rast preduzeća: vremenska linija koja se puni dok se skroluje */
+.ab-story{padding:clamp(84px,11vw,150px) 0 clamp(40px,5vw,70px);background:var(--paper);color:var(--ink)}
+.ab-time{--pad:clamp(68px,8.5vw,116px);--p:0;position:relative;max-width:1000px;margin:0 auto;padding-left:var(--pad)}
+.ab-time::before,.ab-time::after{content:"";position:absolute;left:25px;top:6px;width:2px;border-radius:2px}
+.ab-time::before{bottom:6px;background:rgba(20,17,14,.13)}
+.ab-time::after{height:calc((100% - 12px) * var(--p));background:linear-gradient(180deg,var(--ember),#ffb066)}
+.ab-node{position:relative;margin:0 0 clamp(46px,6.4vw,92px)!important;font:500 clamp(20px,2.15vw,30px)/1.45 var(--ui);letter-spacing:-.016em;color:#14110e}
+.ab-node:last-child{margin-bottom:0!important}
+.ab-node::before{content:"";position:absolute;left:calc(-1 * var(--pad) + 2px);top:-4px;width:48px;height:48px;border-radius:50%;background:#fff var(--ico) center/24px no-repeat;border:2px solid rgba(20,17,14,.14);box-shadow:0 10px 26px -12px rgba(0,0,0,.4)}
+.ab-node.n1{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'/%3E%3C/svg%3E")}
+.ab-node.n2{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7'/%3E%3C/svg%3E")}
+.ab-node.n3{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6a1a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 21h18M5 21V10l7-5 7 5v11'/%3E%3Cpath d='M9 21v-6h6v6'/%3E%3C/svg%3E")}
+
+/* 6. kvalitet: ISO sertifikat na tamnoj pozadini */
+.ab-iso{padding:clamp(88px,11vw,150px) 0;overflow:hidden;isolation:isolate}
+.ab-iso .ab-bgimg>img{opacity:.5}
+.ab-iso .ab-bgimg::after{background:linear-gradient(180deg,var(--paper) 0%,rgba(11,9,8,.55) 14%,rgba(11,9,8,.9) 100%)}
+.ab-iso-grid{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(30px,6vw,96px);align-items:start;padding-top:clamp(120px,12vw,168px)}
+.ab-iso-grid::before{content:"";position:absolute;left:0;top:0;width:96px;height:96px;border-radius:50%;background:var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a0b02' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='M8.5 14.2 7 22l5-3 5 3-1.5-7.8'/%3E%3Cpath d='m9.4 9 1.8 1.8L14.8 7'/%3E%3C/svg%3E") center/48px no-repeat;box-shadow:0 0 0 10px rgba(255,106,26,.16),0 0 0 22px rgba(255,106,26,.07)}
+.ab-cert{padding:clamp(24px,2.6vw,38px);border-radius:22px;border:1px solid rgba(255,106,26,.5);background:rgba(255,106,26,.08);font:600 clamp(16px,1.3vw,19px)/1.6 var(--ui);color:#fff}
+
+/* pojavljivanje pri skrolu (samo kad radi skripta); bez pokreta sve je odmah vidljivo */
+html.js .ab .rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+html.js .ab .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html.js .ab .rv{opacity:1;transform:none;transition:none}
+  html.js .ab mark{background-size:100% .36em;transition:none}
+  .ab figure.par>img{transform:scale(1.02)}
+}
+
+@media (max-width:900px){
+  .ab-intro-grid,.ab-row1,.ab-row2,.ab-log-grid,.ab-iso-grid{grid-template-columns:minmax(0,1fr)}
+  .ab-intro h2{font-size:clamp(60px,18vw,110px)}
+  .ab-ph{aspect-ratio:16/10}
+  .ab-log .ab-bgimg::after{background:linear-gradient(180deg,#0b0908 0%,rgba(11,9,8,.4) 22%,rgba(11,9,8,.78) 62%,#0b0908 100%)}
+  .ab-row2>.ab-body{position:static}
+  .ab-duo figure{width:84%}
+  .ab-inset{transform:rotate(-1.6deg);aspect-ratio:16/11}
+  .ab-log-grid{gap:34px}
+  .ab-time{--pad:60px}
+  .ab-time::before,.ab-time::after{left:21px}
+  .ab-node::before{width:42px;height:42px;background-size:21px;left:calc(-1 * var(--pad) + 0px)}
+  .ab-iso-grid{padding-top:128px}
+  .ab-iso-grid::before{width:82px;height:82px;background-size:42px}
+}
+
 /* ---------- baner strane ---------- */
 .banner{position:relative;background:var(--coal);color:#fff;overflow:hidden;isolation:isolate}
 .banner .bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;filter:grayscale(.25) contrast(1.05);transform:scale(1.04)}
