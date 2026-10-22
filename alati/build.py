@@ -87,12 +87,13 @@ def head(slug, extra_css=''):
 
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
 
-MEGA_IMG = {   # grupa -> fajl iz medijateke (uploads/2024/12/), tačna imena (server razlikuje velika i mala slova)
-    '/lignit/': 'stanariPhoto-36.jpg', '/mrko-lignitni-ugalj/': 'Rudnik-pljevlja-1.jpg', '/suseni-vreoci/': 'Kolubara-prerada-1.jpg',
-    '/mrki-ugalj/': 'RMU-Banovici-siroko-celo-2.jpg', '/kameni-ugalj/': 'Ruski-ugalj-25.jpg', '/antracit/': 'ugalj2-1.jpg',
-    '/koks/': '926550_83409660-e1296078619294.jpg', '/drveni-pelet-od-biomase/': 'Miboro-Pelet-Bukva.jpg', '/primena-uglja-u-industriji/': 'Rmu-Breza-siroko-celo.jpg'}
+UP = 'https://sole.izradasajtovasajta.com/wp-content/uploads/2026/10/'
+TYPE_IMG = {   # grupa -> renderovana slika vrste uglja (alati/render), u medijateci kao ugalj-<tip>.jpg
+    '/lignit/': 'lignit', '/mrko-lignitni-ugalj/': 'mrko', '/suseni-vreoci/': 'suseni', '/mrki-ugalj/': 'mrki', '/kameni-ugalj/': 'kameni',
+    '/antracit/': 'antracit', '/koks/': 'koks', '/drveni-pelet-od-biomase/': 'pelet', '/primena-uglja-u-industriji/': 'zar'}
+MEGA_IMG = {g: f'ugalj-{t}.jpg' for g, t in TYPE_IMG.items()}
 def mega_img(g):
-    return 'https://sole-komerc.solekomerc.co.rs/wp-content/uploads/2024/12/' + MEGA_IMG[g] if g in MEGA_IMG else None
+    return UP + MEGA_IMG[g] if g in MEGA_IMG else None
 
 def chain(slug):
     """Strana i svi njeni roditelji (za označavanje aktivne stavke menija)."""
@@ -397,34 +398,39 @@ def mk(text, phrases=()):
         out = out.replace(e, f'<mark>{e}</mark>', 1)
     return out
 
+def type_card(frm, slug):
+    """Vrsta uglja kao razvlačeći panel (naslovna)."""
+    kc = kcal(slug)
+    return (f'<a class="type" href="{rel(frm, slug)}"><img src="{A(UP + MEGA_IMG[slug])}" alt="" loading="lazy">'
+            f'<div class="tt"><div class="t">{E(title(slug))}</div>' + (f'<div class="kc">{E(kc)}</div>' if kc else '') + '</div><i class="go"></i></a>')
+
 def home_body(slug):
-    """Naslovna ispod uvoda: priča o preduzeću u poglavljima (tekst i slike su doslovno iz podaci/sve.json)."""
+    """Naslovna ispod uvoda: priča o preduzeću u poglavljima (tekst i slike su doslovno iz podaci/sve.json, bez ponovljenog naslova)."""
     b = D[slug]['b']
     slides = [x for x in b if x[0] == 'img']
     caps = [x[1] for x in b if x[0] == 't']
     rest = [x for x in b if x[0] not in ('img', 't')]
-    h2 = rest[0][1]
-    P = [x[1] for x in rest[1:]]
+    P = [x[1] for x in rest[1:]]          # rest[0] je naslov „Dobrodošli na naš sajt” (uklonjen po zahtevu: uvod već kaže dobrodošlicu)
     def fig(i, cls=''):
         _, u, al = slides[i]
         return (f'<figure{f" class=\"{cls}\"" if cls else ""}><img src="{A(fix(u))}" alt="{A(al)}" loading="lazy">'
                 f'<figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>')
-    cards = ''.join(card(slug, g) for g, _ in GROUPS)
-    return f'''<section class="ab ab-dark ab-intro">{fig(0, 'ab-bgimg par')}<div class="wrap"><h2>{E(h2)}</h2>
-<div class="ab-intro-grid"><p class="ab-lead">{mk(P[0])}</p><p class="ab-addr">{mk(P[1])}</p></div></div></section>
-<section class="ab ab-dark ab-pano">{fig(1, 'par')}</section>
-<section class="ab ab-yard"><div class="wrap">
-<div class="ab-row1"><p class="ab-pull">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p>{fig(6, 'ab-ph par')}</div>
-<div class="ab-row2"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p>
-<div class="ab-duo">{fig(4, 'par')}{fig(5, 'par')}</div></div></div></section>
-<section class="ab ab-dark ab-log">{fig(3, 'ab-bgimg par')}<div class="wrap ab-log-grid">{fig(2, 'ab-inset par')}
+    types = ''.join(type_card(slug, g) for g, _ in GROUPS)
+    return f'''<section class="ab ab-dark ab-lead2"><div class="wrap"><p class="ab-lead">{mk(P[0], ['trgovine čvrstim energentima', 'stovarišta i distributivnog centra'])}</p>
+<p class="ab-addr">{mk(P[1])}</p></div></section>
+<section class="ab ab-dark ab-who"><div class="wrap"><p class="ab-pull">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p></div>
+{fig(1, 'ab-pano par')}</section>
+<section class="ab ab-dark ab-eq"><div class="wrap ab-eq-grid"><div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div>
+<div class="ab-eq-stack">{fig(4, 'ab-s1 par')}{fig(5, 'ab-s2 par')}{fig(6, 'ab-s3 par')}</div></div></section>
+<section class="ab ab-dark ab-log">{fig(3, 'ab-band par')}<i class="ab-route"></i><div class="wrap ab-log-grid">{fig(2, 'ab-inset par')}
 <div class="ab-log-card"><p class="ab-body">{mk(P[4], ['Beograd, Novi Sad, Pančevo i Prahovo', 'Rostov, Novorusijsk, Solun i Izmail', 'železničkog transporta'])}</p><p class="ab-note">{mk(P[5])}</p></div></div></section>
-<section class="ab ab-story"><div class="wrap"><div class="ab-time">
+<section class="ab ab-dark ab-story"><div class="wrap ab-story-grid"><div class="ab-time">
 <p class="ab-node n1">{mk(P[6], ['preko 70 zaposlenih radika'])}</p>
 <p class="ab-node n2">{mk(P[7], ['„Ilić Trgovina“'])}</p>
-<p class="ab-node n3">{mk(P[8], ['Od 2012. godine', '„Mlin Dobrinci“'])}</p></div></div></section>
+<p class="ab-node n3">{mk(P[8], ['Od 2012. godine', '„Mlin Dobrinci“'])}</p></div>
+{fig(0, 'ab-side par')}</div></section>
 <section class="ab ab-dark ab-iso">{fig(7, 'ab-bgimg par')}<div class="wrap ab-iso-grid"><p class="ab-body">{mk(P[9], ['ISO 9001/2008'])}</p><p class="ab-cert">{mk(P[10], ['29.02.2012. godine', 'SRPS ISO 9001:2008'])}</p></div></section>
-<section class="home-types"><div class="wrap"><div class="sec-h"><h2>{E(TOP[1][1])}</h2></div>{grid(cards, len(GROUPS))}</div></section>'''
+<section class="ab ab-dark ab-types"><div class="wrap"><h2>{E(TOP[1][1])}</h2><div class="types-row">{types}</div></div></section>'''
 
 def home_page(slug):
     intro = '''<section id="intro"><div class="stick" id="stick">

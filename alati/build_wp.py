@@ -10,7 +10,7 @@ import json, os, re, sys, html
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build as B
 
-HOST = re.compile(r'(?:https?:)?//sole-komerc\.solekomerc\.co\.rs')
+HOST = re.compile(r'(?:https?:)?//(?:sole-komerc\.solekomerc\.co\.rs|sole\.izradasajtovasajta\.com)')
 B.rel = lambda frm, to: to
 B.fix = lambda u: HOST.sub('', u)
 B.page_shell = lambda slug, inner, extra_css='': inner
