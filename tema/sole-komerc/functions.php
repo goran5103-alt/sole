@@ -1,12 +1,12 @@
 <?php
 /**
  * Sole Komerc — tema bez page buildera.
- * Tekst i slike strana: ITX dodatak. Telefon, adresa, logo, uvod, kontakt blok, podnožje, tracker: Opcije teme.
+ * Tekst i slike strana: ITX dodatak. Telefon, adresa, logo, uvod, kontakt blok, podnožje, praćenje pregleda: Opcije teme.
  * Glavni meni, mega meni UGALJ i meniji u podnožju: Izgled → Meniji.
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SOLE_VER', '1.0.0' );
+define( 'SOLE_VER', '1.0.1' );
 
 require_once get_template_directory() . '/inc/opcije.php';
 require_once get_template_directory() . '/inc/meniji.php';
@@ -91,10 +91,12 @@ add_action( 'wp_enqueue_scripts', 'sole_bez_buildera', 9999 );
 add_action( 'wp_print_styles', 'sole_bez_buildera', 9999 );
 add_action( 'wp_print_scripts', 'sole_bez_buildera', 9999 );
 
-/* Praćenje pregleda (preview tracker) — uključuje se u Opcijama teme; fajlovi inc/track.php i inc/dashboard.php dolaze od korisnika */
-add_action( 'init', function () {
-	$f = get_template_directory() . '/inc/track.php';
-	if ( sole_opt( 'tracker_ukljucen' ) && file_exists( $f ) ) {
-		require_once $f;
-	}
-}, 5 );
+/* Praćenje pregleda (preview tracker): svaka strana jednom pozove centralni track.php sa imenom projekta.
+   track.php i dashboard.php stoje na serveru izradasajtovasajta.com, ne u temi. Uključuje se u Opcijama teme. */
+add_action( 'wp_footer', function () {
+	if ( ! sole_opt( 'tracker_ukljucen' ) ) return;
+	$url = esc_url_raw( sole_opt( 'tracker_url' ) );
+	$ime = preg_replace( '/[^a-zA-Z0-9_\-]/', '', (string) sole_opt( 'tracker_ime' ) );
+	if ( '' === $url || '' === $ime ) return;
+	echo '<script>fetch(' . wp_json_encode( add_query_arg( 'site', $ime, $url ) ) . ',{mode:"no-cors",keepalive:true,cache:"no-store"}).catch(function(){});</script>' . "\n";
+}, 99 );

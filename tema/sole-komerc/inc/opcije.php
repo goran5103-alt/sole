@@ -26,7 +26,9 @@ function sole_defaults() {
 		'f_naslov3'        => 'KONTAKT',
 		'f_kontakt'        => '',
 		'f_donji_tekst'    => 'DOBRODOŠLI NA PREZENTACIJU PREDUZEĆA SOLE KOMERC D.O.O. BEOGRAD',
-		'tracker_ukljucen' => 0,
+		'tracker_ukljucen' => 1,
+		'tracker_ime'      => 'sole-komerc',
+		'tracker_url'      => 'https://izradasajtovasajta.com/tracker/track.php',
 	);
 }
 
@@ -74,7 +76,9 @@ function sole_fields() {
 			array( 'f_donji_tekst', 'Tekst donje trake', 'text', '' ),
 		),
 		'Praćenje pregleda' => array(
-			array( 'tracker_ukljucen', 'Uključi praćenje pregleda (preview tracker)', 'check', '' ),
+			array( 'tracker_ukljucen', 'Uključi praćenje pregleda (preview tracker)', 'check', 'Svako otvaranje strane javlja se centralnom track.php.' ),
+			array( 'tracker_ime', 'Ime projekta u pregledu', 'text', 'Samo slova, brojevi, crtica i donja crta.' ),
+			array( 'tracker_url', 'Adresa track.php', 'text', '' ),
 		),
 	);
 }
@@ -83,8 +87,19 @@ add_action( 'admin_menu', function () {
 	add_theme_page( 'Opcije teme', 'Opcije teme', 'manage_options', 'sole-opcije', 'sole_opcije_ekran' );
 } );
 
-add_action( 'admin_init', function () {
-	register_setting( 'sole_opts_grupa', 'sole_opts', array( 'sanitize_callback' => 'sole_sanitize' ) );
+/* Opcije su dostupne i preko REST-a (/wp/v2/settings), pa se mogu čitati i menjati bez ulaska u admin */
+add_action( 'init', function () {
+	$props = array();
+	foreach ( sole_fields() as $polja ) {
+		foreach ( $polja as $p ) {
+			$props[ $p[0] ] = array( 'type' => 'check' === $p[2] ? 'integer' : 'string' );
+		}
+	}
+	register_setting( 'sole_opts_grupa', 'sole_opts', array(
+		'type'              => 'object',
+		'sanitize_callback' => 'sole_sanitize',
+		'show_in_rest'      => array( 'schema' => array( 'type' => 'object', 'properties' => $props ) ),
+	) );
 } );
 
 add_action( 'admin_enqueue_scripts', function ( $hook ) {
