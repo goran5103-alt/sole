@@ -1,10 +1,26 @@
 /* Sole Komerc — meni za telefon, uvećanje slika, obrazac (maketa) */
 (function(){
+  document.documentElement.classList.add('js');
+
+  /* mega meni: grupa pod mišem (ili fokusom) pokazuje svoje podstavke i sliku; slike se učitavaju pri prvom otvaranju */
+  var rail=document.querySelector('.rail');
+  if(rail){
+    var act=function(g){[].forEach.call(rail.querySelectorAll('.grp.act'),function(x){x.classList.remove('act')});g.classList.add('act')};
+    var first=rail.querySelector('.grp.on')||rail.querySelector('.grp');act(first);
+    rail.addEventListener('mouseover',function(e){var g=e.target.closest('.grp');if(g&&g.parentNode===rail)act(g)});
+    rail.addEventListener('focusin',function(e){var g=e.target.closest('.grp');if(g&&g.parentNode===rail)act(g)});
+    var warm=function(){[].forEach.call(rail.querySelectorAll('.pic img'),function(i){i.loading='eager'})},host=rail.closest('.has-mega');
+    if(host){host.addEventListener('mouseenter',warm,{once:true});host.addEventListener('focusin',warm,{once:true})}
+  }
+
   /* mobilni meni */
   var dr=document.getElementById('drawer'),bt=document.getElementById('burger');
   function setOpen(o){if(!dr)return;dr.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';if(bt)bt.setAttribute('aria-expanded',o)}
   if(bt)bt.addEventListener('click',function(){setOpen(true)});
-  if(dr){dr.addEventListener('click',function(e){if(e.target===dr||e.target.closest('.close'))setOpen(false)});}
+  if(dr){dr.addEventListener('click',function(e){
+    var t=e.target.closest('.tg');
+    if(t){var li=t.closest('li'),o=!li.classList.contains('open');li.classList.toggle('open',o);t.setAttribute('aria-expanded',o);return}
+    if(e.target===dr||e.target.closest('.close'))setOpen(false)});}
   addEventListener('keydown',function(e){if(e.key==='Escape'){setOpen(false);closeLb()}});
 
   /* uvećanje slika iz galerije */

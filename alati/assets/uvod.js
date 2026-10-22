@@ -12,8 +12,21 @@
     for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>200){const q=(x-tx)**2+(y-ty)**2;if(q<bd){bd=q;best=[x/k,y/k]}}
     return best||[x0,y0-fs*.36]}
   let O=[800,320];
-  function fit(){const r=stick.getBoundingClientRect(),a=r.width/r.height;let b;try{b=word.getBBox()}catch(e){return}
-    const vw=Math.max(b.width/(a<1?.86:.6),b.height/(a<1?.46:.62)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
+  /* optičko centriranje: slova se postavljaju po stvarnim ivicama (ne po širini polja slova), pa su oba reda tačno na sredini */
+  const t2=document.getElementById('hcT2'),l1=document.getElementById('hcL1'),l2=document.getElementById('hcL2');
+  function ink(){
+    const g=document.createElement('canvas').getContext('2d'),fam=getComputedStyle(t1).fontFamily;
+    let L=1e9,R=-1e9,T=1e9,B=-1e9;
+    [[t1,l1],[t2,l2]].forEach(function(p){
+      const t=p[0],fs=+t.getAttribute('font-size'),y=+t.getAttribute('y');
+      g.font='800 '+fs+'px '+fam;g.textAlign='center';
+      const m=g.measureText(t.textContent),x=800-(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2;
+      t.setAttribute('x',x.toFixed(2));if(p[1])p[1].setAttribute('x',x.toFixed(2));
+      L=Math.min(L,x-m.actualBoundingBoxLeft);R=Math.max(R,x+m.actualBoundingBoxRight);
+      T=Math.min(T,y-m.actualBoundingBoxAscent);B=Math.max(B,y+m.actualBoundingBoxDescent)});
+    return{x:L,y:T,width:R-L,height:B-T}}
+  function fit(){const r=stick.getBoundingClientRect(),a=r.width/r.height,b=ink();
+    const vw=Math.max(b.width/(a<1?.9:.72),b.height/(a<1?.5:.7)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
     svg.setAttribute('viewBox',(cx-vw/2).toFixed(1)+' '+(cy-vh/2).toFixed(1)+' '+vw.toFixed(1)+' '+vh.toFixed(1));
     O=inside();word.style.transformOrigin=line.style.transformOrigin=O[0].toFixed(1)+'px '+O[1].toFixed(1)+'px';onScroll()}
   function onScroll(){const r=intro.getBoundingClientRect(),max=intro.offsetHeight-stick.offsetHeight,

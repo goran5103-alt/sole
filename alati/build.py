@@ -86,31 +86,52 @@ def head(slug, extra_css=''):
 
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
 
+def chain(slug):
+    """Strana i svi njeni roditelji (za označavanje aktivne stavke menija)."""
+    out = {slug}; p = PARENT.get(slug)
+    while p: out.add(p); p = PARENT.get(p)
+    return out
+
+def mega(slug):
+    cur = chain(slug); rows = []
+    for g, ch in GROUPS:
+        im = first_img(g)
+        kids = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
+        pic = f'<a class="pic" href="{rel(slug, g)}" tabindex="-1" aria-hidden="true"><img src="{A(im)}" alt="" loading="lazy" decoding="async"></a>' if im else ''
+        pane = (f'<div class="pane{"" if ch else " leaf"}"><div class="pcol"><a class="ph" href="{rel(slug, g)}">{E(title(g))}</a>'
+                + (f'<ul class="kids{" two" if len(ch) > 5 else ""}">{kids}</ul>' if ch else '') + f'</div>{pic}</div>')
+        cls = 'grp' + (' has-kids' if ch else '') + (' on' if g in cur else '')
+        rows.append(f'<li class="{cls}"><a class="g" href="{rel(slug, g)}">{E(title(g))}</a>{pane}</li>')
+    return '<div class="mega"><div class="wrap mega-in"><ul class="rail">' + ''.join(rows) + '</ul></div></div>'
+
 def header(slug):
-    on_top = PARENT.get(slug, slug)
-    while on_top in PARENT and on_top != '/ugalj/': on_top = PARENT[on_top]
+    cur = chain(slug)
     items = []
     for s, lab in TOP:
-        cls = ' class="on"' if s == on_top or s == slug else ''
+        on = s in cur
         if s == '/ugalj/':
-            cols = []
-            for g, ch in GROUPS:
-                sub = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
-                cols.append(f'<div class="grp"><a href="{rel(slug, g)}">{E(title(g))}</a>' + (f'<ul>{sub}</ul>' if sub else '') + '</div>')
-            items.append(f'<li class="has-mega{(" on" if cls else "")}"><a href="{rel(slug, s)}">{E(lab)}<i class="caret"></i></a><div class="mega">{"".join(cols)}</div></li>')
+            items.append(f'<li class="has-mega{" on" if on else ""}"><a href="{rel(slug, s)}">{E(lab)}<i class="caret"></i></a>{mega(slug)}</li>')
         else:
-            items.append(f'<li{cls}><a href="{rel(slug, s)}">{E(lab)}</a></li>')
-    # mobilni meni
+            items.append('<li' + (' class="on"' if on else '') + f'><a href="{rel(slug, s)}">{E(lab)}</a></li>')
+    # mobilni meni (isti redosled i isti nazivi kao mega meni)
+    n = [0]
+    def tg(label_id):
+        return f'<button class="tg" type="button" aria-expanded="%s" aria-labelledby="{label_id}"></button>'
     dm = []
     for s, lab in TOP:
         if s == '/ugalj/':
             sub = []
             for g, ch in GROUPS:
-                inner = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
-                sub.append(f'<li><a href="{rel(slug, g)}">{E(title(g))}</a>' + (f'<ul>{inner}</ul>' if inner else '') + '</li>')
-            dm.append(f'<li><a href="{rel(slug, s)}">{E(lab)}</a><ul class="d-sub">{"".join(sub)}</ul></li>')
+                if ch:
+                    n[0] += 1; gid = f'dl{n[0]}'; gopen = g in cur
+                    inner = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
+                    sub.append(f'<li class="has-sub{" open" if gopen else ""}"><div class="row"><a id="{gid}" href="{rel(slug, g)}">{E(title(g))}</a>' + tg(gid) % ('true' if gopen else 'false') + f'</div><ul class="d-kids">{inner}</ul></li>')
+                else:
+                    sub.append(f'<li><div class="row"><a href="{rel(slug, g)}">{E(title(g))}</a></div></li>')
+            n[0] += 1; uid = f'dl{n[0]}'; uopen = s in cur
+            dm.append(f'<li class="has-sub{" open" if uopen else ""}"><div class="row"><a id="{uid}" href="{rel(slug, s)}">{E(lab)}</a>' + tg(uid) % ('true' if uopen else 'false') + f'</div><ul class="d-sub">{"".join(sub)}</ul></li>')
         else:
-            dm.append(f'<li><a href="{rel(slug, s)}">{E(lab)}</a></li>')
+            dm.append(f'<li><div class="row"><a href="{rel(slug, s)}">{E(lab)}</a></div></li>')
     return f'''<div class="topbar"><div class="wrap"><div class="tb-tag">{E(TAGLINE)}</div><a class="tb-phone" href="{tel_href(PHONE)}">{E(PHONE)}</a></div></div>
 <header class="site-head" id="head"><div class="wrap">
 <a class="brand" href="{rel(slug, '/')}"><img src="{LOGO}" alt="{A(LOGO_ALT)}" width="190" height="46"></a>
@@ -378,9 +399,10 @@ def home_page(slug):
 <mask id="hcCut" maskUnits="userSpaceOnUse" x="-20000" y="-20000" width="40000" height="40000">
 <rect x="-20000" y="-20000" width="40000" height="40000" fill="#fff"></rect>
 <g id="hcWord"><text id="hcT1" x="800" y="430" text-anchor="middle" font-size="300" fill="#000">SOLE</text><text id="hcT2" x="800" y="660" text-anchor="middle" font-size="240" fill="#000">KOMERC</text></g>
-</mask></defs>
+</mask>
+<filter id="hcRing" x="-4%" y="-8%" width="108%" height="116%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.6" result="d"></feMorphology><feComposite in="d" in2="SourceAlpha" operator="out" result="ring"></feComposite><feFlood flood-color="#f5c518" flood-opacity=".75"></feFlood><feComposite in2="ring" operator="in"></feComposite></filter></defs>
 <rect id="hcCover" x="-20000" y="-20000" width="40000" height="40000" fill="#060403" fill-opacity=".8" mask="url(#hcCut)"></rect>
-<g id="hcLine" fill="none" stroke="#f5c518" stroke-opacity=".55" stroke-width="2" vector-effect="non-scaling-stroke"><text x="800" y="430" text-anchor="middle" font-size="300">SOLE</text><text x="800" y="660" text-anchor="middle" font-size="240">KOMERC</text></g>
+<g id="hcLine" fill="#fff" filter="url(#hcRing)"><text id="hcL1" x="800" y="430" text-anchor="middle" font-size="300">SOLE</text><text id="hcL2" x="800" y="660" text-anchor="middle" font-size="240">KOMERC</text></g>
 </svg>
 <div class="hint"><i></i></div>
 </div></section>'''
