@@ -1,0 +1,33 @@
+/* ===================== HERO — tekst-maska ===================== */
+:root{--tb:38px;--hh:96px;--top:134px}
+.hero-c{position:relative;height:260vh;background:var(--night)}
+body[data-head="over"] .hero-c{margin-top:calc(-1 * var(--top))}
+.hc-stick{position:sticky;top:0;height:100svh;overflow:hidden;color:var(--cream)}
+body[data-head="classic"] .hc-stick{top:var(--top);height:calc(100svh - var(--top))}
+.hc-img,.hc-plain{position:absolute;inset:0}
+.hc-img img{width:100%;height:100%;object-fit:cover;transform:scale(calc(1.2 - var(--p,0) * .2))}
+.hc-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,18,14,.35),rgba(13,18,14,.1) 40%,rgba(13,18,14,.8));opacity:var(--p,0)}
+body[data-hc="img"] .hc-plain,body[data-hc="plain"] .hc-img{display:none}
+/* varijanta bez slike: tamna šuma od boja, topografske linije i magla */
+.hc-plain{background:radial-gradient(ellipse 60% 55% at 50% 45%,#5b7a3a 0%,#33521f 38%,#172414 75%,#0d120e 100%);overflow:hidden}
+.hc-plain .topo{position:absolute;inset:-10%;opacity:.8;animation:drift 60s linear infinite alternate}
+.hc-plain .topo svg{width:100%;height:100%}
+.hc-plain .glow{position:absolute;left:50%;top:48%;width:70vmax;height:70vmax;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(234,90,36,.28),transparent 55%);filter:blur(10px);mix-blend-mode:screen}
+.hc-plain .mist{position:absolute;left:-30%;width:160%;height:45%;bottom:-8%;filter:blur(40px);opacity:.35;background:radial-gradient(ellipse 30% 50% at 25% 50%,rgba(220,228,210,.5),transparent 70%),radial-gradient(ellipse 30% 45% at 70% 55%,rgba(220,228,210,.4),transparent 70%);animation:fogA 40s linear infinite alternate}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(-4%,3%) scale(1.08)}}
+@keyframes fogA{from{transform:translateX(-8%)}to{transform:translateX(10%)}}
+.hc-plain .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,18,14,.2),rgba(13,18,14,.15) 40%,rgba(13,18,14,.85));opacity:var(--p,0)}
+.hc-plain::after{content:"";position:absolute;inset:0;background:var(--noise-l);opacity:.8}
+.hc-mask{position:absolute;left:0;width:100%;overflow:visible;top:0;height:100%}
+body[data-head="over"] .hc-mask{top:var(--top);height:calc(100% - var(--top))}
+.hc-mask text{font-family:var(--fh);text-transform:uppercase}
+.hc-hint{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(241,235,219,.7);opacity:calc(1 - var(--p,0) * 4)}
+.hc-hint i{display:block;width:2px;height:54px;background:linear-gradient(var(--cream),transparent);animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hc-copy{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:90px;opacity:clamp(0,calc((var(--p,0) - .72) * 5),1);transform:translateY(calc((1 - clamp(0,calc((var(--p,0) - .72) * 5),1)) * 40px))}
+.hc-copy h1{font-family:var(--fh);font-weight:400;text-transform:uppercase;line-height:.85}
+.hc-copy h1 .l1{display:block;font-size:clamp(56px,6.6vw,112px)}
+.hc-copy h1 .l2{display:block;font-size:clamp(84px,11.5vw,190px);color:var(--ember)}
+.ha-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+/* klasičan heder: traka i heder uvek vidljivi, bez smanjivanja */
+body[data-head="classic"] .topbar{position:sticky;top:0}

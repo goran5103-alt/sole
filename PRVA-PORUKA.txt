@@ -1,0 +1,12 @@
+Pročitaj CLAUDE.md u ovom folderu i radi tačno po njemu.
+
+Radni poddomen (kopija živog sajta): UPISI-ADRESU-PODDOMENA
+Pristup serveru: UPISI (npr. SSH korisnik@server, putanja do sajta)
+
+Prvo:
+1. Napravi rezervnu kopiju baze i fajlova poddomena.
+2. Popiši sve strane na poddomenu i uporedi ih sa 38 strana u makete/ (adrese moraju da se poklapaju).
+3. Popiši sve instalirane teme i dodatke i predloži šta se briše. Ništa ne briši dok ne potvrdim.
+4. Napiši mi kratak plan, pa kreni sa izradom teme.
+
+Radi bez prekida dok sve strane ne budu prebačene i proverene po spisku iz CLAUDE.md. Staješ samo za brisanje i kad nešto nije jasno.

@@ -1,0 +1,39 @@
+/* Uvod naslovne: tamni sloj sa izrezanom reči (kao na Divljini), skrol uvećava slova, iza je 3D žar */
+#intro{--night:#050403;--ink:#f6f1ea;--muted:#c9b8a6;--ember:#ff6a1a;
+  position:relative;height:260vh;background:var(--night);color:var(--ink)}
+#intro .stick{position:sticky;top:var(--hh,0px);height:calc(100vh - var(--hh,0px));height:calc(100svh - var(--hh,0px));overflow:hidden}
+#intro .hero{position:absolute;inset:0;overflow:hidden;isolation:isolate;
+  background:radial-gradient(120% 70% at 60% 110%,#5a1a04 0%,#1c0904 38%,var(--night) 70%)}
+#intro .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.6s ease}
+#intro .hero.live canvas{opacity:1}
+#intro .veil{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,4,3,.82) 0%,rgba(5,4,3,.55) 32%,rgba(5,4,3,0) 62%),
+             linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 30%,rgba(5,4,3,0) 88%,var(--night) 100%)}
+#intro .copy{position:absolute;inset:0;z-index:2;display:flex;align-items:center;pointer-events:none;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#intro .copy .in{width:100%;max-width:1240px;margin:0 auto;padding-inline:clamp(0px,3vw,40px)}
+#intro h1{margin:0;font-family:var(--head);font-weight:800;color:var(--ink);text-wrap:balance}
+#intro h1 span{display:block}
+#intro h1 .a{display:flex;align-items:center;gap:18px;font-size:clamp(11px,1vw,14px);font-weight:600;letter-spacing:.28em;color:rgba(246,241,234,.8)}
+#intro h1 .a::before{content:"";flex:0 0 auto;width:clamp(28px,4vw,56px);height:2px;background:var(--sun);box-shadow:0 0 12px var(--sun)}
+#intro h1 .b{margin-top:.34em;font-size:clamp(46px,8vw,128px);line-height:.9;letter-spacing:-.03em;
+  text-shadow:0 1px 0 rgba(0,0,0,.4),0 18px 60px rgba(0,0,0,.55)}
+#intro h1 .c{margin-top:1.3em;font-size:clamp(12px,1.15vw,16px);font-weight:500;letter-spacing:.44em;color:var(--muted)}
+#intro .cover{position:absolute;inset:0;z-index:4;width:100%;height:100%;overflow:visible;pointer-events:none}
+#intro .cover text{font-family:var(--head);font-weight:800}
+#intro .hint{position:absolute;left:50%;bottom:34px;z-index:5;transform:translateX(-50%);opacity:calc(1 - var(--p,0) * 4);pointer-events:none}
+#intro .hint i{display:block;width:2px;height:54px;background:linear-gradient(var(--ink),transparent);animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+#intro .copy h1 span{--q:clamp(0,calc((var(--p,0) - var(--d,.72)) * 5),1);opacity:var(--q);transform:translateY(calc((1 - var(--q)) * 36px));filter:blur(calc((1 - var(--q)) * 8px))}
+#intro .copy h1 .b{--d:.76}
+#intro .copy h1 .c{--d:.8}
+@media (max-width:640px){
+  #intro{height:220vh}
+  #intro .copy{align-items:flex-start;padding-top:22%}
+  #intro .veil{background:linear-gradient(180deg,rgba(5,4,3,.85) 0%,rgba(5,4,3,.5) 40%,rgba(5,4,3,0) 65%,var(--night) 100%)}
+  #intro h1 .a{gap:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  #intro{height:auto}#intro .stick{position:relative;height:80vh}#intro .cover,#intro .hint{display:none}
+  #intro .copy h1 span{opacity:1;transform:none;filter:none}
+}
