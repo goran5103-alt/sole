@@ -31,7 +31,6 @@
 #intro .copy h1 .b{--d:.7}
 #intro .copy h1 .c{--d:.74}
 @media (max-width:640px){
-  :root{--tbh:36px}
   #intro{height:420vh}
   #intro .veil{background:linear-gradient(0deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.66) 32%,rgba(5,4,3,.14) 62%,rgba(5,4,3,0) 78%),linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%)}
   #intro h1 .a{font-size:clamp(24px,7.2vw,36px)}

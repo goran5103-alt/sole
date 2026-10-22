@@ -6,7 +6,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SOLE_VER', '1.2.1' );
+define( 'SOLE_VER', '1.3.0' );
 
 require_once get_template_directory() . '/inc/opcije.php';
 require_once get_template_directory() . '/inc/meniji.php';
@@ -24,7 +24,7 @@ add_action( 'after_setup_theme', function () {
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style( 'sole-fonts', 'https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap', array(), null );
+	wp_enqueue_style( 'sole-fonts', 'https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap', array(), null );
 	wp_enqueue_style( 'sole-style', get_stylesheet_uri(), array( 'sole-fonts' ), SOLE_VER );
 	wp_enqueue_script( 'sole-site', get_template_directory_uri() . '/assets/site.js', array(), SOLE_VER, true );
 
@@ -66,7 +66,10 @@ add_action( 'init', function () {
 
 /* Naslovna sa uvodom: zaglavlje je providno preko prvog ekrana (klasa has-intro) */
 add_filter( 'body_class', function ( $c ) {
-	if ( is_front_page() && sole_opt( 'uvod_ukljucen' ) ) $c[] = 'has-intro';
+	if ( is_front_page() && sole_opt( 'uvod_ukljucen' ) ) {
+		$c[] = 'has-intro';
+		if ( sole_opt( 'uvod_sakrij_zaglavlje_mob' ) ) $c[] = 'intro-hide-head';
+	}
 	return $c;
 } );
 

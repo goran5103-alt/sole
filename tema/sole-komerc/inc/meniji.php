@@ -41,7 +41,9 @@ function sole_stranica_slika( $post_id ) {
 	return $cache[ $post_id ];
 }
 
-/* Mega meni: levo grupe, desno podstavke i slika grupe */
+/* Mega meni: levo grupe, desno podstavke i slika grupe.
+   Slika grupe: adresa slike iz medijateke upisana u polje „Opis” stavke menija (Izgled → Meniji; znak „-” znači bez slike);
+   ako je polje prazno, uzima se prva slika strane. */
 function sole_mega( $it, $cur ) {
 	$ids = array();
 	foreach ( $it->kids as $g ) $ids[] = (int) $g->object_id;
@@ -49,7 +51,8 @@ function sole_mega( $it, $cur ) {
 	$rows = '';
 	foreach ( $it->kids as $g ) {
 		$has  = ! empty( $g->kids );
-		$img  = sole_stranica_slika( $g->object_id );
+		$opis = trim( (string) $g->description );
+		$img  = '-' === $opis ? '' : ( '' !== $opis ? $opis : sole_stranica_slika( $g->object_id ) );
 		$kids = '';
 		foreach ( $g->kids as $c ) $kids .= '<li>' . sole_a( $c ) . '</li>';
 		$pic  = $img ? '<a class="pic" href="' . esc_url( $g->url ) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url( $img ) . '" alt="" loading="lazy" decoding="async"></a>' : '';

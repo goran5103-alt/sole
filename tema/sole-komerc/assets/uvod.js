@@ -33,7 +33,11 @@
     return{x:left,y:top,width:right-left,height:bot-top}}
   function fit(){const r=svg.getBoundingClientRect(),a=r.width/r.height,b=ink();
     const vw=Math.max(b.width/(a<1?.9:.64),b.height/(a<1?.6:.72)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
-    svg.setAttribute('viewBox',(cx-vw/2).toFixed(1)+' '+(cy-vh/2).toFixed(1)+' '+vw.toFixed(1)+' '+vh.toFixed(1));
+    /* telefon (uspravno): reči malo više gore, a strelica za skrol odmah ispod njih */
+    const por=a<1,vy=por?cy-.4*vh:cy-vh/2;
+    svg.setAttribute('viewBox',(cx-vw/2).toFixed(1)+' '+vy.toFixed(1)+' '+vw.toFixed(1)+' '+vh.toFixed(1));
+    const hint=document.querySelector('#intro .hint');
+    if(hint){if(por){const sc=r.width/vw,st=stick.getBoundingClientRect();hint.style.top=Math.round(r.top-st.top+(b.y+b.height-vy)*sc+26)+'px';hint.style.bottom='auto'}else{hint.style.top='';hint.style.bottom=''}}
     O=inside();word.style.transformOrigin=line.style.transformOrigin=O[0].toFixed(1)+'px '+O[1].toFixed(1)+'px';onScroll()}
   function onScroll(){const r=intro.getBoundingClientRect(),max=intro.offsetHeight-stick.offsetHeight,
       off=parseFloat(getComputedStyle(stick).top)||0,p=Math.min(1,Math.max(0,(off-r.top)/max));
@@ -241,8 +245,8 @@ function place(t){mx+=(tx-mx)*.03;my+=(ty-my)*.03;const port=W/H<1,e=1-Math.pow(
 /* žar: jak na početku (slova se vide kroz vatru), pri skrolu se jako zagasi i ostaju samo poneki plamenovi, više kao ugalj (zbog čitkosti teksta na kraju) */
 const ss=(a,b,x)=>{x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)},mixf=(a,b,k)=>a+(b-a)*k;
 function render(t){U.uTime.value=t;grade.uniforms.uTime.value=t;
-  const sp=window.SOLE_P==null?1:window.SOLE_P,k=ss(.1,.6,sp);
-  U.uHeat.value=mixf(1.9,.3,k);U.uFl.value=mixf(1.35,.38,k);U.uSp.value=mixf(1.25,.45,k);bloom.strength=mixf(1.05,.42,k);const em=mixf(1.35,.35,k);
+  const sp=window.SOLE_P==null?1:window.SOLE_P,k=ss(.1,.6,sp),ph=matchMedia('(max-width:640px)').matches;/* telefon: na kraju još tamnije */
+  U.uHeat.value=mixf(1.9,ph?.14:.3,k);U.uFl.value=mixf(1.35,ph?.2:.38,k);U.uSp.value=mixf(1.25,ph?.28:.45,k);bloom.strength=mixf(1.05,ph?.28:.42,k);const em=mixf(1.35,ph?.15:.35,k);
   for(const l of embers){const d=l.userData;l.intensity=em*d.b*(.72+.2*Math.sin(t*d.a+d.p)+.08*Math.sin(t*d.a*3.7+d.p*2.))}
   place(t);comp.render()}
 size();

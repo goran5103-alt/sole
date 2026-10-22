@@ -78,7 +78,7 @@ def head(slug, extra_css=''):
 <title>{E(page_title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="{asset(slug, 'style.css')}">{extra_css}
 </head>
 <body>
@@ -86,6 +86,13 @@ def head(slug, extra_css=''):
 '''
 
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
+
+MEGA_IMG = {   # grupa -> fajl iz medijateke (uploads/2024/12/), tačna imena (server razlikuje velika i mala slova)
+    '/lignit/': 'stanariPhoto-36.jpg', '/mrko-lignitni-ugalj/': 'Rudnik-pljevlja-1.jpg', '/suseni-vreoci/': 'Kolubara-prerada-1.jpg',
+    '/mrki-ugalj/': 'RMU-Banovici-siroko-celo-2.jpg', '/kameni-ugalj/': 'Ruski-ugalj-25.jpg', '/antracit/': 'ugalj2-1.jpg',
+    '/koks/': '926550_83409660-e1296078619294.jpg', '/drveni-pelet-od-biomase/': 'Miboro-Pelet-Bukva.jpg', '/primena-uglja-u-industriji/': 'Rmu-Breza-siroko-celo.jpg'}
+def mega_img(g):
+    return 'https://sole-komerc.solekomerc.co.rs/wp-content/uploads/2024/12/' + MEGA_IMG[g] if g in MEGA_IMG else None
 
 def chain(slug):
     """Strana i svi njeni roditelji (za označavanje aktivne stavke menija)."""
@@ -96,7 +103,7 @@ def chain(slug):
 def mega(slug):
     cur = chain(slug); rows = []
     for g, ch in GROUPS:
-        im = first_img(g)
+        im = mega_img(g)
         kids = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
         pic = f'<a class="pic" href="{rel(slug, g)}" tabindex="-1" aria-hidden="true"><img src="{A(im)}" alt="" loading="lazy" decoding="async"></a>' if im else ''
         pane = (f'<div class="pane{"" if ch else " leaf"}"><div class="pcol"><a class="ph" href="{rel(slug, g)}">{E(title(g))}</a>'
@@ -133,7 +140,7 @@ def header(slug):
             dm.append(f'<li class="has-sub{" open" if uopen else ""}"><div class="row"><a id="{uid}" href="{rel(slug, s)}">{E(lab)}</a>' + tg(uid) % ('true' if uopen else 'false') + f'</div><ul class="d-sub">{"".join(sub)}</ul></li>')
         else:
             dm.append(f'<li><div class="row"><a href="{rel(slug, s)}">{E(lab)}</a></div></li>')
-    return f'''<div class="topbar"><div class="wrap"><div class="tb-tag">{E(TAGLINE)}</div><a class="tb-phone" href="{tel_href(PHONE)}">{E(PHONE)}</a></div></div>
+    return f'''<div class="topbar"><div class="wrap"><div class="tb-tag">{E(TAGLINE)}</div></div></div>
 <header class="site-head" id="head"><div class="wrap">
 <a class="brand" href="{rel(slug, '/')}"><img src="{LOGO}" alt="{A(LOGO_ALT)}" width="190" height="46"></a>
 <nav class="nav"><ul>{"".join(items)}</ul></nav>
@@ -420,7 +427,7 @@ def home_page(slug):
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="assets/uvod.js"></script>
 '''
-    page = page_shell(slug, intro + welcome, css).replace('<body>', '<body class="has-intro">', 1)
+    page = page_shell(slug, intro + welcome, css).replace('<body>', '<body class="has-intro intro-hide-head">', 1)
     return page.replace('</body>', scripts + '</body>')
 
 # ---------------- slaganje ----------------

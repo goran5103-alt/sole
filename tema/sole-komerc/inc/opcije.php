@@ -10,6 +10,7 @@ function sole_defaults() {
 		'logo'             => '/wp-content/uploads/2024/12/logon-1.png',
 		'logo_alt'         => 'SOLE KOMERC',
 		'uvod_ukljucen'    => 1,
+		'uvod_sakrij_zaglavlje_mob' => 1,
 		'uvod_rec1'        => 'SOLE',
 		'uvod_rec2'        => 'KOMERC',
 		'uvod_red1'        => 'DOBRODOŠLI NA PREZENTACIJU PREDUZEĆA',
@@ -54,6 +55,7 @@ function sole_fields() {
 		),
 		'Uvod naslovne strane' => array(
 			array( 'uvod_ukljucen', 'Prikaži uvod (animacija žara)', 'check', 'Isključeno: naslovna odmah počinje tekstom.' ),
+			array( 'uvod_sakrij_zaglavlje_mob', 'Na telefonu sakrij logo i meni dok se ne skroluje', 'check', 'Isključeno: logo i meni se vide odmah.' ),
 			array( 'uvod_rec1', 'Velika reč — prvi red', 'text', 'Npr. SOLE' ),
 			array( 'uvod_rec2', 'Velika reč — drugi red', 'text', 'Npr. KOMERC' ),
 			array( 'uvod_red1', 'Naslov — prvi red', 'text', '' ),

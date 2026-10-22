@@ -13,7 +13,7 @@ $svg  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 <script>document.documentElement.className+=' js'</script>
-<div class="topbar"><div class="wrap"><div class="tb-tag"><?php echo esc_html( sole_opt( 'topbar_tekst' ) ); ?></div><a class="tb-phone" href="<?php echo esc_attr( sole_tel( $tel ) ); ?>"><?php echo esc_html( $tel ); ?></a></div></div>
+<div class="topbar"><div class="wrap"><div class="tb-tag"><?php echo esc_html( sole_opt( 'topbar_tekst' ) ); ?></div></div></div>
 <header class="site-head" id="head"><div class="wrap">
 <a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $alt ); ?>" width="190" height="46"></a>
 <nav class="nav"><ul><?php echo sole_main_nav(); ?></ul></nav>
