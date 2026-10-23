@@ -427,8 +427,8 @@ def home_body(slug):
     return f'''<section class="ab ab-dark ab-lead2"><div class="wrap"><p class="ab-lead">{mk(P[0], ['trgovine čvrstim energentima', 'stovarišta i distributivnog centra'])}</p>
 <p class="ab-addr">{mk(P[1])}</p></div></section>
 <section class="ab ab-dark ab-who">{fig(1, 'ab-bgimg par')}<div class="wrap"><p class="ab-state">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p></div></section>
-<section class="ab ab-lt ab-eq"><div class="wrap ab-eq-grid"><div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div>
-<div class="ab-bento">{fig(4, 'pf b1')}{fig(5, 'pf b2')}{fig(2, 'pf b3')}{fig(6, 'pf b4')}</div></div></section>
+<section class="ab ab-eq"><div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div>
+<div class="ab-bento">{fig(4, 'pf b1')}{fig(5, 'pf b2')}{fig(2, 'pf b3')}{fig(6, 'pf b4')}</div></section>
 <section class="ab ab-wh ab-log">{fig(3, 'pf ab-band')}<div class="wrap"><div class="ab-log-card"><p class="ab-body">{mk(P[4], ['Beograd, Novi Sad, Pančevo i Prahovo', 'Rostov, Novorusijsk, Solun i Izmail', 'železničkog transporta'])}</p><p class="ab-note">{mk(P[5])}</p></div></div></section>
 <section class="ab ab-lt ab-story"><div class="wrap ab-story-grid">{fig(0, 'ab-stage')}<div class="ab-time">
 <p class="ab-node n1">{mk(P[6], ['preko 70 zaposlenih radika'])}</p>

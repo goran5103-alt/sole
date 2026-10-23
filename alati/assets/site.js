@@ -5,12 +5,15 @@
   /* naslovna, poglavlja ispod uvoda: pojavljivanje pri skrolu, blaga paralaksa slika, slika vremenske linije, linija koja se puni */
   var abs=document.querySelectorAll('.ab');
   if(abs.length){
-    var rmo=matchMedia('(prefers-reduced-motion: reduce)').matches,all=document.querySelectorAll('.ab h2,.ab p,.ab figure,.ab .type');
-    if(rmo||!('IntersectionObserver' in window)){[].forEach.call(all,function(e){e.classList.add('in')})}
+    var rmo=matchMedia('(prefers-reduced-motion: reduce)').matches,fx=document.querySelectorAll('.ab-lead,.ab-addr,.ab-state'),all=document.querySelectorAll('.ab h2,.ab p,.ab figure,.ab .type');
+    [].forEach.call(fx,function(e){e.classList.add('fx')});
+    if(rmo||!('IntersectionObserver' in window)){[].forEach.call(all,function(e){e.classList.add('in')});[].forEach.call(document.querySelectorAll('.ab-lead2,.ab-who'),function(e){e.classList.add('fx-in')})}
     else{
       var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
-      [].forEach.call(all,function(e){if(!e.matches('figure'))e.classList.add('rv');io.observe(e)});
+      [].forEach.call(all,function(e){if(e.classList.contains('fx'))return;if(!e.matches('figure'))e.classList.add('rv');io.observe(e)});
       [].forEach.call(document.querySelectorAll('.ab .type'),function(e,i){e.style.transitionDelay=(i%3)*.08+'s'});
+      var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fx-in');io2.unobserve(e.target)}})},{threshold:.45});
+      [].forEach.call(document.querySelectorAll('.ab-lead2,.ab-who'),function(e){io2.observe(e)});
     }
     var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
       story=document.querySelector('.ab-story'),nodes=[].slice.call(document.querySelectorAll('.ab-node')),tk=0;
@@ -20,6 +23,34 @@
       if(nodes.length){var ref=vh*.55;nodes.forEach(function(n){var r=n.getBoundingClientRect(),gap=parseFloat(getComputedStyle(n).marginBottom)||0;
         n.style.setProperty('--q',Math.min(1,Math.max(0,(ref-r.top)/(r.height+gap))).toFixed(3));n.classList.toggle('on',ref>r.top)})}};
     addEventListener('scroll',function(){if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);upd();
+
+    /* oprema: reč pod mišem osvetljava svoju fotografiju (magacin, mehanizacija, kolosek, kiper vozila) */
+    var bento=document.querySelector('.ab-bento'),mks=document.querySelectorAll('.ab-eq .ab-body mark'),map=['b4','b1','b3','b2'];
+    if(bento)[].forEach.call(mks,function(m,i){if(!map[i])return;
+      m.addEventListener('mouseenter',function(){bento.classList.add('hl','hl-'+map[i])});
+      m.addEventListener('mouseleave',function(){bento.className=bento.className.replace(/\s*hl(-b\d)?/g,'')})});
+
+    /* prve dve sekcije posle uvoda zauzimaju ceo ekran: jedan skrol (točkić ili prevlačenje) prikazuje celu sekciju */
+    var sA=document.querySelector('.ab-lead2'),sB=document.querySelector('.ab-who'),busy=false,lastW=0,t0=0;
+    if(sA&&sB&&!rmo){
+      var stops=function(){var vh=innerHeight,o=[];[sA,sB].forEach(function(e){var r=e.getBoundingClientRect();if(r.height<=vh+40)o.push(r.top+scrollY)});return o};
+      var go=function(to){busy=true;var from=scrollY,d=Math.abs(to-from),dur=Math.min(1100,600+d*.28),t=performance.now();
+        (function step(n){var k=Math.min(1,(n-t)/dur),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;scrollTo({top:from+(to-from)*e,behavior:'instant'});
+          if(k<1)requestAnimationFrame(step);else setTimeout(function(){busy=false},120)})(t)};
+      var target=function(dir){var st=stops(),y=scrollY,vh=innerHeight,k;if(st.length<2||st[0]-y>vh*1.1)return null;
+        if(dir>0){if(y<st[0]-vh-60||y>=st[1]-4)return null;for(k=0;k<st.length;k++)if(st[k]>y+4)return st[k]}
+        else{if(y>st[1]+4||y<=st[0]+4)return null;return st[0]}
+        return null};
+      addEventListener('wheel',function(e){if(e.ctrlKey||!e.deltaY)return;var n=performance.now();
+        if(busy||n-lastW<160){lastW=n;e.preventDefault();return}
+        var to=target(e.deltaY>0?1:-1);if(to===null)return;lastW=n;e.preventDefault();go(to)},{passive:false});
+      var ty=0,dec=0,tg=false;
+      addEventListener('touchstart',function(e){ty=e.touches[0].clientY;dec=0;tg=false},{passive:true});
+      addEventListener('touchmove',function(e){var dy=ty-e.touches[0].clientY;
+        if(!dec&&Math.abs(dy)>6){dec=1;tg=!busy&&target(dy>0?1:-1)!==null}
+        if((tg||busy)&&e.cancelable)e.preventDefault()},{passive:false});
+      addEventListener('touchend',function(e){if(!tg||busy)return;var dy=ty-e.changedTouches[0].clientY;if(Math.abs(dy)<28)return;var to=target(dy>0?1:-1);if(to!==null)go(to)},{passive:true});
+    }
   }
 
   /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */
