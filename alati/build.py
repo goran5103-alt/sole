@@ -88,20 +88,13 @@ def head(slug, extra_css=''):
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
 
 UP = 'https://sole.izradasajtovasajta.com/wp-content/uploads/2026/10/'
-PHOTO = {   # grupa -> (strana sa koje je fotografija, početak naziva fajla); sve su već u medijateci
-    '/lignit/': ('/lignit/', 'ugalj2-1'), '/mrko-lignitni-ugalj/': ('/lignit/', 'loznica-ogrev'),
-    '/suseni-vreoci/': ('/suseni-vreoci/', 'Kolubara-vagonske'), '/mrki-ugalj/': ('/mrki-ugalj-banovici/', 'rudnuk_banovici'),
-    '/kameni-ugalj/': ('/kameni-ugalj/', 'Ruski-ugalj-22'), '/antracit/': ('/lignit/', '926550_'),
-    '/koks/': ('/mrki-ugalj/', 'ugalj-qz1ckf'), '/drveni-pelet-od-biomase/': ('/drveni-pelet-od-biomase/', 'Miboro-Pelet'),
-    '/primena-uglja-u-industriji/': ('/lignit-kolubara/', 'RB-Kolubara-1')}
-def photo(g):
-    """Fotografija vrste uglja iz medijateke (puna adresa sa //, kao u podacima)."""
-    if g not in PHOTO: return None
-    pg, pre = PHOTO[g]
-    for x in D[pg]['b']:
-        if x[0] == 'img' and x[1].split('/')[-1].startswith(pre): return fix(x[1])
-    raise KeyError(g)
-def mega_img(g): return photo(g)
+TIP = {'/lignit/': 'lignit', '/mrko-lignitni-ugalj/': 'mrko', '/suseni-vreoci/': 'suseni', '/mrki-ugalj/': 'mrki', '/kameni-ugalj/': 'kameni',
+       '/antracit/': 'antracit', '/koks/': 'koks', '/drveni-pelet-od-biomase/': 'pelet', '/primena-uglja-u-industriji/': 'zar'}
+def photo(g, meni=False):
+    """Obrađena fotografija vrste uglja iz medijateke (alati/slike: Real-ESRGAN + završna obrada); za meni manja verzija."""
+    if g not in TIP: return None
+    return UP + f'sole-ugalj-{TIP[g]}{"-m" if meni else ""}.jpg'
+def mega_img(g): return photo(g, True)
 
 def chain(slug):
     """Strana i svi njeni roditelji (za označavanje aktivne stavke menija)."""
