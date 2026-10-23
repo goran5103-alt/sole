@@ -23,7 +23,7 @@
 #intro h1 .c::before{content:"";flex:0 0 auto;width:clamp(36px,4.5vw,64px);height:3px;border-radius:2px;background:var(--ember)}
 #intro .cover{position:absolute;left:0;width:100%;top:calc(var(--hh,76px) + var(--tbh,36px));height:calc(100% - var(--hh,76px) - var(--tbh,36px));z-index:4;overflow:visible;pointer-events:none}
 .admin-bar #intro .cover{top:calc(var(--hh,76px) + var(--tbh,36px))}
-#intro .cover text{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.13em}
+#intro .cover text{font-family:"Anton","Bebas Neue",Impact,"Arial Narrow",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.03em}
 #intro .hint{position:absolute;left:50%;bottom:34px;z-index:5;transform:translateX(-50%);opacity:calc(1 - var(--p,0) * 4);pointer-events:none}
 #intro .hint i{display:block;width:2px;height:54px;background:linear-gradient(var(--ink),transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}

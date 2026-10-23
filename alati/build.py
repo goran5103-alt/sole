@@ -88,12 +88,20 @@ def head(slug, extra_css=''):
 def tel_href(p): return 'tel:' + re.sub(r'[^\d+]', '', p)
 
 UP = 'https://sole.izradasajtovasajta.com/wp-content/uploads/2026/10/'
-TYPE_IMG = {   # grupa -> renderovana slika vrste uglja (alati/render), u medijateci kao ugalj-<tip>.jpg
-    '/lignit/': 'lignit', '/mrko-lignitni-ugalj/': 'mrko', '/suseni-vreoci/': 'suseni', '/mrki-ugalj/': 'mrki', '/kameni-ugalj/': 'kameni',
-    '/antracit/': 'antracit', '/koks/': 'koks', '/drveni-pelet-od-biomase/': 'pelet', '/primena-uglja-u-industriji/': 'zar'}
-MEGA_IMG = {g: f'ugalj-{t}.jpg' for g, t in TYPE_IMG.items()}
-def mega_img(g):
-    return UP + MEGA_IMG[g] if g in MEGA_IMG else None
+PHOTO = {   # grupa -> (strana sa koje je fotografija, početak naziva fajla); sve su već u medijateci
+    '/lignit/': ('/lignit/', 'ugalj2-1'), '/mrko-lignitni-ugalj/': ('/lignit/', 'loznica-ogrev'),
+    '/suseni-vreoci/': ('/suseni-vreoci/', 'Kolubara-vagonske'), '/mrki-ugalj/': ('/mrki-ugalj-banovici/', 'rudnuk_banovici'),
+    '/kameni-ugalj/': ('/kameni-ugalj/', 'Ruski-ugalj-22'), '/antracit/': ('/lignit/', '926550_'),
+    '/koks/': ('/mrki-ugalj/', 'ugalj-qz1ckf'), '/drveni-pelet-od-biomase/': ('/drveni-pelet-od-biomase/', 'Miboro-Pelet'),
+    '/primena-uglja-u-industriji/': ('/lignit-kolubara/', 'RB-Kolubara-1')}
+def photo(g):
+    """Fotografija vrste uglja iz medijateke (puna adresa sa //, kao u podacima)."""
+    if g not in PHOTO: return None
+    pg, pre = PHOTO[g]
+    for x in D[pg]['b']:
+        if x[0] == 'img' and x[1].split('/')[-1].startswith(pre): return fix(x[1])
+    raise KeyError(g)
+def mega_img(g): return photo(g)
 
 def chain(slug):
     """Strana i svi njeni roditelji (za označavanje aktivne stavke menija)."""
@@ -401,7 +409,7 @@ def mk(text, phrases=()):
 def type_card(frm, slug):
     """Vrsta uglja kao razvlačeći panel (naslovna)."""
     kc = kcal(slug)
-    return (f'<a class="type" href="{rel(frm, slug)}"><img src="{A(UP + MEGA_IMG[slug])}" alt="" loading="lazy">'
+    return (f'<a class="type" href="{rel(frm, slug)}"><img src="{A(photo(slug))}" alt="" loading="lazy">'
             f'<div class="tt"><div class="t">{E(title(slug))}</div>' + (f'<div class="kc">{E(kc)}</div>' if kc else '') + '</div><i class="go"></i></a>')
 
 def home_body(slug):
@@ -418,19 +426,16 @@ def home_body(slug):
     types = ''.join(type_card(slug, g) for g, _ in GROUPS)
     return f'''<section class="ab ab-dark ab-lead2"><div class="wrap"><p class="ab-lead">{mk(P[0], ['trgovine čvrstim energentima', 'stovarišta i distributivnog centra'])}</p>
 <p class="ab-addr">{mk(P[1])}</p></div></section>
-<section class="ab ab-dark ab-who"><div class="wrap"><p class="ab-pull">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p></div>
-{fig(1, 'ab-pano par')}</section>
-<section class="ab ab-dark ab-eq"><div class="wrap ab-eq-grid"><div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div>
-<div class="ab-eq-stack">{fig(4, 'ab-s1 par')}{fig(5, 'ab-s2 par')}{fig(6, 'ab-s3 par')}</div></div></section>
-<section class="ab ab-dark ab-log">{fig(3, 'ab-band par')}<i class="ab-route"></i><div class="wrap ab-log-grid">{fig(2, 'ab-inset par')}
-<div class="ab-log-card"><p class="ab-body">{mk(P[4], ['Beograd, Novi Sad, Pančevo i Prahovo', 'Rostov, Novorusijsk, Solun i Izmail', 'železničkog transporta'])}</p><p class="ab-note">{mk(P[5])}</p></div></div></section>
-<section class="ab ab-dark ab-story"><div class="wrap ab-story-grid"><div class="ab-time">
+<section class="ab ab-dark ab-who">{fig(1, 'ab-bgimg par')}<div class="wrap"><p class="ab-state">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p></div></section>
+<section class="ab ab-lt ab-eq"><div class="wrap ab-eq-grid"><div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div>
+<div class="ab-bento">{fig(4, 'pf b1')}{fig(5, 'pf b2')}{fig(2, 'pf b3')}{fig(6, 'pf b4')}</div></div></section>
+<section class="ab ab-wh ab-log">{fig(3, 'pf ab-band')}<div class="wrap"><div class="ab-log-card"><p class="ab-body">{mk(P[4], ['Beograd, Novi Sad, Pančevo i Prahovo', 'Rostov, Novorusijsk, Solun i Izmail', 'železničkog transporta'])}</p><p class="ab-note">{mk(P[5])}</p></div></div></section>
+<section class="ab ab-lt ab-story"><div class="wrap ab-story-grid">{fig(0, 'ab-stage')}<div class="ab-time">
 <p class="ab-node n1">{mk(P[6], ['preko 70 zaposlenih radika'])}</p>
 <p class="ab-node n2">{mk(P[7], ['„Ilić Trgovina“'])}</p>
-<p class="ab-node n3">{mk(P[8], ['Od 2012. godine', '„Mlin Dobrinci“'])}</p></div>
-{fig(0, 'ab-side par')}</div></section>
-<section class="ab ab-dark ab-iso">{fig(7, 'ab-bgimg par')}<div class="wrap ab-iso-grid"><p class="ab-body">{mk(P[9], ['ISO 9001/2008'])}</p><p class="ab-cert">{mk(P[10], ['29.02.2012. godine', 'SRPS ISO 9001:2008'])}</p></div></section>
-<section class="ab ab-dark ab-types"><div class="wrap"><h2>{E(TOP[1][1])}</h2><div class="types-row">{types}</div></div></section>'''
+<p class="ab-node n3">{mk(P[8], ['Od 2012. godine', '„Mlin Dobrinci“'])}</p></div></div></section>
+<section class="ab ab-bl ab-iso"><div class="wrap ab-iso-grid">{fig(7, 'pf ab-isoimg')}<div class="ab-iso-text"><p class="ab-body">{mk(P[9], ['ISO 9001/2008'])}</p><p class="ab-cert">{mk(P[10], ['29.02.2012. godine', 'SRPS ISO 9001:2008'])}</p></div></div></section>
+<section class="ab ab-wh ab-types"><div class="wrap"><h2>{E(TOP[1][1])}</h2><div class="types-row">{types}</div></div></section>'''
 
 def home_page(slug):
     intro = '''<section id="intro"><div class="stick" id="stick">

@@ -2,27 +2,24 @@
 (function(){
   document.documentElement.classList.add('js');
 
-  /* naslovna, poglavlja ispod uvoda: pojavljivanje pri skrolu, paralaksa slika, iskaz koji se ispisuje, ruta, vremenska linija, paneli vrsta uglja */
+  /* naslovna, poglavlja ispod uvoda: pojavljivanje pri skrolu, blaga paralaksa slika, slika vremenske linije, linija koja se puni */
   var abs=document.querySelectorAll('.ab');
   if(abs.length){
-    var rmo=matchMedia('(prefers-reduced-motion: reduce)').matches,els=document.querySelectorAll('.ab h2,.ab p:not(.ab-pull),.ab figure:not(.par),.ab .types-row');
-    if(rmo||!('IntersectionObserver' in window)){[].forEach.call(document.querySelectorAll('.ab h2,.ab p,.ab figure,.ab .types-row'),function(e){e.classList.add('in')})}
+    var rmo=matchMedia('(prefers-reduced-motion: reduce)').matches,all=document.querySelectorAll('.ab h2,.ab p,.ab figure,.ab .type');
+    if(rmo||!('IntersectionObserver' in window)){[].forEach.call(all,function(e){e.classList.add('in')})}
     else{
-      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -10% 0px',threshold:.06});
-      [].forEach.call(els,function(e){e.classList.add('rv');io.observe(e)});
-      [].forEach.call(document.querySelectorAll('.ab figure.par,.ab .ab-pull'),function(e){io.observe(e)});
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+      [].forEach.call(all,function(e){if(!e.matches('figure'))e.classList.add('rv');io.observe(e)});
+      [].forEach.call(document.querySelectorAll('.ab .type'),function(e,i){e.style.transitionDelay=(i%3)*.08+'s'});
     }
-    var pars=[].slice.call(document.querySelectorAll('.ab figure.par')),tl=document.querySelector('.ab-time'),pull=document.querySelector('.ab-pull'),route=document.querySelector('.ab-route'),tk=0;
+    var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
+      story=document.querySelector('.ab-story'),nodes=[].slice.call(document.querySelectorAll('.ab-node')),tk=0;
     var upd=function(){tk=0;var vh=innerHeight;
-      if(!rmo)pars.forEach(function(f){var r=f.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;var c=(r.top+r.height/2-vh/2)/vh;f.style.setProperty('--py',(-c*(f.classList.contains('ab-bgimg')?70:34)).toFixed(1)+'px')});
-      if(tl){var r=tl.getBoundingClientRect(),p=Math.min(1,Math.max(0,(vh*.62-r.top)/r.height));tl.style.setProperty('--p',p.toFixed(3))}
-      if(pull&&!rmo){var r2=pull.getBoundingClientRect(),q=Math.min(1,Math.max(0,(vh*.9-r2.top)/(vh*.55+r2.height*.55)));pull.style.setProperty('--y',(q*150).toFixed(1)+'%')}
-      if(route&&!rmo){var r3=route.parentNode.getBoundingClientRect(),z=Math.min(1,Math.max(0,(vh*.85-r3.top)/(r3.height*.8)));route.style.setProperty('--rp',(z*100).toFixed(1)+'%')}};
+      if(!rmo)pars.forEach(function(o){var r=o.f.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;var c=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/vh));o.f.style.setProperty('--py',(-c*o.a).toFixed(1)+'px')});
+      if(story&&!rmo){var r=story.getBoundingClientRect();story.style.setProperty('--tp',Math.min(1,Math.max(0,(vh*.55-r.top)/(r.height-vh*.1))).toFixed(3))}
+      if(nodes.length){var ref=vh*.55;nodes.forEach(function(n){var r=n.getBoundingClientRect(),gap=parseFloat(getComputedStyle(n).marginBottom)||0;
+        n.style.setProperty('--q',Math.min(1,Math.max(0,(ref-r.top)/(r.height+gap))).toFixed(3));n.classList.toggle('on',ref>r.top)})}};
     addEventListener('scroll',function(){if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);upd();
-    /* paneli vrsta uglja: aktivan je onaj pod mišem/fokusom (prvi na početku) */
-    var tr=document.querySelector('.types-row');
-    if(tr){var ts=[].slice.call(tr.querySelectorAll('.type')),on=function(t){ts.forEach(function(x){x.classList.toggle('act',x===t)})};
-      on(ts[Math.min(3,ts.length-1)]);ts.forEach(function(t){t.addEventListener('mouseenter',function(){on(t)});t.addEventListener('focus',function(){on(t)})})}
   }
 
   /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */

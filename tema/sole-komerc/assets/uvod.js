@@ -12,25 +12,28 @@
     for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>200){const q=(x-tx)**2+(y-ty)**2;if(q<bd){bd=q;best=[x/k,y/k]}}
     return best||[x0,y0-fs*.36]}
   let O=[800,320];
-  /* Raspored reči u maski: oba reda iste širine (reč iznad je viša), po stvarnim ivicama slova, tačno na sredini */
-  const LS=.13;/* razmak slova (em), isti kao u CSS-u */
+  /* Raspored reči u maski: manji razmak između slova, a slova su šira (ne viša) tako da blok ostaje iste širine kao ranije;
+     oba reda iste širine, po stvarnim ivicama slova, tačno na sredini */
+  const LS=.03,LS0=.13;/* novi i raniji razmak slova (em), LS isti kao u CSS-u */
+  let SX=1;
   const t2=document.getElementById('hcT2'),l1=document.getElementById('hcL1'),l2=document.getElementById('hcL2');
   function ink(){
     const g=document.createElement('canvas').getContext('2d'),cs=getComputedStyle(t1),fam=cs.fontFamily,wt=cs.fontWeight;
     const fs1=+t1.getAttribute('font-size'),y1=430;
     g.textAlign='center';
-    const ls=function(fs){if('letterSpacing' in g)g.letterSpacing=(LS*fs)+'px'};
-    ls(fs1);g.font=wt+' '+fs1+'px '+fam;const m1=g.measureText(t1.textContent),w1=m1.actualBoundingBoxLeft+m1.actualBoundingBoxRight;
-    ls(100);g.font=wt+' 100px '+fam;const m0=g.measureText(t2.textContent),w0=m0.actualBoundingBoxLeft+m0.actualBoundingBoxRight;
+    const ls=function(fs,k){if('letterSpacing' in g)g.letterSpacing=(k*fs)+'px'},wid=function(m){return m.actualBoundingBoxLeft+m.actualBoundingBoxRight};
+    ls(fs1,LS0);g.font=wt+' '+fs1+'px '+fam;const wOld=wid(g.measureText(t1.textContent));
+    ls(fs1,LS);g.font=wt+' '+fs1+'px '+fam;const m1=g.measureText(t1.textContent),w1=wid(m1);
+    SX=wOld/w1;
+    ls(100,LS);g.font=wt+' 100px '+fam;const w0=wid(g.measureText(t2.textContent));
     const fs2=Math.min(fs1*1.1,100*w1/w0);
-    ls(fs2);g.font=wt+' '+fs2+'px '+fam;const m2=g.measureText(t2.textContent);
+    ls(fs2,LS);g.font=wt+' '+fs2+'px '+fam;const m2=g.measureText(t2.textContent);
     const gap=.14*m1.actualBoundingBoxAscent,y2=y1+m1.actualBoundingBoxDescent+gap+m2.actualBoundingBoxAscent;
     [[t1,l1,m1,fs1,y1],[t2,l2,m2,fs2,y2]].forEach(function(p){const m=p[2],x=(800-(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2).toFixed(2);
-      [p[0],p[1]].forEach(function(e){if(!e)return;e.setAttribute('x',x);e.setAttribute('y',p[4].toFixed(2));e.setAttribute('font-size',p[3].toFixed(2))})});
-    const x1=800-(m1.actualBoundingBoxRight-m1.actualBoundingBoxLeft)/2,x2=800-(m2.actualBoundingBoxRight-m2.actualBoundingBoxLeft)/2;
-    const left=Math.min(x1-m1.actualBoundingBoxLeft,x2-m2.actualBoundingBoxLeft),right=Math.max(x1+m1.actualBoundingBoxRight,x2+m2.actualBoundingBoxRight),
-          top=y1-m1.actualBoundingBoxAscent,bot=y2+m2.actualBoundingBoxDescent;
-    return{x:left,y:top,width:right-left,height:bot-top}}
+      [p[0],p[1]].forEach(function(e){if(!e)return;e.setAttribute('x',x);e.setAttribute('y',p[4].toFixed(2));e.setAttribute('font-size',p[3].toFixed(2));
+        e.setAttribute('transform','translate(800 0) scale('+SX.toFixed(4)+' 1) translate(-800 0)')})});
+    const W=Math.max(w1,wid(m2))*SX,top=y1-m1.actualBoundingBoxAscent,bot=y2+m2.actualBoundingBoxDescent;
+    return{x:800-W/2,y:top,width:W,height:bot-top}}
   function fit(){const r=svg.getBoundingClientRect(),a=r.width/r.height,b=ink();
     const vw=Math.max(b.width/(a<1?.9:.64),b.height/(a<1?.6:.72)*a),vh=vw/a,cx=b.x+b.width/2,cy=b.y+b.height/2;
     /* telefon (uspravno): reči malo više gore, a strelica za skrol odmah ispod njih */
@@ -38,7 +41,7 @@
     svg.setAttribute('viewBox',(cx-vw/2).toFixed(1)+' '+vy.toFixed(1)+' '+vw.toFixed(1)+' '+vh.toFixed(1));
     const hint=document.querySelector('#intro .hint');
     if(hint){if(por){const sc=r.width/vw,st=stick.getBoundingClientRect();hint.style.top=Math.round(r.top-st.top+(b.y+b.height-vy)*sc+26)+'px';hint.style.bottom='auto'}else{hint.style.top='';hint.style.bottom=''}}
-    O=inside();word.style.transformOrigin=line.style.transformOrigin=O[0].toFixed(1)+'px '+O[1].toFixed(1)+'px';onScroll()}
+    O=inside();O[0]=800+(O[0]-800)*SX;word.style.transformOrigin=line.style.transformOrigin=O[0].toFixed(1)+'px '+O[1].toFixed(1)+'px';onScroll()}
   function onScroll(){const r=intro.getBoundingClientRect(),max=intro.offsetHeight-stick.offsetHeight,
       off=parseFloat(getComputedStyle(stick).top)||0,p=Math.min(1,Math.max(0,(off-r.top)/max));
     stick.style.setProperty('--p',p.toFixed(4));window.SOLE_P=p;
