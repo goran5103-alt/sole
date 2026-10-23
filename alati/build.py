@@ -423,11 +423,18 @@ def home_body(slug):
         _, u, al = slides[i]
         return (f'<figure{f" class=\"{cls}\"" if cls else ""}><img src="{A(fix(u))}" alt="{A(al)}" loading="lazy">'
                 f'<figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>')
+    def bg(i):
+        _, u, al = slides[i]
+        return f'<figure class="ab-lead-bg"><img src="{A(fix(u))}" alt="" loading="lazy"></figure>'
+    def fig_full(i, cls, name):
+        """Ista fotografija u većoj rezoluciji iz medijateke (original umesto isečka 1600x580)."""
+        _, u, al = slides[i]
+        return f'<figure class="{cls}"><img src="{A(fix(u.rsplit("/", 1)[0] + "/" + name))}" alt="{A(al)}" loading="lazy"><figcaption>{E(caps[i]) if i < len(caps) else ""}</figcaption></figure>'
     types = ''.join(type_card(slug, g) for g, _ in GROUPS)
-    return f'''<section class="ab ab-dark ab-lead2"><div class="wrap"><p class="ab-lead">{mk(P[0], ['trgovine čvrstim energentima', 'stovarišta i distributivnog centra'])}</p>
+    return f'''<section class="ab ab-dark ab-lead2">{bg(0)}<div class="wrap"><p class="ab-lead">{mk(P[0], ['trgovine čvrstim energentima', 'stovarišta i distributivnog centra'])}</p>
 <p class="ab-addr">{mk(P[1])}</p></div></section>
 <section class="ab ab-dark ab-who">{fig(1, 'ab-bgimg par')}<div class="wrap"><p class="ab-state">{mk(P[2], ['domaćinstvima', 'institucijama', 'velikim industrijskim potrošačima'])}</p></div></section>
-<section class="ab ab-eq"><div class="ab-eq-pin"><div class="ab-eq-figs">{fig(6, 'eqf b1')}{fig(4, 'eqf b2')}{fig(2, 'eqf b3')}{fig(5, 'eqf b4')}</div>
+<section class="ab ab-eq"><div class="ab-eq-pin"><div class="ab-eq-figs">{fig(4, 'eqf b1')}{fig(2, 'eqf b2')}{fig_full(5, 'eqf b3', 'DSC_0016.jpg')}</div>
 <div class="ab-eq-text"><p class="ab-body">{mk(P[3], ['magacinskim prostorom', 'mehanizacijom', 'industrijskim kolosekom', 'kiper vozilima nosivosti od 1 do 26 tona', 'kolskom vagom mernog opsega do 60 tona'])}</p></div></div></section>
 <section class="ab ab-lt ab-story"><div class="ab-story-grid">{fig(0, 'ab-stage')}<div class="ab-time">
 <p class="ab-node n1">{mk(P[6], ['preko 70 zaposlenih radika'])}</p>

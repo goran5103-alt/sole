@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 1.8.0
+Version: 1.9.0
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -140,10 +140,12 @@ html.js .ab .in mark,html.js .ab mark.in{background-size:100% .34em}
 html.js .ab figure.pf>img{clip-path:inset(0 0 100% 0);transition:clip-path 1.2s cubic-bezier(.2,.7,.2,1),filter .6s}
 html.js .ab figure.pf.in>img{clip-path:inset(0)}
 .ab-bgimg{position:absolute!important;overflow:hidden;inset:0;z-index:0;--amp:50;--sc:1.14}
+.ab-bgimg>img{object-position:20% 50%}
 
 /* 1. uvodna rečenica i adresa: nastavak uvoda, ista pozadina */
 .ab-lead2{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:calc(var(--hh,76px) + 24px) 0 clamp(40px,6vw,90px)}
 .ab-lead2 .wrap{width:100%}
+.ab-lead-bg{display:none}
 .ab-lead2::after{content:"";position:absolute;right:-8%;top:58%;width:min(62vw,800px);aspect-ratio:1;transform:translateY(-50%);border-radius:50%;pointer-events:none;z-index:0;
   background:repeating-radial-gradient(circle,transparent 0 50px,rgba(255,106,26,.17) 51px 52px);-webkit-mask-image:radial-gradient(circle,#000 18%,transparent 68%);mask-image:radial-gradient(circle,#000 18%,transparent 68%);animation:ab-breathe 16s ease-in-out infinite alternate}
 .ab-lead{max-width:25ch;font:600 clamp(26px,3.7vw,58px)/1.16 var(--ui);letter-spacing:-.032em;color:#f6f1ea}
@@ -155,49 +157,55 @@ html.js .ab figure.pf.in>img{clip-path:inset(0)}
 .ab-who{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:calc(var(--hh,76px) + 24px) 0 clamp(40px,6vw,90px)}
 .ab-who .wrap{width:100%}
 .ab-who::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,3,.94) 0%,rgba(5,4,3,.8) 34%,rgba(5,4,3,.28) 62%,rgba(5,4,3,.08) 100%),linear-gradient(180deg,#050403 0%,rgba(5,4,3,0) 22%,rgba(5,4,3,0) 82%,rgba(5,4,3,.45) 100%)}
-.ab-state{max-width:min(29ch,100%);padding:clamp(26px,3vw,46px) clamp(24px,3vw,46px);background:linear-gradient(135deg,rgba(6,12,20,.74),rgba(6,12,20,.4));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--ember);font:600 clamp(24px,2.5vw,38px)/1.28 var(--ui);letter-spacing:-.022em;color:#f6f1ea}
+.ab-state{max-width:min(29ch,100%);padding:clamp(26px,3vw,46px) clamp(40px,5vw,84px) clamp(26px,3vw,46px) clamp(24px,3vw,46px);background:linear-gradient(90deg,rgba(6,12,20,.8) 0%,rgba(6,12,20,.62) 55%,rgba(6,12,20,0) 100%);border-left:4px solid var(--ember);font:600 clamp(24px,2.5vw,38px)/1.28 var(--ui);letter-spacing:-.022em;color:#f6f1ea}
 .ab-state mark{background:none!important;color:var(--ember);padding:0;margin:0}
 
 /* oživljen tekst: pri dolasku sekcije u vidno polje tekst se meko ispisuje odozgo nadole (maska), blago se podiže i izoštrava */
 @property --r{syntax:"<percentage>";inherits:false;initial-value:0%}
+@keyframes ab-drip{0%,100%{opacity:.25;transform:scaleY(.4);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
 @keyframes ab-breathe{from{transform:translateY(-50%) scale(.96);opacity:.7}to{transform:translateY(-50%) scale(1.06);opacity:1}}
 @keyframes ab-pin{0%{box-shadow:0 0 0 6px rgba(255,106,26,.15),0 0 0 14px rgba(255,106,26,.06)}70%,100%{box-shadow:0 0 0 14px rgba(255,106,26,0),0 0 0 30px rgba(255,106,26,0)}}
 html.js .ab .fx{--r:-45%;transform:translateY(22px);filter:blur(7px);
   -webkit-mask-image:linear-gradient(180deg,#000 var(--r),transparent calc(var(--r) + 45%));mask-image:linear-gradient(180deg,#000 var(--r),transparent calc(var(--r) + 45%));
-  transition:--r 1.9s cubic-bezier(.3,.6,.2,1) var(--d,0s),transform 1.5s cubic-bezier(.2,.7,.2,1) var(--d,0s),filter 1.4s ease var(--d,0s)}
+  transition:--r 1.5s cubic-bezier(.3,.6,.2,1) var(--d,0s),transform 1.2s cubic-bezier(.2,.7,.2,1) var(--d,0s),filter .9s ease var(--d,0s)}
 html.js .ab.fx-in .fx{--r:100%;transform:none;filter:none}
-html.js .ab .fx.ab-addr{--d:.7s}
+html.js .ab .fx.ab-addr{--d:.3s}
 html.js .ab-who .ab-bgimg>img{scale:1.2;transition:scale 3s cubic-bezier(.2,.6,.2,1)}
 html.js .ab-who.fx-in .ab-bgimg>img{scale:1}
 html.js .ab.fx-in .fx mark{background-size:100% .34em}
 
-/* 3. čime raspolaže: ekran ostaje na mestu, dok skrolujete reči u tekstu se redom osvetljavaju a pozadinska fotografija se smenjuje */
-.ab-eq{position:relative;background:#0b1f33;color:#fff}
+/* 3. čime raspolaže: ekran ostaje na mestu, dok skrolujete reči u tekstu se redom osvetljavaju a fotografija u okviru se smenjuje; gornja i donja linija se pune istovremeno */
+.ab-eq{position:relative;background:#07090c;color:#fff}
 .ab-eq-pin{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:min(100vh,780px)}
-.ab-eq-figs{grid-column:2;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:3px;background:#fff}
-.ab-eq-figs figure{position:relative;overflow:hidden;background:#0b2c4a}
-.ab-eq-figs .b1{grid-column:1/3}.ab-eq-figs .b2{grid-column:3/7}.ab-eq-figs .b3{grid-column:1/5}.ab-eq-figs .b4{grid-column:5/7}
+.ab-eq-figs{grid-column:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:3px;background:#fff}
+.ab-eq-figs figure{position:relative;overflow:hidden;background:#0b0e12}
+.ab-eq-figs .b1{grid-column:1/3}
 .ab-eq-figs img{width:100%;height:100%;object-fit:cover}
-.ab-eq-text{grid-column:1;grid-row:1;position:relative;display:flex;align-items:center;background:#0f3b63;padding:clamp(48px,6vw,110px) clamp(28px,5vw,90px) clamp(48px,6vw,110px) max(clamp(28px,5vw,90px),calc((100vw - var(--wrap)) / 2))}
-.ab-eq-text::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:var(--ember)}
+.ab-eq-text{grid-column:1;grid-row:1;position:relative;display:flex;align-items:center;background:#0a0c10;padding:clamp(48px,6vw,110px) clamp(28px,5vw,90px) clamp(48px,6vw,110px) max(clamp(28px,5vw,90px),calc((100vw - var(--wrap)) / 2))}
 .ab-eq .ab-body{color:rgba(255,255,255,.92);font-size:clamp(18px,1.5vw,21.5px);line-height:1.8}
 .ab-eq mark{background:none;color:#fff;border-bottom:2px solid rgba(255,106,26,.75);padding:0 .06em;margin:0}
 
-/* pokretna verzija (samo uz skriptu): ceo ekran, fotografije su pozadina, tekst je ploča preko nje */
+/* pokretna verzija (samo uz skriptu i bez „smanjenog pokreta”) */
 @media (prefers-reduced-motion:no-preference){
 html.js .ab-eq{height:300vh}
-html.js .ab-eq-pin{position:sticky;top:0;display:block;height:100vh;height:100svh;min-height:0;overflow:hidden}
-html.js .ab-eq-figs{position:absolute;inset:0;display:block;background:#0b1f33}
+html.js .ab-eq-pin{position:sticky;top:0;display:block;height:100vh;height:100svh;min-height:0;overflow:hidden;background:radial-gradient(55% 70% at 78% 50%,rgba(255,106,26,.14),transparent 70%),#07090c}
+html.js .ab-eq-figs{position:absolute;right:0;top:50%;transform:translateY(-50%);width:min(56vw,860px);aspect-ratio:16/10;display:block;background:#0b0e12;box-shadow:0 50px 100px -40px rgba(0,0,0,.9)}
+html.js .ab-eq-figs::before,html.js .ab-eq-figs::after{content:"";position:absolute;z-index:3;width:84px;height:84px;pointer-events:none}
+html.js .ab-eq-figs::before{left:-16px;top:-16px;border-left:4px solid var(--ember);border-top:4px solid var(--ember)}
+html.js .ab-eq-figs::after{right:0;bottom:-16px;border-right:4px solid var(--ember);border-bottom:4px solid var(--ember)}
 html.js .ab-eq-figs figure{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
 html.js .ab-eq-figs figure.on{opacity:1}
-html.js .ab-eq-figs img{transform:scale(1.2);transition:transform 7s cubic-bezier(.2,.6,.2,1)}
-html.js .ab-eq-figs figure.on img{transform:scale(1.04)}
-html.js .ab-eq-figs::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(6,16,28,.78) 0%,rgba(6,16,28,.4) 42%,rgba(6,16,28,.05) 75%)}
-html.js .ab-eq-text{position:absolute;z-index:3;left:max(24px,calc((100vw - var(--wrap)) / 2));top:50%;transform:translateY(-50%);width:min(580px,44vw);padding:clamp(30px,3.2vw,52px);background:rgba(8,26,44,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-top:4px solid var(--ember);box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
-html.js .ab-eq-text::before{display:none}
-html.js .ab-eq-text::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--ember) calc(var(--ep,0) * 100%),rgba(255,255,255,.16) 0)}
-html.js .ab-eq mark{color:rgba(255,255,255,.6);border-bottom-color:rgba(255,255,255,.22);transition:color .5s,border-color .5s,background-color .5s}
-html.js .ab-eq mark.act{color:#fff;border-bottom-color:var(--ember);background:rgba(255,106,26,.26)}
+html.js .ab-eq-figs img{transform:scale(1.14);transition:transform 7s cubic-bezier(.2,.6,.2,1);filter:saturate(1.06) contrast(1.05)}
+html.js .ab-eq-figs figure.on img{transform:scale(1)}
+html.js .ab-eq-figs .b1 img{object-position:28% 50%}
+html.js .ab-eq-figs .b2 img{object-position:42% 50%}
+html.js .ab-eq-figs .b3 img{object-position:50% 50%}
+html.js .ab-eq-text{position:absolute;left:max(24px,calc((100vw - var(--wrap)) / 2));top:50%;transform:translateY(-50%);width:min(480px,34vw);padding:clamp(28px,3vw,44px) 0;background:none;border-top:4px solid rgba(255,255,255,.16);border-bottom:4px solid rgba(255,255,255,.16)}
+html.js .ab-eq-text::before,html.js .ab-eq-text::after{content:"";position:absolute;left:0;width:calc(var(--ep,0) * 100%);height:4px;background:linear-gradient(90deg,#ff5a0a,#ff9a3d 70%,#ffe3b8);box-shadow:0 0 16px rgba(255,106,26,.75);top:-4px;right:auto;bottom:auto}
+html.js .ab-eq-text::after{top:auto;bottom:-4px}
+html.js .ab-eq .ab-body{font-size:clamp(17px,1.35vw,20px);line-height:1.75}
+html.js .ab-eq mark{color:rgba(255,255,255,.55);border-bottom-color:rgba(255,255,255,.2);transition:color .5s,border-color .5s,background-color .5s}
+html.js .ab-eq mark.act{color:#fff;border-bottom-color:var(--ember);background:rgba(255,106,26,.28)}
 }
 
 /* 4. rast preduzeća: slika preko cele visine ekrana ostaje, tekst prolazi pored nje; linija sa oznakama se puni */
@@ -276,16 +284,22 @@ html.js .ab .rv.in{opacity:1;transform:none}
 
 @media (max-width:900px){
   .ab-lead2{padding-top:calc(var(--hh,76px) + var(--tbh,42px) + 10px)}
+  .ab-lead-bg{display:block;position:absolute;inset:0;z-index:0;overflow:hidden;background:#050403}
+  .ab-lead-bg>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2;filter:saturate(.9) contrast(1.1)}
+  .ab-lead-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#050403 0%,rgba(5,4,3,.2) 30%,rgba(5,4,3,.2) 70%,#050403 100%)}
+  .ab-lead2 .wrap::after{content:"";display:block;width:2px;height:56px;margin:clamp(30px,8svh,64px) auto 0;background:linear-gradient(#f6f1ea,transparent);animation:ab-drip 2.2s ease-in-out infinite}
   .ab-who{flex-direction:column;align-items:stretch;justify-content:flex-start;padding:calc(var(--hh,76px) + var(--tbh,42px) + 10px) 0 0}
   .ab-who::after{display:none}
-  .ab figure.ab-bgimg{position:relative!important;inset:auto;order:2;width:100%;flex:1 1 auto;min-height:36svh;margin-top:28px;--amp:0}
-  .ab-who .wrap{order:1}
+  .ab figure.ab-bgimg{position:relative!important;inset:auto;order:1;width:100%;flex:1 1 auto;min-height:38svh;margin:0 0 28px;--amp:0}
+  .ab-who .wrap{order:2}
   .ab figure.ab-bgimg>img{position:absolute;inset:0}
-  .ab-state{padding:22px 22px 22px 20px}
+  .ab-state{max-width:none;padding:6px 0 0 18px;background:none}
+  .ab-who{padding-bottom:36px}
   /* oprema */
   .ab-eq-pin{grid-template-columns:minmax(0,1fr);min-height:0}
   .ab-eq-text{grid-column:1;grid-row:1;padding:44px 20px 36px}
   .ab-eq-figs{grid-column:1;grid-row:2;grid-template-rows:repeat(2,clamp(120px,34vw,190px))}
+  .ab-eq .ab-body{font-size:18px;line-height:1.7}
   /* rast */
   .ab-story-grid,.ab-iso-grid{grid-template-columns:minmax(0,1fr)}
   .ab figure.ab-stage{position:relative;height:auto;aspect-ratio:16/10;clip-path:none}
@@ -309,10 +323,13 @@ html.js .ab .rv.in{opacity:1;transform:none}
 }
 
 @media (max-width:900px) and (prefers-reduced-motion:no-preference){
-  html.js .ab-eq{height:260vh}
-  html.js .ab-eq-text{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;padding:26px 20px 30px;border-left:0;border-right:0;border-bottom:0}
-  html.js .ab-eq-text .ab-body{font-size:16px;line-height:1.65}
-  html.js .ab-eq-figs::after{background:linear-gradient(0deg,rgba(6,16,28,.4),rgba(6,16,28,0) 60%)}
+  html.js .ab-eq{height:280vh}
+  html.js .ab-eq-pin{display:flex;flex-direction:column;padding-top:calc(var(--hh,76px) + var(--tbh,42px) + 6px)}
+  html.js .ab-eq-text{order:1;position:relative;left:auto;top:auto;transform:none;width:auto;margin:0 20px;padding:24px 0 26px}
+  html.js .ab-eq .ab-body{font-size:17px;line-height:1.65}
+  html.js .ab-eq-figs{order:2;position:relative;right:auto;top:auto;transform:none;width:auto;aspect-ratio:auto;flex:1 1 auto;min-height:150px;margin:22px 0 0;box-shadow:none}
+  html.js .ab-eq-figs::before{left:12px;top:12px;width:44px;height:44px}
+  html.js .ab-eq-figs::after{right:12px;bottom:12px;width:44px;height:44px}
 }
 
 /* ---------- baner strane ---------- */
