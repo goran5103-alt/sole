@@ -27,6 +27,11 @@
         n.style.setProperty('--q',Math.min(1,Math.max(0,(ref-r.top)/(r.height+gap))).toFixed(3));n.classList.toggle('on',ref>r.top)})}};
     addEventListener('scroll',function(){if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);upd();
 
+    /* ugalj: na računaru je aktivan red pod mišem/fokusom (prvi na početku), njegova fotografija je velika sa desne strane */
+    var tr=document.querySelector('.types-row');
+    if(tr){var ts=[].slice.call(tr.querySelectorAll('.type')),ton=function(t){ts.forEach(function(x){x.classList.toggle('act',x===t)})};
+      ton(ts[0]);ts.forEach(function(t){t.addEventListener('mouseenter',function(){ton(t)});t.addEventListener('focus',function(){ton(t)})})}
+
     /* prve dve sekcije posle uvoda zauzimaju ceo ekran: jedan skrol (točkić ili prevlačenje) prikazuje celu sekciju */
     var sA=document.querySelector('.ab-lead2'),sB=document.querySelector('.ab-who'),busy=false,lastW=0,t0=0;
     if(sA&&sB&&!rmo){
