@@ -15,20 +15,17 @@
       var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fx-in');io2.unobserve(e.target)}})},{threshold:.45});
       [].forEach.call(document.querySelectorAll('.ab-lead2,.ab-who'),function(e){io2.observe(e)});
     }
-    var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
+    var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf,.ab figure.ab-isoimg')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
+      eq=document.querySelector('.ab-eq'),efs=[].slice.call(document.querySelectorAll('.ab-eq-figs figure')),emk=[].slice.call(document.querySelectorAll('.ab-eq .ab-body mark')),emap=[0,1,2,3,3],
       story=document.querySelector('.ab-story'),nodes=[].slice.call(document.querySelectorAll('.ab-node')),tk=0;
     var upd=function(){tk=0;var vh=innerHeight;
       if(!rmo)pars.forEach(function(o){var r=o.f.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;var c=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/vh));o.f.style.setProperty('--py',(-c*o.a).toFixed(1)+'px')});
+      if(eq&&!rmo&&eq.offsetHeight>vh*1.4){var re=eq.getBoundingClientRect(),pe=Math.min(1,Math.max(0,-re.top/(re.height-vh))),ix=Math.min(emk.length-1,Math.floor(pe*emk.length)),fi=emap[ix];
+        eq.style.setProperty('--ep',pe.toFixed(3));emk.forEach(function(m,k){m.classList.toggle('act',k===ix)});efs.forEach(function(f,k){f.classList.toggle('on',k===fi)})}
       if(story&&!rmo){var r=story.getBoundingClientRect();story.style.setProperty('--tp',Math.min(1,Math.max(0,(vh*.55-r.top)/(r.height-vh*.1))).toFixed(3))}
       if(nodes.length){var ref=vh*.55;nodes.forEach(function(n){var r=n.getBoundingClientRect(),gap=parseFloat(getComputedStyle(n).marginBottom)||0;
         n.style.setProperty('--q',Math.min(1,Math.max(0,(ref-r.top)/(r.height+gap))).toFixed(3));n.classList.toggle('on',ref>r.top)})}};
     addEventListener('scroll',function(){if(!tk)tk=requestAnimationFrame(upd)},{passive:true});addEventListener('resize',upd);upd();
-
-    /* oprema: reč pod mišem osvetljava svoju fotografiju (magacin, mehanizacija, kolosek, kiper vozila) */
-    var bento=document.querySelector('.ab-bento'),mks=document.querySelectorAll('.ab-eq .ab-body mark'),map=['b4','b1','b3','b2'];
-    if(bento)[].forEach.call(mks,function(m,i){if(!map[i])return;
-      m.addEventListener('mouseenter',function(){bento.classList.add('hl','hl-'+map[i])});
-      m.addEventListener('mouseleave',function(){bento.className=bento.className.replace(/\s*hl(-b\d)?/g,'')})});
 
     /* prve dve sekcije posle uvoda zauzimaju ceo ekran: jedan skrol (točkić ili prevlačenje) prikazuje celu sekciju */
     var sA=document.querySelector('.ab-lead2'),sB=document.querySelector('.ab-who'),busy=false,lastW=0,t0=0;
