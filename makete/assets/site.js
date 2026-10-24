@@ -12,7 +12,7 @@
       var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
       [].forEach.call(all,function(e){if(e.classList.contains('fx'))return;if(!e.matches('figure'))e.classList.add('rv');io.observe(e)});
       [].forEach.call(document.querySelectorAll('.ab .type'),function(e,i){e.style.transitionDelay=(i%3)*.08+'s'});
-      var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fx-in');io2.unobserve(e.target)}})},{threshold:.45});
+      var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fx-in');io2.unobserve(e.target)}})},{threshold:.2});
       [].forEach.call(document.querySelectorAll('.ab-lead2,.ab-who'),function(e){io2.observe(e)});
     }
     var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf,.ab figure.ab-isoimg')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
@@ -36,8 +36,8 @@
     var sA=document.querySelector('.ab-lead2'),sB=document.querySelector('.ab-who'),busy=false,lastW=0,t0=0;
     if(sA&&sB&&!rmo){
       var stops=function(){var vh=innerHeight,o=[];[sA,sB].forEach(function(e){var r=e.getBoundingClientRect();if(r.height<=vh+40)o.push(r.top+scrollY)});return o};
-      var go=function(to){busy=true;var from=scrollY,d=Math.abs(to-from),dur=Math.min(1100,600+d*.28),t=performance.now();
-        (function step(n){var k=Math.min(1,(n-t)/dur),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;scrollTo({top:from+(to-from)*e,behavior:'instant'});
+      var go=function(to){busy=true;var from=scrollY,d=Math.abs(to-from),dur=Math.min(900,520+d*.22),t=performance.now();
+        (function step(n){var k=Math.min(1,(n-t)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;scrollTo({top:from+(to-from)*e,behavior:'instant'});
           if(k<1)requestAnimationFrame(step);else setTimeout(function(){busy=false},120)})(t)};
       var target=function(dir){var st=stops(),y=scrollY,vh=innerHeight,k;if(st.length<2||st[0]-y>vh*1.1)return null;
         if(dir>0){if(y<st[0]-vh-60||y>=st[1]-4)return null;for(k=0;k<st.length;k++)if(st[k]>y+4)return st[k]}
