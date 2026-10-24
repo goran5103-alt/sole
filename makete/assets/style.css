@@ -3,11 +3,11 @@
 :root{
   --coal:#0f0e0d; --coal2:#181614; --coal3:#24211e; --line-d:#34302b;
   --paper:#f5f3ef; --card:#ffffff; --ink:#1c1b1a; --muted:#5e5a55; --line:#e2ddd5;
-  --blue:#1e73be; --blue2:#1fa7da; --sun:#f5c518; --ember:#ff6a1a;
-  --head:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --blue:#1e73be; --blue2:#1fa7da; --sun:#ff6a1a; --ember-ink:#c2410c; --ember:#ff6a1a;
+  --head:"Manrope","Helvetica Neue",Arial,sans-serif;
   --ui:"Manrope","Helvetica Neue",Arial,sans-serif; --acc:#4da3ff;
-  --body:"Source Sans 3","Source Sans Pro","Segoe UI",Arial,sans-serif;
-  --hh:76px; --wrap:1220px; --r:10px;
+  --body:"Manrope","Helvetica Neue",Arial,sans-serif;
+  --hh:76px; --wrap:1220px; --r:0px;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -515,6 +515,131 @@ html.js .ab .rv.in{opacity:1;transform:none}
 .form textarea{min-height:150px;resize:vertical}
 .form button{justify-self:start;background:var(--sun);color:#1a1405;border:0;border-radius:999px;padding:15px 26px;font:800 15px/1 var(--head);cursor:pointer}
 .form .sent{grid-column:1/-1;color:var(--sun);font:600 14px/1.4 var(--head);margin:0}
+
+/* ---------- unutrašnje strane: isti jezik kao naslovna (oštre ivice, narandžasti akcenat, Manrope, fotografije sa naslovom preko slike) ---------- */
+body{font-size:17.5px;line-height:1.75}
+main{min-height:46vh}
+.page{padding-block:clamp(48px,6vw,92px)}
+.prose p{color:#34312d;max-width:70ch}
+.prose p.lead{font-size:1.18em;line-height:1.7;font-weight:500;color:var(--ink);padding-left:22px;border-left:4px solid var(--ember)}
+.prose h2,.prose h3{font-family:var(--ui);letter-spacing:-.02em;color:var(--ink)}
+.prose h2{position:relative;padding-top:20px}
+.prose h2::before{content:"";position:absolute;left:0;top:0;width:48px;height:4px;background:var(--ember)}
+.prose h3::before{width:12px;height:12px;border-radius:0;background:var(--ember)}
+.prose .caps{font:800 13px/1.3 var(--ui);letter-spacing:.2em;color:var(--ember-ink);margin:0 0 16px;display:flex;align-items:center;gap:12px}
+.prose .caps::before{content:"";width:28px;height:3px;background:var(--ember)}
+.prose ul.dots li{padding-left:26px}
+.prose ul.dots li::before{border-radius:0;width:9px;height:9px;background:var(--ember);top:.62em}
+.prose figure img{border-radius:0}
+.prose a{color:var(--ember-ink);text-underline-offset:3px}
+
+/* tehnički list: levo narandžasta ivica, ključ i vrednost */
+.specs{border:0;border-left:5px solid var(--ember);border-radius:0;background:#fff;box-shadow:0 22px 40px -32px rgba(30,24,16,.4);max-width:780px}
+.specs li{padding:15px 24px;border-top:1px solid #ece7df}
+.specs li:nth-child(odd){background:#fff}
+.specs li:nth-child(even){background:#faf8f4}
+.specs .k{font:700 13px/1.4 var(--ui);letter-spacing:.03em;color:var(--muted);text-transform:none}
+.specs .v{font:800 17px/1.4 var(--ui);color:var(--ink)}
+.specs li.one::before{border-radius:0;background:var(--ember)}
+
+/* galerija */
+.gallery{gap:6px}
+.gallery a{border-radius:0;background:#14100c}
+.gallery a::after{border-radius:0;right:0;bottom:0;width:38px;height:38px;background-color:var(--ember);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23120a04' stroke-width='2.4'%3E%3Cpath d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/%3E%3C/svg%3E");background-size:17px;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.gallery a:hover::after,.gallery a:focus-visible::after{opacity:1;transform:none}
+.gallery-h b{font-family:var(--ui)}
+
+/* bočna kolona */
+.box{border-radius:0;border:0;border-top:4px solid var(--ember);background:#fff;box-shadow:0 26px 46px -34px rgba(30,24,16,.45);padding:24px 26px}
+.box h4{font:800 12px/1.2 var(--ui);letter-spacing:.2em;color:var(--ink);margin-bottom:14px}
+.sib a{font:600 15px/1.35 var(--ui);padding:12px 0;border-color:#ece7df;transition:color .2s,padding .25s}
+.sib a::after{border-color:var(--ember);opacity:0;transform:translateX(-6px) rotate(45deg);transition:opacity .2s,transform .25s}
+.sib a:hover{color:var(--ember-ink);padding-left:8px}
+.sib a:hover::after,.sib a.on::after{opacity:1;transform:rotate(45deg)}
+.sib a.on{color:var(--ember-ink);font-weight:800;box-shadow:inset 3px 0 0 var(--ember);padding-left:12px}
+.box.dark{background:#0b0d11;color:#e9e3dc;border-top:0;border-left:4px solid var(--ember)}
+.box.dark::after{background:radial-gradient(circle,rgba(255,106,26,.3),transparent 65%)}
+.box.dark h4{color:#9aa4b0}
+.box.dark .addr{font:700 17px/1.45 var(--ui);color:#fff}
+.box.dark .tel{background:var(--blue);color:#fff;border-radius:999px;font:800 16px/1 var(--ui);transition:background .25s}
+.box.dark .tel:hover{background:#2a86d6}
+.box.dark .more{font-family:var(--ui)}
+.toc a{font:600 14.5px/1.4 var(--ui);transition:color .2s,padding .25s}
+.toc a:hover{color:var(--ember-ink);padding-left:8px}
+
+/* kartice vrsta uglja: fotografija sa naslovom preko slike (kao pločice na naslovnoj) */
+.cards{gap:6px}
+.card{position:relative;display:block;aspect-ratio:4/3;border:0;border-radius:0;background:#0b0d11;color:#fff;overflow:hidden;box-shadow:none;transform:none}
+.card:hover{transform:none;box-shadow:none;border-color:transparent}
+.card .ph{position:absolute;inset:0;aspect-ratio:auto;background:radial-gradient(80% 120% at 80% 120%,rgba(255,106,26,.45),transparent 60%),linear-gradient(135deg,#25211d,#0e0d0c)}
+.card .ph img{transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.card:hover .ph img,.card:focus-visible .ph img{transform:scale(1.06)}
+.card::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(6,12,20,.94) 0%,rgba(6,12,20,.62) 42%,rgba(6,12,20,0) 72%)}
+.card .bd{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 66px 18px 20px;gap:6px;display:flex;flex-direction:column}
+.card .bd::before{content:"";width:34px;height:3px;background:var(--ember);transition:width .4s;order:-1}
+.card:hover .bd::before{width:64px}
+.card .t{font:800 clamp(17px,1.4vw,21px)/1.2 var(--ui);letter-spacing:-.01em;color:#fff}
+.card .kc{font:500 13px/1.45 var(--ui);color:rgba(255,255,255,.8)}
+.card .go{position:absolute;right:14px;bottom:14px;width:40px;height:40px;padding:0;margin:0;min-height:0;background:var(--ember) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23120a04' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E") center/20px no-repeat;transition:transform .35s}
+.card .go::after{display:none}
+.card:hover .go{transform:translate(3px,-3px)}
+.cards.n1 .card{aspect-ratio:21/9}
+.cards.n1 .card .ph{flex:none;min-height:0}
+.cards.n1 .card .bd{padding:26px 80px 26px 30px;justify-content:flex-end}
+.cards.n1 .card .t{font-size:clamp(22px,2.2vw,30px)}
+.sec-h h2{font:800 clamp(26px,3vw,38px)/1.15 var(--ui);letter-spacing:-.025em}
+.sec-h h2::before{height:4px;width:48px;border-radius:0}
+.group-block .sec-h a:hover{color:var(--ember-ink)}
+
+/* dokumentacija */
+.docs{gap:6px}
+.docs a{border-radius:0;border:0;border-left:4px solid var(--ember);background:#fff;font:700 15.5px/1.4 var(--ui);padding:20px 22px;box-shadow:0 20px 36px -30px rgba(30,24,16,.45);transition:transform .25s,box-shadow .25s}
+.docs a:hover{border-color:var(--ember);transform:translateY(-3px);box-shadow:0 26px 40px -28px rgba(30,24,16,.55)}
+.docs .ic{border-radius:0;background:#0b0d11;color:var(--ember);width:50px;height:50px}
+
+/* cene */
+.pay{gap:6px}
+.pay li{border-radius:0;border:0;border-left:5px solid var(--ember);background:#fff;box-shadow:0 20px 36px -30px rgba(30,24,16,.45);font:700 15.5px/1.5 var(--ui);padding:20px 22px}
+
+/* partneri */
+.partners li{font:500 15.5px/1.5 var(--ui);border-color:#e4ded4}
+.partners li.sub{padding-left:18px;color:var(--muted)}
+.partners-intro{font:800 clamp(19px,1.8vw,24px)/1.45 var(--ui);letter-spacing:-.015em;border-left:4px solid var(--ember);padding-left:22px;max-width:62ch}
+
+/* kontakt */
+.contact-grid{gap:6px}
+.cbox{border-radius:0;border:0;border-top:4px solid var(--ember);box-shadow:0 26px 46px -34px rgba(30,24,16,.45);padding:30px 32px}
+.cbox .lines{font:700 17px/1.65 var(--ui)}
+.cbox .hours{font:600 14.5px/1.55 var(--ui);border-color:#ece7df}
+.cbox .hours::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6a1a' stroke-width='2.2'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
+.form-wrap{border-radius:0;background:#0b0d11;border-left:5px solid var(--ember);padding:clamp(26px,4vw,48px);margin-top:6px}
+.form-wrap h3{font:800 clamp(24px,2.6vw,34px)/1.15 var(--ui);letter-spacing:-.02em}
+.form input,.form textarea{border-radius:0;font-family:var(--ui);border:1px solid #2c3139;background:#12161c;transition:border-color .2s}
+.form input:focus,.form textarea:focus{outline:0;border-color:var(--ember)}
+.form button{border-radius:0;background:var(--ember);color:#120a04;font:800 14px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;padding:18px 32px;transition:background .25s}
+.form button:hover{background:#ff8540}
+.form .sent{font-family:var(--ui)}
+
+/* pojavljivanje pri skrolu na unutrašnjim stranama (samo kad radi skripta i bez „smanjenog pokreta”) */
+@media (prefers-reduced-motion:no-preference){
+  html.js .page .rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  html.js .page .rv.in{opacity:1;transform:none}
+}
+@media (max-width:900px){
+  body{font-size:17px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .cards.n1{grid-template-columns:minmax(0,1fr)!important}
+  .cards.n1 .card{aspect-ratio:16/10}
+  .card{aspect-ratio:4/5}
+  .card .bd{padding:14px 56px 14px 14px}
+  .card .t{font-size:16px}
+  .card .kc{font-size:12px}
+  .card .go{width:34px;height:34px;right:10px;bottom:10px;background-size:17px}
+  .prose p.lead{padding-left:16px}
+  .box{padding:22px}
+}
+@media (max-width:520px){.cards{grid-template-columns:minmax(0,1fr)!important}.card{aspect-ratio:16/10}}
+
 
 /* ---------- podnožje ---------- */
 .foot{position:relative;background:#08141f;color:#aab8c6;padding-block:clamp(60px,7vw,100px) 26px;margin-top:0;overflow:hidden}

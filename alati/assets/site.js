@@ -70,6 +70,13 @@
     h.addEventListener('click',function(){if(matchMedia('(max-width: 900px)').matches)tg()});
     h.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&matchMedia('(max-width: 900px)').matches){e.preventDefault();tg()}})});
 
+  /* unutrašnje strane: kartice, tabele, pločice i fotografije se blago pojavljuju pri skrolu (samo klase i stilovi, sadržaj se ne dira) */
+  var pg=document.querySelector('.page');
+  if(pg&&!document.querySelector('.ab')&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var pio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');pio.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px',threshold:.05});
+    [].forEach.call(document.querySelectorAll('.page .card,.page .specs,.page .gallery a,.page .docs li,.page .pay li,.page .cbox,.page .form-wrap,.page .box,.page .prose figure'),function(e,i){
+      var sib=e.parentNode?[].indexOf.call(e.parentNode.children,e):0;e.style.transitionDelay=Math.min(sib%4,3)*.07+'s';e.classList.add('rv');pio.observe(e)})}
+
   /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */
   var hd=document.getElementById('head');
   if(hd&&document.body.classList.contains('has-intro')){var sol=function(){hd.classList.toggle('solid',scrollY>40)};addEventListener('scroll',sol,{passive:true});sol()}

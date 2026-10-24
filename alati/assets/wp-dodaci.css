@@ -12,11 +12,13 @@ main{display:block}
 .form-wrap .wpcf7-form br{display:none}
 .form-wrap .wpcf7-form-control-wrap{display:block}
 .form-wrap .wpcf7-form-control-wrap[data-name="your-subject"],.form-wrap .wpcf7-form-control-wrap[data-name="your-message"]{grid-column:1/-1}
-.form-wrap .wpcf7-form input[type=text],.form-wrap .wpcf7-form input[type=email],.form-wrap .wpcf7-form textarea{width:100%;font:400 16px/1.4 var(--body);padding:15px 16px;border-radius:10px;border:1px solid #3a352f;background:#1c1916;color:#fff;box-shadow:none;height:auto;margin:0}
+.form-wrap .wpcf7-form input[type=text],.form-wrap .wpcf7-form input[type=email],.form-wrap .wpcf7-form textarea{width:100%;font:400 16px/1.4 var(--body);padding:15px 16px;border-radius:0;border:1px solid #2c3139;background:#12161c;color:#fff;box-shadow:none;height:auto;margin:0}
+.form-wrap .wpcf7-form input[type=text]:focus,.form-wrap .wpcf7-form input[type=email]:focus,.form-wrap .wpcf7-form textarea:focus{outline:0;border-color:var(--ember)}
 .form-wrap .wpcf7-form ::placeholder{color:#998f85;opacity:1}
 .form-wrap .wpcf7-form input[type=text],.form-wrap .wpcf7-form input[type=email],.form-wrap .wpcf7-form textarea{display:block}
 .form-wrap .wpcf7-form textarea{height:150px;min-height:150px;resize:vertical}
-.form-wrap .wpcf7-form input[type=submit]{justify-self:start;background:var(--sun);color:#1a1405;border:0;border-radius:999px;padding:15px 26px;font:800 15px/1 var(--head);cursor:pointer;width:auto;margin:0;text-transform:none;box-shadow:none}
+.form-wrap .wpcf7-form input[type=submit]{justify-self:start;background:var(--ember);color:#120a04;border:0;border-radius:0;padding:18px 32px;font:800 14px/1 var(--ui);letter-spacing:.12em;cursor:pointer;width:auto;margin:0;text-transform:uppercase;box-shadow:none;transition:background .25s}
+.form-wrap .wpcf7-form input[type=submit]:hover{background:#ff8540}
 .form-wrap .wpcf7-form{position:relative}
 .form-wrap .wpcf7-spinner{position:absolute;margin:0;left:190px;bottom:15px}
 .form-wrap .wpcf7-not-valid-tip{color:#ff9a7a;font:600 13px/1.4 var(--head);margin-top:4px}
