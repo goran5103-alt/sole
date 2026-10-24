@@ -6,7 +6,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SOLE_VER', '2.3.0' );
+define( 'SOLE_VER', '2.4.0' );
 
 require_once get_template_directory() . '/inc/opcije.php';
 require_once get_template_directory() . '/inc/meniji.php';

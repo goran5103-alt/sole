@@ -156,6 +156,22 @@ def header(slug):
 </div></div>
 '''
 
+def fl_kind(l):
+    """Vrsta reda u kontakt bloku podnožja (za ikonicu): mejl, faks, radno vreme, telefon, inače adresa."""
+    if '@' in l: return 'mail'
+    if re.match(r'(?i)^fax\b', l): return 'fax'
+    if re.search(r'(?i)ponedeljak|utorak|sreda|četvrtak|petak|subota|nedelja|\d{1,2}:\d{2}', l): return 'time'
+    if re.match(r'^[+\d][\d\s,/().-]{6,}$', l): return 'tel'
+    return 'pin'
+def foot_lines(p):
+    ls = [x for x in p.split('\n') if x.strip()]
+    out, prev = [], None
+    for i, l in enumerate(ls):
+        k = 'ttl' if (i == 0 and len(ls) > 1 and l.upper() == l and not re.search(r'\d', l)) else fl_kind(l)
+        cont = ' fl-c' if (prev == k and k != 'ttl') else ''
+        out.append(f'<span class="fl fl-{k}{cont}">{E(l)}</span>'); prev = k
+    return '<br>'.join(out)
+
 def footer(slug):
     kp = [x[1] for x in KONTAKT if x[0] == 'p']   # direkcija, radno vreme, stovarište, radno vreme
     links = ''.join(f'<li><a href="{rel(slug, s)}">{E(l)}</a></li>' for s, l in TOP)
@@ -165,7 +181,7 @@ def footer(slug):
 <div class="f-brand"><img src="{LOGO}" alt="{A(LOGO_ALT)}"><p class="addr">{E(ADDR)}</p><p><a class="tel" href="{tel_href(PHONE)}">{E(PHONE)}</a></p></div>
 <div><h4>{E(TOP[0][1])}</h4><ul>{links}</ul></div>
 <div><h4>{E(TOP[1][1])}</h4><ul>{groups}</ul></div>
-<div class="f-contact"><h4>{E(TOP[-1][1])}</h4><p>{br(kp[0])}</p><p>{br(kp[1])}</p><p>{br(kp[2])}</p><p>{br(kp[3])}</p></div>
+<div class="f-contact"><h4>{E(TOP[-1][1])}</h4><p class="fb">{foot_lines(kp[0])}</p><p class="fb">{foot_lines(kp[1])}</p><p class="fb">{foot_lines(kp[2])}</p><p class="fb">{foot_lines(kp[3])}</p></div>
 </div>
 <div class="bottom">{E(TAGLINE)}</div>
 </div></footer>
@@ -173,8 +189,22 @@ def footer(slug):
 <script src="{asset(slug, 'site.js')}"></script>
 '''
 
+BANNER_SLIKA = {   # strane bez vrste uglja: fotografije iz medijateke (isečci 1600x580 i original kamiona)
+    '/stovariste/': '2024/12/DSC_0006-1600x580-1.jpg', '/transport/': '2024/12/IMG_0599-1600x580-1.jpg', '/cene/': '2024/12/3.-Coal-1600x580-1.jpg',
+    '/akcije/': '2024/12/9339061661420800632-1600x580-1.jpg', '/partneri-lista/': '2024/12/IMG_0602-1600x580-1.jpg',
+    '/dokumentacija/': '2024/12/ugalj-1600x580-1.jpg', '/kontakt/': '2024/12/DSC_0016.jpg'}
+def banner_slika(slug):
+    """Slika trake: obrađena fotografija vrste uglja (strana ili njena grupa), za ostale strane fotografija iz medijateke."""
+    s = slug
+    while s:
+        if s in TIP: return UP + f'sole-ugalj-{TIP[s]}.jpg'
+        s = PARENT.get(s)
+    if slug == '/ugalj/': return UP + 'sole-ugalj-lignit.jpg'
+    if slug in BANNER_SLIKA: return UP.replace('2026/10/', '') + BANNER_SLIKA[slug]
+    return None
+
 def banner(slug, h1_text):
-    bg = first_img(slug)
+    bg = banner_slika(slug)
     crumbs = [f'<li><a href="{rel(slug, "/")}">{E(BRAND)}</a></li>']
     chain = []
     p = PARENT.get(slug)

@@ -36,9 +36,11 @@
     var sA=document.querySelector('.ab-lead2'),sB=document.querySelector('.ab-who'),busy=false,lastW=0,t0=0;
     if(sA&&sB&&!rmo){
       var stops=function(){var vh=innerHeight,o=[];[sA,sB].forEach(function(e){var r=e.getBoundingClientRect();if(r.height<=vh+40)o.push(r.top+scrollY)});return o};
-      var go=function(to){busy=true;var from=scrollY,d=Math.abs(to-from),dur=Math.min(900,520+d*.22),t=performance.now();
+      var de=document.documentElement,unlock=function(){if(performance.now()-lastW<180){setTimeout(unlock,60);return}de.style.overflow='';busy=false};
+      var go=function(to){busy=true;de.style.overflow='hidden';   /* nativni skrol (i njegov zalet) se isključuje dok traje skok, da se dve animacije ne bore */
+        var from=scrollY,d=Math.abs(to-from),dur=Math.min(900,520+d*.22),t=performance.now();
         (function step(n){var k=Math.min(1,(n-t)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;scrollTo({top:from+(to-from)*e,behavior:'instant'});
-          if(k<1)requestAnimationFrame(step);else setTimeout(function(){busy=false},120)})(t)};
+          if(k<1)requestAnimationFrame(step);else{lastW=performance.now();unlock()}})(t)};
       var target=function(dir){var st=stops(),y=scrollY,vh=innerHeight,k;if(st.length<2||st[0]-y>vh*1.1)return null;
         if(dir>0){if(y<st[0]-vh-60||y>=st[1]-4)return null;for(k=0;k<st.length;k++)if(st[k]>y+4)return st[k]}
         else{if(y>st[1]+4||y<=st[0]+4)return null;return st[0]}
