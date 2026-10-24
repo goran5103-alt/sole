@@ -22,15 +22,8 @@ def kontakt(slug):
     b = D[slug]['b']
     h3 = b[0][1]
     ps = [x[1] for x in b if x[0] == 'p']
-    boxes = ''
-    for i in (0, 2):
-        lines = ps[i]
-        lines_h = B.br(lines)
-        for m in re.findall(r'[\w.+-]+@[\w.-]+', lines):
-            lines_h = lines_h.replace(E(m), f'<a href="mailto:{A(m)}">{E(m)}</a>')
-        boxes += f'<div class="cbox"><p class="lines">{lines_h}</p><p class="hours">{B.br(ps[i + 1])}</p></div>'
     frm = f'<div class="form-wrap"><h3>{E(h3)}</h3><div data-itx-slot="cf7"></div></div>'
-    return B.banner(slug, B.title(slug)) + f'<section class="page"><div class="wrap"><div class="contact-grid">{boxes}</div>{frm}</div></section>'
+    return B.banner(slug, B.title(slug)) + f'<section class="page contact"><div class="wrap"><div class="contact-grid"><div class="contact-cards">{B.kontakt_cards(ps)}</div>{frm}</div></div></section>'
 
 def home(slug):
     return B.home_body(slug)

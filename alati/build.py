@@ -221,17 +221,32 @@ def banner(slug, h1_text):
 </div></section>
 '''
 
+def spans(n, maxc):
+    """Raspored n stavki u redove od najviše maxc u mreži od 12 kolona, bez praznih mesta: svaki red se popuni do kraja (npr. 4 -> 2+2, 5 -> 3+2, 7 -> 4+3)."""
+    ok = (1, 2, 3, 4, 6)
+    rows = -(-n // maxc)
+    while True:
+        base, extra = divmod(n, rows)
+        sizes = [base + 1] * extra + [base] * (rows - extra)
+        if all(s in ok for s in sizes): break
+        rows += 1
+    out = []
+    for s in sizes: out += [12 // s] * s
+    return out
+
+def sp_cls(n, maxc):
+    return [f'sp{x}' for x in spans(n, maxc)]
+
 def gallery(slug, items, key='g'):
+    """Galerija kao slajder: velika scena (popunjava skripta, mesto je u sadržaju kao slot) i traka sličica; bez skripte ostaje mreža sličica."""
     if not items: return ''
     tiles = ''.join(f'<a href="{A(fix(u))}" data-lb="{key}"><img src="{A(fix(u))}" alt="{A(al)}" loading="lazy"></a>' for _, u, al in items)
-    n = len(items)
-    if n <= 2: c, w = n, False
-    elif n % 3 == 0: c, w = 3, False
-    elif n % 4 == 0: c, w = 4, False
-    elif (n - 1) % 3 == 0: c, w = 3, True
-    else: c, w = 4, True
-    cls = f'gallery g{c}' + (' gw' if w else '') + (' mw' if n % 2 == 1 and n > 1 else '')
-    return f'<div class="{cls}">{tiles}</div>'
+    return f'<div class="slider{" one" if len(items) == 1 else ""}"><div class="gl-stage" data-itx-slot="slajder"></div><div class="gl-thumbs">{tiles}</div></div>'
+
+def showcase(slug, items):
+    """Galerija preko cele širine na tamnoj podlozi (posle sadržaja strane)."""
+    if not items: return ''
+    return f'<section class="showcase"><div class="wrap"><div class="gallery-h"></div>{gallery(slug, items)}</div></section>'
 
 # ---------------- sadržaj (tekst se ne menja, samo se oblikuje) ----------------
 SPEC_RE = re.compile(r'^([^:]{3,60}):(\s.*)$', re.S)
@@ -248,10 +263,11 @@ def render_list(items):
     specs = sum(1 for x in items if SPEC_RE.match(x[1]))
     if specs >= max(2, len(items) * .5):
         rows = []
-        for x in items:
+        cl = sp_cls(len(items), 2 if len(items) in (2, 4) else 3)
+        for x, c in zip(items, cl):
             m = SPEC_RE.match(x[1])
-            if m: rows.append(f'<li><span class="k">{E(m.group(1))}:</span><span class="v">{br(m.group(2).strip())}</span></li>')
-            else: rows.append(f'<li class="one">{br(x[1])}</li>')
+            if m: rows.append(f'<li class="{c}"><span class="k">{E(m.group(1))}:</span><span class="v">{br(m.group(2).strip())}</span></li>')
+            else: rows.append(f'<li class="one {c}">{br(x[1])}</li>')
         return '<ul class="specs">' + ''.join(rows) + '</ul>'
     if all(re.search(r'\d', x[1]) for x in items) and len(items) >= 3:
         return '<ul class="specs">' + ''.join(f'<li class="one">{br(x[1])}</li>' for x in items) + '</ul>'
@@ -298,23 +314,34 @@ def contact_box(slug):
     return f'''<div class="box dark"><h4>{E(TOP[-1][1])}</h4><p class="addr">{E(ADDR)}</p>
 <p><a class="tel" href="{tel_href(PHONE)}">{E(PHONE)}</a></p><p><a class="more" href="{rel(slug, '/kontakt/')}">{E(TOP[-1][1])}</a></p></div>'''
 
-def card(frm, slug):
+def card(frm, slug, sp=''):
     im = first_img(slug)
-    ph = f'<img src="{A(im)}" alt="{A(imgs(slug)[0][2])}" loading="lazy">' if im else ''
+    if im: ph = f'<img src="{A(im)}" alt="{A(imgs(slug)[0][2])}" loading="lazy">'
+    else:   # strana bez fotografije: obrađena fotografija vrste uglja kojoj pripada (iz medijateke)
+        g, ph = PARENT.get(slug), ''
+        while g and g not in TIP: g = PARENT.get(g)
+        if g: ph = f'<img src="{A(photo(g))}" alt="" loading="lazy">'
     kc = kcal(slug)
-    return f'''<a class="card" href="{rel(frm, slug)}"><div class="ph">{ph}</div><div class="bd"><div class="t">{E(title(slug))}</div>{f'<div class="kc">{E(kc)}</div>' if kc else ''}<div class="go"></div></div></a>'''
+    return f'''<a class="card{" " + sp if sp else ""}" href="{rel(frm, slug)}"><div class="ph">{ph}</div><div class="bd"><div class="t">{E(title(slug))}</div>{f'<div class="kc">{E(kc)}</div>' if kc else ''}<div class="go"></div></div></a>'''
 
-def grid(cards_html, n, narrow=False):
-    if narrow: c = {1: 1, 2: 2, 3: 3, 4: 2}.get(n, 3)
-    else: c = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 3, 7: 4, 8: 4}.get(n, 3 if n % 3 == 0 else 4)
-    return f'<div class="cards n{c}">{cards_html}</div>'
+def grid(frm, slugs, maxc=3):
+    cl = sp_cls(len(slugs), maxc)
+    return '<div class="cards">' + ''.join(card(frm, s, c) for s, c in zip(slugs, cl)) + '</div>'
 
 def page_shell(slug, inner, extra_css=''):
     return head(slug, extra_css) + header(slug) + '<main>\n' + inner + '\n</main>\n' + footer(slug) + '</body>\n</html>\n'
 
 def gallery_block(slug, im):
-    if not im: return ''
-    return '<div class="gallery-h"></div>' + gallery(slug, im)
+    return showcase(slug, im)
+
+def sib_box(slug):
+    par = PARENT.get(slug)
+    if par and par != '/ugalj/':
+        lst, head = [par] + CHILDREN[par], title(par)
+    else:
+        lst, head = [g for g, _ in GROUPS], dict(TOP)['/ugalj/']
+    return '<div class="box"><h4>' + E(head) + '</h4><ul class="sib">' + ''.join(
+        f'<li><a class="{"on" if s == slug else ""}" href="{rel(slug, s)}">{E(title(s))}</a></li>' for s in lst) + '</ul></div>'
 
 # ---------------- tipovi strana ----------------
 def product_page(slug):
@@ -322,21 +349,11 @@ def product_page(slug):
     h1 = first_h1(slug) or title(slug)
     im = imgs(slug)
     body = render_body(b)
-    par = PARENT.get(slug)
-    sib = ''
-    if par and par != '/ugalj/':
-        lst = [par] + CHILDREN[par]
-        sib = '<div class="box"><h4>' + E(title(par)) + '</h4><ul class="sib">' + ''.join(
-            f'<li><a class="{"on" if s == slug else ""}" href="{rel(slug, s)}">{E(title(s))}</a></li>' for s in lst) + '</ul></div>'
-    else:
-        lst = [g for g, _ in GROUPS]
-        sib = '<div class="box"><h4>' + E(dict(TOP)['/ugalj/']) + '</h4><ul class="sib">' + ''.join(
-            f'<li><a class="{"on" if s == slug else ""}" href="{rel(slug, s)}">{E(title(s))}</a></li>' for s in lst) + '</ul></div>'
     kids = ''
     if CHILDREN.get(slug):
-        kids = '<div style="margin-top:28px">' + grid(''.join(card(slug, c) for c in CHILDREN[slug]), len(CHILDREN[slug]), narrow=True) + '</div>'
-    main = f'<div class="main prose">{body}{kids}{gallery_block(slug, im)}</div>'
-    inner = banner(slug, h1) + f'<section class="page"><div class="wrap layout">{main}<aside class="aside">{sib}{contact_box(slug)}</aside></div></section>'
+        kids = f'<section class="kids-band"><div class="wrap">{grid(slug, CHILDREN[slug], 3)}</div></section>'
+    inner = (banner(slug, h1) + f'<section class="page"><div class="wrap layout"><div class="main prose">{body}</div><aside class="aside">{sib_box(slug)}{contact_box(slug)}</aside></div></section>'
+             + kids + showcase(slug, im))
     return page_shell(slug, inner)
 
 def ugalj_page(slug):
@@ -346,12 +363,12 @@ def ugalj_page(slug):
     blocks = []
     for g, ch in GROUPS:
         if not ch: continue
-        blocks.append(f'<div class="group-block"><div class="sec-h"><h2><a href="{rel(slug, g)}">{E(title(g))}</a></h2></div>{grid("".join(card(slug, c) for c in ch), len(ch))}</div>')
+        blocks.append(f'<div class="group-block"><div class="sec-h"><h2><a href="{rel(slug, g)}">{E(title(g))}</a></h2></div>{grid(slug, ch, 3)}</div>')
     leaf = [g for g, ch in GROUPS if not ch]
-    blocks.append(f'<div class="group-block">{grid("".join(card(slug, g) for g in leaf), len(leaf))}</div>')
-    inner = banner(slug, title(slug)) + f'''<section class="page"><div class="wrap layout">
-<div class="main prose">{body}{gallery_block(slug, im)}</div><aside class="aside">{contact_box(slug)}</aside></div></section>
-<section class="page" style="padding-top:0"><div class="wrap">{"".join(blocks)}</div></section>'''
+    blocks.append(f'<div class="group-block leaf">{grid(slug, leaf, 3)}</div>')
+    inner = (banner(slug, title(slug)) + f'''<section class="page"><div class="wrap layout">
+<div class="main prose">{body}</div><aside class="aside">{contact_box(slug)}</aside></div></section>'''
+             + showcase(slug, im) + f'<section class="page groups"><div class="wrap">{"".join(blocks)}</div></section>')
     return page_shell(slug, inner)
 
 def primena_page(slug):
@@ -360,7 +377,7 @@ def primena_page(slug):
     body = render_body(b, inline_imgs=True, ids=ids)
     toc = '<div class="box"><h4>' + E(title(slug)) + '</h4><ul class="toc">' + ''.join(
         f'<li><a href="#s{i + 1}">{E(t)}</a></li>' for i, t in enumerate(ids)) + '</ul></div>'
-    inner = banner(slug, first_h1(slug)) + f'<section class="page"><div class="wrap layout"><div class="main prose">{body}</div><aside class="aside">{toc}{contact_box(slug)}</aside></div></section>'
+    inner = banner(slug, first_h1(slug)) + f'<section class="page numbered"><div class="wrap layout"><div class="main prose">{body}</div><aside class="aside">{toc}{contact_box(slug)}</aside></div></section>'
     return page_shell(slug, inner)
 
 def simple_page(slug, full=False):
@@ -370,18 +387,23 @@ def simple_page(slug, full=False):
     body = render_body(b)
     lay = 'layout full' if full else 'layout'
     aside = '' if full else f'<aside class="aside">{contact_box(slug)}</aside>'
-    inner = banner(slug, h1) + f'<section class="page"><div class="wrap {lay}"><div class="main prose">{body}{gallery_block(slug, im)}</div>{aside}</div></section>'
+    inner = banner(slug, h1) + f'<section class="page"><div class="wrap {lay}"><div class="main prose">{body}</div>{aside}</div></section>' + showcase(slug, im)
     return page_shell(slug, inner)
 
 def cene_page(slug):
     b = D[slug]['b']
     h1 = first_h1(slug)
-    pre, pay = [], []
+    pre, pay, head, after = [], [], [], False
     for x in b:
-        (pay if x[0] == 'li' else pre).append(x)
+        if x[0] == 'li': pay.append(x)
+        elif x[0] in ('h2', 'h3') or after:
+            after = True; head.append(x)
+        else: pre.append(x)
     body = render_body(pre)
-    lst = '<ul class="pay">' + ''.join(f'<li>{E(x[1])}</li>' for x in pay) + '</ul>'
-    inner = banner(slug, h1) + f'<section class="page"><div class="wrap layout"><div class="main prose">{body}{lst}</div><aside class="aside">{contact_box(slug)}</aside></div></section>'
+    cl = sp_cls(len(pay), 4)
+    lst = '<ul class="pay">' + ''.join(f'<li class="{c}">{E(x[1])}</li>' for x, c in zip(pay, cl)) + '</ul>'
+    band = f'<section class="pay-band"><div class="wrap"><div class="prose">{render_body(head)}</div>{lst}</div></section>'
+    inner = banner(slug, h1) + f'<section class="page"><div class="wrap layout"><div class="main prose">{body}</div><aside class="aside">{contact_box(slug)}</aside></div></section>' + band
     return page_shell(slug, inner)
 
 def partneri_page(slug):
@@ -390,34 +412,53 @@ def partneri_page(slug):
     ps = [x[1] for x in b if x[0] == 'p']
     intro, rest = ps[0], ps[1:]
     lis = ''.join(f'<li class="{"sub" if s.startswith("–") else ""}">{E(s)}</li>' for s in rest)
-    inner = banner(slug, h1) + f'<section class="page"><div class="wrap"><p class="partners-intro">{E(intro)}</p><ul class="partners">{lis}</ul></div></section>'
+    inner = (banner(slug, h1) + f'<section class="intro-band"><div class="wrap"><p class="partners-intro">{E(intro)}</p></div></section>'
+             + f'<section class="page partners-page"><div class="wrap"><ul class="partners">{lis}</ul></div></section>')
     return page_shell(slug, inner)
 
+DOC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>'
 def dok_page(slug):
     b = D[slug]['b']
     h1 = first_h1(slug)
-    docs = ''.join(f'<li><a href="{A(x[2][0][1])}" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg></span><div>{E(x[1])}</div></a></li>' for x in b if x[0] == 'p')
+    its = [x for x in b if x[0] == 'p']
+    cl = sp_cls(len(its), 3)
+    docs = ''.join(f'<li class="{c}"><a href="{A(x[2][0][1])}" target="_blank" rel="noopener"><span class="ic">{DOC_SVG}</span><div>{E(x[1])}</div><i class="dl"></i></a></li>' for x, c in zip(its, cl))
     inner = banner(slug, h1) + f'<section class="page"><div class="wrap"><ul class="docs">{docs}</ul></div></section>'
     return page_shell(slug, inner)
+
+def line_kind(l):
+    if '@' in l: return 'mail'
+    if re.match(r'(?i)^fax\b', l): return 'fax'
+    if re.search(r'(?i)ponedeljak|utorak|sreda|četvrtak|petak|subota|nedelja|\d{1,2}:\d{2}', l): return 'time'
+    if re.match(r'^[+\d][\d\s,/().-]{6,}$', l): return 'tel'
+    return 'pin'
+
+def kontakt_cards(ps):
+    """Dve kartice (direkcija, stovarište): svaki red je posebna stavka sa ikonicom prema vrsti sadržaja."""
+    out = ''
+    for i in (0, 2):
+        ls = [x for x in ps[i].split('\n') if x.strip()]
+        lis = ''
+        for k, l in enumerate(ls):
+            kind = 'ttl' if (k == 0 and len(ls) > 1 and l.upper() == l and not re.search(r'\d', l)) else line_kind(l)
+            val = E(l)
+            for m in re.findall(r'[\w.+-]+@[\w.-]+', l):
+                val = val.replace(E(m), f'<a href="mailto:{A(m)}">{E(m)}</a>')
+            lis += f'<li class="k-{kind}">{val}</li>'
+        hrs = [x for x in ps[i + 1].split('\n') if x.strip()]
+        out += f'<div class="cbox"><ul class="clines">{lis}</ul><ul class="chours">' + ''.join(f'<li>{E(h)}</li>' for h in hrs) + '</ul></div>'
+    return out
 
 def kontakt_page(slug):
     b = D[slug]['b']
     h3 = b[0][1]
     ps = [x[1] for x in b if x[0] == 'p']
-    form = [x for x in b if x[0] == 'form'][0]
-    boxes = ''
-    for i in (0, 2):
-        lines = ps[i]
-        lines_h = br(lines)
-        for m in re.findall(r'[\w.+-]+@[\w.-]+', lines):
-            lines_h = lines_h.replace(E(m), f'<a href="mailto:{A(m)}">{E(m)}</a>')
-        boxes += f'<div class="cbox"><p class="lines">{lines_h}</p><p class="hours">{br(ps[i + 1])}</p></div>'
-    f = form
+    f = [x for x in b if x[0] == 'form'][0]
     frm = f'''<div class="form-wrap"><h3>{E(h3)}</h3><form class="form">
 <input type="text" name="your-name" placeholder="{A(f[1])}"><input type="email" name="your-email" placeholder="{A(f[2])}">
 <input class="full" type="text" name="your-subject" placeholder="{A(f[3])}"><textarea class="full" name="your-message" placeholder="{A(f[4])}"></textarea>
 <button type="submit">{E(f[5])}</button></form></div>'''
-    inner = banner(slug, title(slug)) + f'<section class="page"><div class="wrap"><div class="contact-grid">{boxes}</div>{frm}</div></section>'
+    inner = banner(slug, title(slug)) + f'<section class="page contact"><div class="wrap"><div class="contact-grid"><div class="contact-cards">{kontakt_cards(ps)}</div>{frm}</div></div></section>'
     return page_shell(slug, inner)
 
 def mk(text, phrases=()):
