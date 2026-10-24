@@ -48,14 +48,27 @@
       addEventListener('wheel',function(e){if(e.ctrlKey||!e.deltaY)return;var n=performance.now();
         if(busy||n-lastW<160){lastW=n;e.preventDefault();return}
         var to=target(e.deltaY>0?1:-1);if(to===null)return;lastW=n;e.preventDefault();go(to)},{passive:false});
-      var ty=0,dec=0,tg=false;
-      addEventListener('touchstart',function(e){ty=e.touches[0].clientY;dec=0;tg=false},{passive:true});
-      addEventListener('touchmove',function(e){var dy=ty-e.touches[0].clientY;
-        if(!dec&&Math.abs(dy)>6){dec=1;tg=!busy&&target(dy>0?1:-1)!==null}
-        if((tg||busy)&&e.cancelable)e.preventDefault()},{passive:false});
-      addEventListener('touchend',function(e){if(!tg||busy)return;var dy=ty-e.changedTouches[0].clientY;if(Math.abs(dy)<28)return;var to=target(dy>0?1:-1);if(to!==null)go(to)},{passive:true});
+      /* telefon: kad se prst podigne i skrol se smiri, ekran se „zalepi” na najbližu od dve sekcije (smer prevlačenja odlučuje) */
+      if(matchMedia('(pointer: coarse)').matches){
+        var touching=false,lastY=scrollY,dirv=0,tm=0;
+        var settle=function(){if(touching||busy)return;var st=stops();if(st.length<2)return;var y=scrollY,vh=innerHeight,A=st[0],B=st[1],to=null;
+          if(dirv>=0){if(y>=A-vh*.6&&y<A-4)to=A;else if(y>=A-4&&y<B-4)to=(y-A)>(B-A)*.12?B:A}
+          else{if(y>B+4&&y<=B+vh*.6)to=B;else if(y>A+4&&y<=B+4)to=(y-A)<(B-A)*.88?A:B}
+          if(to!==null&&Math.abs(to-y)>3)go(to)};
+        addEventListener('touchstart',function(){touching=true;clearTimeout(tm)},{passive:true});
+        var up=function(){touching=false;clearTimeout(tm);tm=setTimeout(settle,160)};
+        addEventListener('touchend',up,{passive:true});addEventListener('touchcancel',up,{passive:true});
+        addEventListener('scroll',function(){var d=scrollY-lastY;if(Math.abs(d)>=1){dirv=d>0?1:-1;lastY=scrollY}clearTimeout(tm);tm=setTimeout(settle,160)},{passive:true});
+      }
     }
   }
+
+  /* podnožje na telefonu: kolone su harmonika, otvara se jedna po jedna */
+  var fcols=document.querySelectorAll('.foot .cols>div:not(.f-brand)');
+  [].forEach.call(fcols,function(c){var h=c.querySelector('h4');if(!h)return;h.setAttribute('role','button');h.setAttribute('tabindex','0');h.setAttribute('aria-expanded','false');
+    var tg=function(){var o=!c.classList.contains('open');[].forEach.call(fcols,function(x){x.classList.remove('open');var xh=x.querySelector('h4');if(xh)xh.setAttribute('aria-expanded','false')});if(o){c.classList.add('open');h.setAttribute('aria-expanded','true')}};
+    h.addEventListener('click',function(){if(matchMedia('(max-width: 900px)').matches)tg()});
+    h.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&matchMedia('(max-width: 900px)').matches){e.preventDefault();tg()}})});
 
   /* zaglavlje naslovne: providno preko uvoda, puno posle skrola */
   var hd=document.getElementById('head');
