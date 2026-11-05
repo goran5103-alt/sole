@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.9.5
+Version: 2.9.6
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -458,20 +458,23 @@ html.js .ab .rv.in{opacity:1;transform:none}
   .type .t{color:#f6f1ea}
   .type .kc{color:rgba(246,241,234,.62)}
 }
-/* oprema (animirana verzija): fotografija ispunjava ekran od vrha, blag toplo-tamni sloj preko nje i pretapanje u crno; tekst svetao na dnu */
+/* oprema (animirana verzija, telefon): ekran je zalepljen, fotografija je cela u kadru (kadar po fotografiji), pretapa se u crno; ispod je tekst sa linijom koja prati istaknutu reč; prolazi se za dva poteza */
 @media (max-width:900px) and (prefers-reduced-motion:no-preference){
-  html.js .ab-eq-pin{display:block;padding:0;height:100svh;height:100dvh}
-  html.js .ab-eq-figs{position:absolute;left:0;right:0;top:0;width:auto;height:74svh;aspect-ratio:auto;flex:none;margin:0;box-shadow:none;-webkit-clip-path:none;clip-path:none;background:#050403}
+  html.js .ab-eq{height:230vh}
+  html.js .ab-eq-pin{display:flex;flex-direction:column;justify-content:center;padding:calc(var(--hh,64px) + 10px) 0 var(--scene-pb);height:100svh;height:100dvh}
+  html.js .ab-eq-figs{position:relative;left:auto;right:auto;top:auto;width:auto;height:clamp(230px,36svh,300px);aspect-ratio:auto;flex:none;margin:0;box-shadow:none;-webkit-clip-path:none;clip-path:none;background:#050403}
   html.js .ab-eq-figs::before,html.js .ab-eq-figs::after{display:none}
   html.js .ab-eq-figs figure::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg,rgba(5,4,3,.5) 0%,rgba(5,4,3,.08) 26%,rgba(5,4,3,.22) 46%,rgba(5,4,3,.82) 70%,#050403 90%),linear-gradient(135deg,rgba(255,106,26,.16),rgba(255,106,26,0) 46%)}
-  html.js .ab-eq-figs .b1 img{object-position:40% 50%}
-  html.js .ab-eq-figs .b2 img{object-position:58% 50%}
-  html.js .ab-eq-figs .b3 img{object-position:24% 50%}
-  html.js .ab-eq-text{position:absolute;left:20px;right:20px;bottom:var(--scene-pb);top:auto;width:auto;margin:0;transform:none;z-index:3;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.18);background:none}
-  html.js .ab-eq-text::before{display:block;content:"";position:absolute;left:-4px;right:auto;top:0;bottom:auto;width:4px;height:calc(var(--ep,0) * 100%);background:linear-gradient(180deg,#ff5a0a,#ffb347);box-shadow:0 0 12px rgba(255,106,26,.7)}
+    background:linear-gradient(0deg,#050403 0%,rgba(5,4,3,0) 26%),linear-gradient(180deg,rgba(5,4,3,.28),rgba(5,4,3,0) 24%),linear-gradient(135deg,rgba(255,106,26,.12),rgba(255,106,26,0) 46%)}
+  html.js .ab-eq-figs img{transform:scale(1.05)}
+  html.js .ab-eq-figs figure.on img{transform:scale(1)}
+  html.js .ab-eq-figs .b1 img{object-position:15% 50%}
+  html.js .ab-eq-figs .b2 img{object-position:88% 50%}
+  html.js .ab-eq-figs .b3 img{object-position:15% 50%}
+  html.js .ab-eq-text{position:relative;left:auto;right:auto;bottom:auto;top:auto;width:auto;margin:22px 20px 0;transform:none;z-index:3;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.18);background:none}
+  html.js .ab-eq-text::before{display:block;content:"";position:absolute;left:-4px;right:auto;top:0;bottom:auto;width:4px;height:calc(var(--epm,0) * 100%);background:linear-gradient(180deg,#ff5a0a,#ffb347);box-shadow:0 0 12px rgba(255,106,26,.7)}
   html.js .ab-eq-text::after{display:none}
-  html.js .ab-eq .ab-body{font:600 clamp(16px,2.4svh,19px)/1.46 var(--ui);letter-spacing:-.012em}
+  html.js .ab-eq .ab-body{font:600 clamp(16px,2.3svh,18px)/1.46 var(--ui);letter-spacing:-.012em}
   html.js .ab-eq mark{color:rgba(246,241,234,.62);transition:color .5s}
   html.js .ab-eq mark.act{background:none;color:var(--ember)}
 }

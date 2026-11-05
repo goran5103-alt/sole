@@ -16,12 +16,16 @@
       [].forEach.call(document.querySelectorAll('.ab-lead2,.ab-who'),function(e){io2.observe(e)});
     }
     var pars=[].slice.call(document.querySelectorAll('.ab figure.par,.ab figure.pf,.ab figure.ab-isoimg')).map(function(f){return{f:f,a:parseFloat(getComputedStyle(f).getPropertyValue('--amp'))||0}}),
-      eq=document.querySelector('.ab-eq'),efs=[].slice.call(document.querySelectorAll('.ab-eq-figs figure')),emk=[].slice.call(document.querySelectorAll('.ab-eq .ab-body mark')),emap=[0,0,1,2,2],
+      eq=document.querySelector('.ab-eq'),etx=document.querySelector('.ab-eq-text'),efs=[].slice.call(document.querySelectorAll('.ab-eq-figs figure')),emk=[].slice.call(document.querySelectorAll('.ab-eq .ab-body mark')),emap=[0,0,1,2,2],
       story=document.querySelector('.ab-story'),nodes=[].slice.call(document.querySelectorAll('.ab-node')),tk=0;
     var upd=function(){tk=0;var vh=innerHeight;
       if(!rmo)pars.forEach(function(o){var r=o.f.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;var c=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/vh));o.f.style.setProperty('--py',(-c*o.a).toFixed(1)+'px')});
       if(eq&&!rmo&&eq.offsetHeight>vh*1.4){var re=eq.getBoundingClientRect(),pe=Math.min(1,Math.max(0,-re.top/(re.height-vh))),ix=Math.min(emk.length-1,Math.floor(pe*emk.length)),fi=emap[ix];
-        eq.style.setProperty('--ep',pe.toFixed(3));emk.forEach(function(m,k){m.classList.toggle('act',k===ix)});efs.forEach(function(f,k){f.classList.toggle('on',k===fi)})}
+        eq.style.setProperty('--ep',pe.toFixed(3));emk.forEach(function(m,k){m.classList.toggle('act',k===ix)});efs.forEach(function(f,k){f.classList.toggle('on',k===fi)});
+        /* telefon: linija sleva se puni tačno do kraja istaknute reči (sinhrono sa isticanjem), a na kraju do kraja teksta */
+        if(matchMedia('(max-width: 900px)').matches&&etx){var th=etx.offsetHeight||1,tt=etx.getBoundingClientRect().top,n=emk.length,seg=pe*n,kk=Math.min(n-1,Math.floor(seg)),tq=seg-kk,
+          bots=emk.map(function(m){var rs=m.getClientRects();return rs.length?Math.max(0,Math.min(th,rs[rs.length-1].bottom-tt)):0}),y0=kk?bots[kk-1]:0,y1=kk===n-1?th:bots[kk];
+          eq.style.setProperty('--epm',((y0+(y1-y0)*tq)/th).toFixed(3))}}
       if(story&&!rmo){var r=story.getBoundingClientRect();story.style.setProperty('--tp',Math.min(1,Math.max(0,(vh*.55-r.top)/(r.height-vh*.1))).toFixed(3))}
       if(nodes.length){var ref=vh*.55;nodes.forEach(function(n){var r=n.getBoundingClientRect(),gap=parseFloat(getComputedStyle(n).marginBottom)||0;
         n.style.setProperty('--q',Math.min(1,Math.max(0,(ref-r.top)/(r.height+gap))).toFixed(3));n.classList.toggle('on',ref>r.top)})}};
