@@ -380,25 +380,38 @@ html.js .ab .rv.in{opacity:1;transform:none}
   .ab-who::after{display:block;content:"";position:absolute;left:0;right:0;top:0;height:62svh;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%,rgba(5,4,3,0) 52%,#050403 100%)}
   .ab-who .wrap{position:relative;z-index:2;margin-top:calc(62svh - 64px)}
   .ab-state{padding:2px 0 2px 18px;margin:0;border-left:4px solid var(--ember);background:none}
-  /* oprema: fotografija u maski sa zasečenim uglovima, tekst istog stila kao „kašika” (levo narandžasta linija koja se puni) */
+  /* oprema (bez animacije): fotografije u maski sa zasečenim uglovima */
   .ab-eq-figs{margin:0 16px;-webkit-clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px));clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px))}
   .ab-eq-text{padding:30px 20px 36px 20px}
   .ab-eq .ab-body{font:600 18px/1.5 var(--ui);letter-spacing:-.012em;color:rgba(246,241,234,.96)}
-  .ab-eq mark{border:0;background:none;color:rgba(246,241,234,.6);padding:0;margin:0;text-decoration:none}
-  html.js .ab-eq mark.act{background:none;color:var(--ember)}
-  html.js .ab-eq-text{position:relative;margin:18px 20px 0;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.16);width:auto;background:none}
+  .ab-eq mark{border:0;background:none;color:var(--ember);padding:0;margin:0;text-decoration:none}
+  /* rast: fotografija žara na vrhu, bez zaseka — pretapa se u crnu pozadinu kao kašika; tekst svetao na crnom */
+  .ab-story,.ab-story.ab-lt{background:#050403;color:#f6f1ea}
+  .ab-story{--hl:rgba(255,106,26,.55);padding-bottom:56px}
+  .ab figure.ab-stage{position:relative;top:auto;z-index:1;height:58svh;min-height:0;aspect-ratio:auto;box-shadow:none;-webkit-clip-path:none;clip-path:none;margin:0;background:#050403}
+  .ab figure.ab-stage::after{background:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 22%,rgba(5,4,3,0) 46%,#050403 100%)}
+  .ab-time{position:relative;z-index:2;margin-top:-72px;padding-top:0}
+  .ab-node{font:600 20px/1.5 var(--ui);letter-spacing:-.016em;color:#f6f1ea}
+  .ab-node::before{background:var(--ico) center/25px no-repeat,#17110c;box-shadow:0 0 0 4px #050403,0 0 0 6px rgba(255,255,255,.18)}
+  .ab-node.on::before{background:var(--ico2) center/25px no-repeat,var(--ember);box-shadow:0 0 0 4px #050403,0 6px 20px -4px rgba(255,106,26,.75)}
+  .ab-node:not(:last-child)::after{background:linear-gradient(var(--ember),#ffb066) 0 0/100% calc(var(--q)*100%) no-repeat,rgba(255,255,255,.18)}
+}
+/* oprema (animirana verzija): fotografija ispunjava ekran od vrha, blag toplo-tamni sloj preko nje i pretapanje u crno; tekst svetao na dnu */
+@media (max-width:900px) and (prefers-reduced-motion:no-preference){
+  html.js .ab-eq-pin{display:block;padding:0;height:100svh;height:100dvh}
+  html.js .ab-eq-figs{position:absolute;left:0;right:0;top:0;width:auto;height:74svh;aspect-ratio:auto;flex:none;margin:0;box-shadow:none;-webkit-clip-path:none;clip-path:none;background:#050403}
+  html.js .ab-eq-figs::before,html.js .ab-eq-figs::after{display:none}
+  html.js .ab-eq-figs figure::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(5,4,3,.5) 0%,rgba(5,4,3,.08) 26%,rgba(5,4,3,.22) 46%,rgba(5,4,3,.82) 70%,#050403 90%),linear-gradient(135deg,rgba(255,106,26,.16),rgba(255,106,26,0) 46%)}
+  html.js .ab-eq-figs .b1 img{object-position:40% 50%}
+  html.js .ab-eq-figs .b2 img{object-position:58% 50%}
+  html.js .ab-eq-figs .b3 img{object-position:24% 50%}
+  html.js .ab-eq-text{position:absolute;left:20px;right:20px;bottom:22px;top:auto;width:auto;margin:0;transform:none;z-index:3;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.18);background:none}
   html.js .ab-eq-text::before{display:block;content:"";position:absolute;left:-4px;right:auto;top:0;bottom:auto;width:4px;height:calc(var(--ep,0) * 100%);background:linear-gradient(180deg,#ff5a0a,#ffb347);box-shadow:0 0 12px rgba(255,106,26,.7)}
   html.js .ab-eq-text::after{display:none}
-  html.js .ab-eq .ab-body{font:600 17px/1.48 var(--ui)}
-  html.js .ab-eq-pin{padding-bottom:22px}
-  html.js .ab-eq-figs{margin:0 16px}
-  html.js .ab-eq-figs::before{left:14px;top:14px;width:40px;height:40px}
-  html.js .ab-eq-figs::after{right:14px;bottom:14px;width:40px;height:40px;display:block}
-  html.js .ab-eq-figs figure::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(5,4,3,.5),rgba(5,4,3,0) 45%),linear-gradient(135deg,rgba(255,106,26,.16),transparent 40%)}
-  /* rast: fotografija na vrhu (ne zalepljena), kosa donja ivica; tekst istog stila kao ostala poglavlja */
-  .ab figure.ab-stage{position:relative;top:auto;z-index:auto;height:auto;min-height:0;aspect-ratio:4/3.1;box-shadow:none;-webkit-clip-path:polygon(0 0,100% 0,100% calc(100% - 46px),0 100%);clip-path:polygon(0 0,100% 0,100% calc(100% - 46px),0 100%);margin-bottom:-14px}
-  .ab-time{padding-top:26px}
-  .ab-node{font:600 20px/1.5 var(--ui);letter-spacing:-.016em}
+  html.js .ab-eq .ab-body{font:600 clamp(16px,2.4svh,19px)/1.46 var(--ui);letter-spacing:-.012em}
+  html.js .ab-eq mark{color:rgba(246,241,234,.62);transition:color .5s}
+  html.js .ab-eq mark.act{background:none;color:var(--ember)}
 }
 
 /* ---------- baner strane: niska tamna traka, naslov levo, oštra fotografija sa desne strane koja se stapa sa pozadinom ---------- */
