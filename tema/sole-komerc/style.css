@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.9.4
+Version: 2.9.5
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -117,26 +117,23 @@ html.js .drawer .open>.d-sub,html.js .drawer .open>.d-kids{display:block}
 .drawer .d-top{margin-bottom:6px}
 .drawer .d-top img{height:40px}
 .drawer .close{width:40px;height:40px}
-.drawer .d-main>li>.row>a{padding:7px 0}
+.drawer .d-main>li>.row>a{display:flex;align-items:center;box-sizing:border-box;height:47px;min-height:47px;padding:0}
 .drawer .d-main>li>.row>.tg{flex:0 0 44px}
 .drawer .d-sub{border-left:0;padding:0;margin:4px 0 10px;display:block}
 html.js .drawer .open>.d-sub{display:grid}
 .drawer .d-sub>li{position:relative;border:0;border-top:1px solid rgba(255,255,255,.14);background:none}
 .drawer .d-sub>li:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
 .drawer .d-sub>li>.row{position:relative}
-.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:16px;padding:8px 48px 8px 0;min-height:54px;font:700 16px/1.25 var(--ui);letter-spacing:0;color:#fff}
+.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:16px;box-sizing:border-box;height:47px;min-height:47px;padding:0 48px 0 0;font:700 16px/1.25 var(--ui);letter-spacing:0;color:#fff}
 .drawer .d-sub>li:not(.has-sub)>.row>a.dg{padding-right:8px}
-.drawer a.dg>img{flex:0 0 66px;width:66px;height:45px;object-fit:cover;display:block}
+.drawer a.dg>img{flex:0 0 56px;width:56px;height:38px;object-fit:cover;display:block}
 .drawer a.dg>span{min-width:0}
 .drawer .d-sub>li>.row>.tg{position:absolute;right:0;top:0;bottom:0;flex:none;width:44px;height:auto;color:#bdb4aa}
 .drawer .d-sub>li.open>.row>.tg{color:var(--ember)}
-.drawer .d-kids{margin:0;padding:0 12px 10px 82px;border:0}
+.drawer .d-kids{margin:0;padding:0 12px 10px 72px;border:0}
 .drawer .d-kids a{padding:5px 0;font-size:14px}
 .drawer .d-call{display:flex;justify-content:center;margin-top:14px;background:var(--blue);color:#fff;border-radius:999px;padding:13px;font:700 15px/1 var(--ui)}
 @media (max-height:740px){
-  .drawer .d-main>li>.row>a{padding:4px 0;font-size:14px}
-  .drawer .d-sub>li>.row>a.dg{min-height:48px;padding-top:6px;padding-bottom:6px;font-size:15px}
-  .drawer a.dg>img{flex-basis:58px;width:58px;height:40px}
   .drawer .d-top img{height:32px}
   .drawer .d-top{margin-bottom:2px}
   .drawer .close{width:36px;height:36px}
