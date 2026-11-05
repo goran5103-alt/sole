@@ -7,7 +7,7 @@
   --head:"Manrope","Helvetica Neue",Arial,sans-serif;
   --ui:"Manrope","Helvetica Neue",Arial,sans-serif; --acc:#4da3ff;
   --body:"Manrope","Helvetica Neue",Arial,sans-serif;
-  --hh:76px; --wrap:1220px; --r:0px;
+  --hh:76px; --tbh:44px; --wrap:1220px; --r:0px;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -107,30 +107,31 @@ html.js .drawer .open>.d-sub,html.js .drawer .open>.d-kids{display:block}
 .drawer .d-top{margin-bottom:6px}
 .drawer .d-top img{height:40px}
 .drawer .close{width:40px;height:40px}
-.drawer .d-main>li>.row>a{padding:10px 0}
+.drawer .d-main>li>.row>a{padding:7px 0}
 .drawer .d-main>li>.row>.tg{flex:0 0 44px}
-.drawer .d-sub{border-left:0;padding:0;margin:2px 0 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.drawer .d-sub{border-left:0;padding:0;margin:2px 0 8px;display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
 html.js .drawer .open>.d-sub{display:grid}
 .drawer .d-sub>li{position:relative;border:0;background:rgba(255,255,255,.06)}
-.drawer .d-sub>li.has-sub.open,.drawer .d-sub>li:last-child:nth-child(odd){grid-column:1/-1}
 .drawer .d-sub>li>.row{position:relative}
-.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:9px;padding:5px 30px 5px 5px;min-height:48px;font:700 13px/1.2 var(--ui);letter-spacing:0;color:#fff}
+.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:12px;padding:2px 44px 2px 4px;min-height:36px;font:700 14px/1.2 var(--ui);letter-spacing:0;color:#fff}
 .drawer .d-sub>li:not(.has-sub)>.row>a.dg{padding-right:8px}
-.drawer a.dg>img{flex:0 0 40px;width:40px;height:40px;object-fit:cover;display:block}
+.drawer a.dg>img{flex:0 0 44px;width:44px;height:30px;object-fit:cover;display:block}
 .drawer a.dg>span{min-width:0}
-.drawer .d-sub>li>.row>.tg{position:absolute;right:0;top:0;bottom:0;flex:none;width:30px;height:auto;color:#bdb4aa}
+.drawer .d-sub>li>.row>.tg{position:absolute;right:0;top:0;bottom:0;flex:none;width:40px;height:auto;color:#bdb4aa}
 .drawer .d-sub>li.open>.row>.tg{color:var(--ember)}
-.drawer .d-kids{margin:0;padding:2px 12px 10px 54px;border:0}
-.drawer .d-kids a{padding:6px 0;font-size:14.5px}
-@media (max-height:740px){
-  .drawer .d-main>li>.row>a{padding:7px 0}
-  .drawer .d-sub{gap:4px}
-  .drawer .d-sub>li>.row>a.dg{min-height:40px;padding-top:3px;padding-bottom:3px;font-size:12.5px}
-  .drawer a.dg>img{flex-basis:34px;width:34px;height:34px}
-  .drawer .d-top img{height:34px}
-  .drawer .d-call{margin-top:10px;padding:11px}
-}
+.drawer .d-kids{margin:0;padding:0 12px 8px 62px;border:0}
+.drawer .d-kids a{padding:5px 0;font-size:14px}
 .drawer .d-call{display:flex;justify-content:center;margin-top:14px;background:var(--blue);color:#fff;border-radius:999px;padding:13px;font:700 15px/1 var(--ui)}
+@media (max-height:740px){
+  .drawer .d-main>li>.row>a{padding:4px 0;font-size:14px}
+  .drawer .d-sub>li>.row>a.dg{min-height:30px;padding-top:1px;padding-bottom:1px;font-size:13px}
+  .drawer a.dg>img{flex-basis:38px;width:38px;height:26px}
+  .drawer .d-top img{height:32px}
+  .drawer .d-top{margin-bottom:2px}
+  .drawer .close{width:36px;height:36px}
+  .drawer .d-call{margin-top:8px;padding:10px}
+  .drawer .panel{padding-top:8px;padding-bottom:12px}
+}
 
 /* ---------- naslovna ispod uvoda: tamni početak (nastavak uvoda), pa svetle sekcije ---------- */
 .ab{position:relative;--ember:#ff6a1a;--hl:rgba(255,106,26,.28);font-family:var(--ui)}
@@ -990,7 +991,7 @@ html:not(.js) .gl-thumbs a{opacity:1;flex:1 1 220px}
   .site-head .brand,.site-head .burger{transition:opacity .35s}
   .has-intro.intro-hide-head .site-head:not(.solid) .brand,.has-intro.intro-hide-head .site-head:not(.solid) .burger{opacity:0;pointer-events:none}
   body{font-size:16.5px}
-  :root{--tbh:42px}
+  :root{--tbh:50px}
   .topbar{font-size:9.5px;letter-spacing:.1em}
   .topbar .tb-tag{white-space:normal;line-height:1.35;padding:0}
   .brand img{height:58px}
