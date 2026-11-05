@@ -925,6 +925,12 @@ html:not(.js) .gl-thumbs a{opacity:1;flex:1 1 220px}
 }
 
 
+/* telefon: galerija (slajder) je uvek poslednji element strane, ispod svih ostalih sekcija (samo vizuelni redosled; sadržaj i uređivač ostaju isti) */
+@media (max-width:900px){
+  main:has(>.showcase){display:flex;flex-direction:column}
+  main:has(>.showcase)>.showcase{order:99}
+}
+
 /* ---------- podnožje ---------- */
 .foot{position:relative;background:#08141f;color:#aab8c6;padding-block:clamp(60px,7vw,100px) 26px;margin-top:0;overflow:hidden}
 .foot::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--ember) 0 22%,var(--blue) 22% 100%)}

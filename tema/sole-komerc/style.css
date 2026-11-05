@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.9.3
+Version: 2.9.4
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -934,6 +934,12 @@ html:not(.js) .gl-thumbs a{opacity:1;flex:1 1 220px}
   .pay li,.pay li.sp6,.pay li.sp4,.pay li.sp3,.pay li.sp2{grid-column:span 12}
 }
 
+
+/* telefon: galerija (slajder) je uvek poslednji element strane, ispod svih ostalih sekcija (samo vizuelni redosled; sadržaj i uređivač ostaju isti) */
+@media (max-width:900px){
+  main:has(>.showcase){display:flex;flex-direction:column}
+  main:has(>.showcase)>.showcase{order:99}
+}
 
 /* ---------- podnožje ---------- */
 .foot{position:relative;background:#08141f;color:#aab8c6;padding-block:clamp(60px,7vw,100px) 26px;margin-top:0;overflow:hidden}
