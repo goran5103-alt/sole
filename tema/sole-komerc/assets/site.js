@@ -48,17 +48,12 @@
       addEventListener('wheel',function(e){if(e.ctrlKey||!e.deltaY)return;var n=performance.now();
         if(busy||n-lastW<160){lastW=n;e.preventDefault();return}
         var to=target(e.deltaY>0?1:-1);if(to===null)return;lastW=n;e.preventDefault();go(to)},{passive:false});
-      /* telefon: kad se prst podigne i skrol se smiri, ekran se „zalepi” na najbližu od dve sekcije (smer prevlačenja odlučuje) */
+      /* telefon: sistemsko „zalepljivanje” ekrana (CSS scroll-snap) samo u zoni od kraja uvoda do početka sekcije opreme; jedan potez prsta = jedan ceo ekran */
       if(matchMedia('(pointer: coarse)').matches){
-        var touching=false,lastY=scrollY,dirv=0,tm=0;
-        var settle=function(){if(touching||busy)return;var st=stops();if(st.length<2)return;var y=scrollY,vh=innerHeight,A=st[0],B=st[1],to=null;
-          if(dirv>=0){if(y>=A-vh*.6&&y<A-4)to=A;else if(y>=A-4&&y<B-4)to=(y-A)>(B-A)*.12?B:A}
-          else{if(y>B+4&&y<=B+vh*.6)to=B;else if(y>A+4&&y<=B+4)to=(y-A)<(B-A)*.88?A:B}
-          if(to!==null&&Math.abs(to-y)>3)go(to)};
-        addEventListener('touchstart',function(){touching=true;clearTimeout(tm)},{passive:true});
-        var up=function(){touching=false;clearTimeout(tm);tm=setTimeout(settle,160)};
-        addEventListener('touchend',up,{passive:true});addEventListener('touchcancel',up,{passive:true});
-        addEventListener('scroll',function(){var d=scrollY-lastY;if(Math.abs(d)>=1){dirv=d>0?1:-1;lastY=scrollY}clearTimeout(tm);tm=setTimeout(settle,160)},{passive:true});
+        var de2=document.documentElement,zon=false,eqS=document.querySelector('.ab-eq'),tz=0;
+        var zone=function(){tz=0;if(!eqS)return;var vh=innerHeight,y=scrollY,A=sA.getBoundingClientRect().top+y,E2=eqS.getBoundingClientRect().top+y,on=y>=A-vh-2&&y<=E2+3;
+          if(on!==zon){zon=on;de2.classList.toggle('snapz',on)}};
+        addEventListener('scroll',function(){if(!tz)tz=requestAnimationFrame(zone)},{passive:true});addEventListener('resize',zone);zone();
       }
     }
   }
