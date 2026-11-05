@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.8.3
+Version: 2.9.0
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -112,6 +112,14 @@ html:not(.js) .has-intro .site-head{background:rgba(18,16,14,.9)}
 .drawer .d-kids a{display:block;font:500 15px/1.35 var(--ui);padding:7px 0;color:#a9a39b}
 html.js .drawer .d-sub,html.js .drawer .d-kids{display:none}
 html.js .drawer .open>.d-sub,html.js .drawer .open>.d-kids{display:block}
+.drawer .d-sub{padding-left:0;border-left:0;margin-bottom:10px}
+.drawer .d-sub>li{border-top:1px solid rgba(255,255,255,.1)}
+.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:14px;padding:9px 0;font:700 16px/1.25 var(--ui);color:#fff}
+.drawer a.dg>img{flex:0 0 88px;width:88px;height:64px;object-fit:cover;display:block}
+.drawer a.dg>span{min-width:0}
+.drawer .d-sub>li>.row>.tg{flex:0 0 52px}
+.drawer .d-sub>li.open>.row>.tg{color:var(--ember)}
+.drawer .d-kids{margin-left:102px;padding-left:12px}
 .drawer .d-call{display:flex;justify-content:center;margin-top:22px;background:var(--blue);color:#fff;border-radius:999px;padding:15px;font:700 15px/1 var(--ui)}
 
 /* ---------- naslovna ispod uvoda: tamni početak (nastavak uvoda), pa svetle sekcije ---------- */
@@ -406,6 +414,27 @@ html.js .ab .rv.in{opacity:1;transform:none}
   .ab-node::before{background:var(--ico) center/25px no-repeat,#17110c;box-shadow:0 0 0 4px #050403,0 0 0 6px rgba(255,255,255,.18)}
   .ab-node.on::before{background:var(--ico2) center/25px no-repeat,var(--ember);box-shadow:0 0 0 4px #050403,0 6px 20px -4px rgba(255,106,26,.75)}
   .ab-node:not(:last-child)::after{background:linear-gradient(var(--ember),#ffb066) 0 0/100% calc(var(--q)*100%) no-repeat,rgba(255,255,255,.18)}
+  /* logistika, kvalitet i vrste uglja: ista scena (fotografija sa pretapanjem u crno, razmak, tekst sa narandžastom linijom) */
+  .ab-log,.ab-bl,.ab-types{background:#050403;color:#f6f1ea;--hl:rgba(255,106,26,.55)}
+  .ab-log{display:block;min-height:0;padding:0 0 56px}
+  .ab-log::after{display:none}
+  .ab-log .ab-band,.ab-isoimg{position:relative!important;inset:auto;height:50svh;aspect-ratio:auto;margin:0;width:100%;clip-path:none;-webkit-clip-path:none;border-radius:0}
+  .ab-log .ab-band::after,.ab-isoimg::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--scene-fade)}
+  .ab-log-card{max-width:none;margin:var(--scene-gap) 20px 0;padding:2px 0 2px 18px;border-left:4px solid var(--ember);background:none;box-shadow:none}
+  .ab-log-card .ab-body,.ab-iso .ab-body{font:600 18px/1.5 var(--ui);letter-spacing:-.012em;color:rgba(246,241,234,.96)}
+  .ab-note{border-top:1px solid rgba(255,255,255,.2);color:rgba(246,241,234,.7)}
+  .ab-iso-grid{display:flex;flex-direction:column}
+  .ab-isoimg{order:-1}
+  .ab-iso-text{padding:var(--scene-gap) 20px 56px}
+  .ab-iso-text::before{width:64px;height:64px;margin-bottom:20px;box-shadow:none}
+  .ab-iso .ab-body{padding-left:18px;border-left:4px solid var(--ember)}
+  .ab-cert{margin-top:24px!important;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);box-shadow:none;color:#f6f1ea}
+  .ab-types{padding:56px 0 64px}
+  .ab-types h2{color:#f6f1ea}
+  .type{color:#f6f1ea;border-top-color:rgba(255,255,255,.14)}
+  .type:last-child{border-bottom-color:rgba(255,255,255,.14)}
+  .type .t{color:#f6f1ea}
+  .type .kc{color:rgba(246,241,234,.62)}
 }
 /* oprema (animirana verzija): fotografija ispunjava ekran od vrha, blag toplo-tamni sloj preko nje i pretapanje u crno; tekst svetao na dnu */
 @media (max-width:900px) and (prefers-reduced-motion:no-preference){

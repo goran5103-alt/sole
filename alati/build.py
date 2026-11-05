@@ -123,7 +123,10 @@ def header(slug):
             items.append(f'<li class="has-mega{" on" if on else ""}"><a href="{rel(slug, s)}">{E(lab)}<i class="caret"></i></a>{mega(slug)}</li>')
         else:
             items.append('<li' + (' class="on"' if on else '') + f'><a href="{rel(slug, s)}">{E(lab)}</a></li>')
-    # mobilni meni (isti redosled i isti nazivi kao mega meni)
+    # mobilni meni (isti redosled i isti nazivi kao mega meni); grupe uglja su odmah otvorene, kao spisak sa slikama
+    def dpic(g):
+        im = mega_img(g)
+        return f'<img src="{A(im)}" alt="" loading="lazy" decoding="async">' if im else ''
     n = [0]
     def tg(label_id):
         return f'<button class="tg" type="button" aria-expanded="%s" aria-labelledby="{label_id}"></button>'
@@ -135,10 +138,10 @@ def header(slug):
                 if ch:
                     n[0] += 1; gid = f'dl{n[0]}'; gopen = g in cur
                     inner = ''.join(f'<li><a href="{rel(slug, c)}">{E(title(c))}</a></li>' for c in ch)
-                    sub.append(f'<li class="has-sub{" open" if gopen else ""}"><div class="row"><a id="{gid}" href="{rel(slug, g)}">{E(title(g))}</a>' + tg(gid) % ('true' if gopen else 'false') + f'</div><ul class="d-kids">{inner}</ul></li>')
+                    sub.append(f'<li class="has-sub{" open" if gopen else ""}"><div class="row"><a class="dg has-pic" id="{gid}" href="{rel(slug, g)}">{dpic(g)}<span>{E(title(g))}</span></a>' + tg(gid) % ('true' if gopen else 'false') + f'</div><ul class="d-kids">{inner}</ul></li>')
                 else:
-                    sub.append(f'<li><div class="row"><a href="{rel(slug, g)}">{E(title(g))}</a></div></li>')
-            n[0] += 1; uid = f'dl{n[0]}'; uopen = s in cur
+                    sub.append(f'<li><div class="row"><a class="dg has-pic" href="{rel(slug, g)}">{dpic(g)}<span>{E(title(g))}</span></a></div></li>')
+            n[0] += 1; uid = f'dl{n[0]}'; uopen = True
             dm.append(f'<li class="has-sub{" open" if uopen else ""}"><div class="row"><a id="{uid}" href="{rel(slug, s)}">{E(lab)}</a>' + tg(uid) % ('true' if uopen else 'false') + f'</div><ul class="d-sub">{"".join(sub)}</ul></li>')
         else:
             dm.append(f'<li><div class="row"><a href="{rel(slug, s)}">{E(lab)}</a></div></li>')

@@ -41,9 +41,14 @@ function sole_stranica_slika( $post_id ) {
 	return $cache[ $post_id ];
 }
 
-/* Mega meni: levo grupe, desno podstavke i slika grupe.
-   Slika grupe: adresa slike iz medijateke upisana u polje „Opis” stavke menija (Izgled → Meniji; znak „-” znači bez slike);
-   ako je polje prazno, uzima se prva slika strane. */
+/* Slika grupe: adresa slike iz medijateke upisana u polje „Opis” stavke menija (Izgled → Meniji; znak „-” znači bez slike);
+   ako je polje prazno, uzima se prva slika strane. Koriste je mega meni i mobilni meni. */
+function sole_grupa_slika( $g ) {
+	$opis = trim( (string) $g->description );
+	return '-' === $opis ? '' : ( '' !== $opis ? $opis : sole_stranica_slika( $g->object_id ) );
+}
+
+/* Mega meni: levo grupe, desno podstavke i slika grupe. */
 function sole_mega( $it, $cur ) {
 	$ids = array();
 	foreach ( $it->kids as $g ) $ids[] = (int) $g->object_id;
@@ -51,8 +56,7 @@ function sole_mega( $it, $cur ) {
 	$rows = '';
 	foreach ( $it->kids as $g ) {
 		$has  = ! empty( $g->kids );
-		$opis = trim( (string) $g->description );
-		$img  = '-' === $opis ? '' : ( '' !== $opis ? $opis : sole_stranica_slika( $g->object_id ) );
+		$img  = sole_grupa_slika( $g );
 		$kids = '';
 		foreach ( $g->kids as $c ) $kids .= '<li>' . sole_a( $c ) . '</li>';
 		$pic  = $img ? '<a class="pic" href="' . esc_url( $g->url ) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url( $img ) . '" alt="" loading="lazy" decoding="async"></a>' : '';
@@ -91,20 +95,23 @@ function sole_drawer_nav() {
 		if ( $it->kids ) {
 			$sub = '';
 			foreach ( $it->kids as $g ) {
+				$img = sole_grupa_slika( $g );
+				$pic = $img ? '<img src="' . esc_url( $img ) . '" alt="" loading="lazy" decoding="async">' : '';
+				$lnk = '<a class="dg' . ( $img ? ' has-pic' : '' ) . '" href="' . esc_url( $g->url ) . '"';
 				if ( $g->kids ) {
 					$n++;
 					$gid = 'dl' . $n;
 					$gop = sole_item_on( $g, $cur );
 					$inner = '';
 					foreach ( $g->kids as $c ) $inner .= '<li>' . sole_a( $c ) . '</li>';
-					$sub .= '<li class="has-sub' . ( $gop ? ' open' : '' ) . '"><div class="row"><a id="' . $gid . '" href="' . esc_url( $g->url ) . '">' . esc_html( $g->title ) . '</a>' . sole_toggle( $gid, $gop ) . '</div><ul class="d-kids">' . $inner . '</ul></li>';
+					$sub .= '<li class="has-sub' . ( $gop ? ' open' : '' ) . '"><div class="row">' . $lnk . ' id="' . $gid . '">' . $pic . '<span>' . esc_html( $g->title ) . '</span></a>' . sole_toggle( $gid, $gop ) . '</div><ul class="d-kids">' . $inner . '</ul></li>';
 				} else {
-					$sub .= '<li><div class="row">' . sole_a( $g ) . '</div></li>';
+					$sub .= '<li><div class="row">' . $lnk . '>' . $pic . '<span>' . esc_html( $g->title ) . '</span></a></div></li>';
 				}
 			}
 			$n++;
 			$uid = 'dl' . $n;
-			$uop = sole_item_on( $it, $cur );
+			$uop = true;   /* grupe uglja su u mobilnom meniju odmah otvorene (spisak sa slikama) */
 			$out .= '<li class="has-sub' . ( $uop ? ' open' : '' ) . '"><div class="row"><a id="' . $uid . '" href="' . esc_url( $it->url ) . '">' . esc_html( $it->title ) . '</a>' . sole_toggle( $uid, $uop ) . '</div><ul class="d-sub">' . $sub . '</ul></li>';
 		} else {
 			$out .= '<li><div class="row">' . sole_a( $it ) . '</div></li>';
