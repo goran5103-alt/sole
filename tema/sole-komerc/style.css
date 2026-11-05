@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.9.0
+Version: 2.9.1
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -30,7 +30,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset
 h1,h2,h3,h4{font-family:var(--head);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
 
 /* ---------- traka i zaglavlje ---------- */
-.topbar{position:relative;z-index:62;background:var(--blue);color:#fff;font:700 11.5px/1 var(--ui);letter-spacing:.16em}
+.topbar{position:relative;z-index:62;background:#08141f radial-gradient(70% 420% at 82% 50%,rgba(30,115,190,.3),transparent 70%);box-shadow:inset 0 -2px 0 var(--blue);color:#fff;font:700 11.5px/1 var(--ui);letter-spacing:.16em}
 .topbar .wrap{display:flex;align-items:center;justify-content:center;gap:16px;min-height:var(--tbh,36px)}
 .topbar .tb-tag{text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.7;padding-top:1px}
 .site-head{position:sticky;top:0;z-index:60;background:rgba(18,16,14,.74);backdrop-filter:saturate(1.4) blur(18px);-webkit-backdrop-filter:saturate(1.4) blur(18px);border-bottom:1px solid rgba(255,255,255,.07);transition:background .3s,border-color .3s}
@@ -112,15 +112,35 @@ html:not(.js) .has-intro .site-head{background:rgba(18,16,14,.9)}
 .drawer .d-kids a{display:block;font:500 15px/1.35 var(--ui);padding:7px 0;color:#a9a39b}
 html.js .drawer .d-sub,html.js .drawer .d-kids{display:none}
 html.js .drawer .open>.d-sub,html.js .drawer .open>.d-kids{display:block}
-.drawer .d-sub{padding-left:0;border-left:0;margin-bottom:10px}
-.drawer .d-sub>li{border-top:1px solid rgba(255,255,255,.1)}
-.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:14px;padding:9px 0;font:700 16px/1.25 var(--ui);color:#fff}
-.drawer a.dg>img{flex:0 0 88px;width:88px;height:64px;object-fit:cover;display:block}
+/* grupe uglja u mobilnom meniju: zbijene pločice u dve kolone (mala fotografija + naziv), da meni stane u jedan ekran; grupa sa podstavkama se otvara preko cele širine */
+.drawer .panel{padding:12px 20px 18px;padding-top:max(12px,env(safe-area-inset-top,0px))}
+.drawer .d-top{margin-bottom:6px}
+.drawer .d-top img{height:40px}
+.drawer .close{width:40px;height:40px}
+.drawer .d-main>li>.row>a{padding:10px 0}
+.drawer .d-main>li>.row>.tg{flex:0 0 44px}
+.drawer .d-sub{border-left:0;padding:0;margin:2px 0 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+html.js .drawer .open>.d-sub{display:grid}
+.drawer .d-sub>li{position:relative;border:0;background:rgba(255,255,255,.06)}
+.drawer .d-sub>li.has-sub.open,.drawer .d-sub>li:last-child:nth-child(odd){grid-column:1/-1}
+.drawer .d-sub>li>.row{position:relative}
+.drawer .d-sub>li>.row>a.dg{display:flex;align-items:center;gap:9px;padding:5px 30px 5px 5px;min-height:48px;font:700 13px/1.2 var(--ui);letter-spacing:0;color:#fff}
+.drawer .d-sub>li:not(.has-sub)>.row>a.dg{padding-right:8px}
+.drawer a.dg>img{flex:0 0 40px;width:40px;height:40px;object-fit:cover;display:block}
 .drawer a.dg>span{min-width:0}
-.drawer .d-sub>li>.row>.tg{flex:0 0 52px}
+.drawer .d-sub>li>.row>.tg{position:absolute;right:0;top:0;bottom:0;flex:none;width:30px;height:auto;color:#bdb4aa}
 .drawer .d-sub>li.open>.row>.tg{color:var(--ember)}
-.drawer .d-kids{margin-left:102px;padding-left:12px}
-.drawer .d-call{display:flex;justify-content:center;margin-top:22px;background:var(--blue);color:#fff;border-radius:999px;padding:15px;font:700 15px/1 var(--ui)}
+.drawer .d-kids{margin:0;padding:2px 12px 10px 54px;border:0}
+.drawer .d-kids a{padding:6px 0;font-size:14.5px}
+@media (max-height:740px){
+  .drawer .d-main>li>.row>a{padding:7px 0}
+  .drawer .d-sub{gap:4px}
+  .drawer .d-sub>li>.row>a.dg{min-height:40px;padding-top:3px;padding-bottom:3px;font-size:12.5px}
+  .drawer a.dg>img{flex-basis:34px;width:34px;height:34px}
+  .drawer .d-top img{height:34px}
+  .drawer .d-call{margin-top:10px;padding:11px}
+}
+.drawer .d-call{display:flex;justify-content:center;margin-top:14px;background:var(--blue);color:#fff;border-radius:999px;padding:13px;font:700 15px/1 var(--ui)}
 
 /* ---------- naslovna ispod uvoda: tamni početak (nastavak uvoda), pa svetle sekcije ---------- */
 .ab{position:relative;--ember:#ff6a1a;--hl:rgba(255,106,26,.28);font-family:var(--ui)}
@@ -391,13 +411,14 @@ html.js .ab .rv.in{opacity:1;transform:none}
 
 /* ===== telefon: usklađivanje poglavlja (kašika, oprema, rast) sa tamnim scenama ===== */
 @media (max-width:900px){
-  :root{--scene-h:62svh;--scene-fade:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%,rgba(5,4,3,0) 52%,#050403 100%);--scene-gap:30px}
+  :root{--scene-h:62svh;--scene-fade:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%,rgba(5,4,3,0) 52%,#050403 100%);--scene-gap:30px;--scene-pb:56px}
   /* kašika: fotografija ide od vrha (zaglavlje je prekriva), bez crne trake; kašika je u kadru; tekst na dnu preko meke tamne zavese */
-  .ab-who{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;padding:0 0 38px}
-  .ab figure.ab-bgimg{position:absolute!important;left:0;right:0;top:0;bottom:auto;width:auto;height:var(--scene-h);min-height:0;order:0;margin:0}
+  .ab-who{position:relative;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:0 0 var(--scene-pb)}
+  .ab figure.ab-bgimg{position:relative!important;inset:auto;left:auto;right:auto;top:auto;width:auto;flex:1 1 auto;height:auto;min-height:var(--scene-h);order:0;margin:0}
   .ab figure.ab-bgimg>img{position:absolute;inset:0;object-position:57% 50%}
-  .ab-who::after{display:block;content:"";position:absolute;left:0;right:0;top:0;height:var(--scene-h);z-index:1;pointer-events:none;background:var(--scene-fade)}
-  .ab-who .wrap{position:relative;z-index:2;margin-top:calc(var(--scene-h) + var(--scene-gap) - 64px)}
+  .ab-who::after{display:none}
+  .ab-who .ab-bgimg::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--scene-fade);box-shadow:none;border-radius:0}
+  .ab-who .wrap{position:relative;z-index:2;margin-top:var(--scene-gap)}
   .ab-state{padding:2px 0 2px 18px;margin:0;border-left:4px solid var(--ember);background:none}
   /* oprema (bez animacije): fotografije u maski sa zasečenim uglovima */
   .ab-eq-figs{margin:0 16px;-webkit-clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px));clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px))}
@@ -406,9 +427,11 @@ html.js .ab .rv.in{opacity:1;transform:none}
   .ab-eq mark{border:0;background:none;color:var(--ember);padding:0;margin:0;text-decoration:none}
   /* rast: fotografija žara na vrhu, bez zaseka — pretapa se u crnu pozadinu kao kašika; tekst svetao na crnom */
   .ab-story,.ab-story.ab-lt{background:#050403;color:#f6f1ea}
-  .ab-story{--hl:rgba(255,106,26,.55);padding-bottom:56px}
+  .ab-story{--hl:rgba(255,106,26,.55);padding-bottom:var(--scene-pb)}
   .ab figure.ab-stage{position:relative;top:auto;z-index:1;height:var(--scene-h);min-height:0;aspect-ratio:auto;box-shadow:none;-webkit-clip-path:none;clip-path:none;margin:0;background:#050403}
   .ab figure.ab-stage::after{background:var(--scene-fade)}
+  .ab-story-grid{gap:0}
+  .ab-node:last-child{margin-bottom:0!important}
   .ab-time{position:relative;z-index:2;margin-top:0;padding-top:var(--scene-gap)}
   .ab-node{font:600 20px/1.5 var(--ui);letter-spacing:-.016em;color:#f6f1ea}
   .ab-node::before{background:var(--ico) center/25px no-repeat,#17110c;box-shadow:0 0 0 4px #050403,0 0 0 6px rgba(255,255,255,.18)}
@@ -416,20 +439,20 @@ html.js .ab .rv.in{opacity:1;transform:none}
   .ab-node:not(:last-child)::after{background:linear-gradient(var(--ember),#ffb066) 0 0/100% calc(var(--q)*100%) no-repeat,rgba(255,255,255,.18)}
   /* logistika, kvalitet i vrste uglja: ista scena (fotografija sa pretapanjem u crno, razmak, tekst sa narandžastom linijom) */
   .ab-log,.ab-bl,.ab-types{background:#050403;color:#f6f1ea;--hl:rgba(255,106,26,.55)}
-  .ab-log{display:block;min-height:0;padding:0 0 56px}
+  .ab-log{display:block;min-height:0;padding:0 0 var(--scene-pb)}
   .ab-log::after{display:none}
   .ab-log .ab-band,.ab-isoimg{position:relative!important;inset:auto;height:50svh;aspect-ratio:auto;margin:0;width:100%;clip-path:none;-webkit-clip-path:none;border-radius:0}
   .ab-log .ab-band::after,.ab-isoimg::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--scene-fade)}
   .ab-log-card{max-width:none;margin:var(--scene-gap) 20px 0;padding:2px 0 2px 18px;border-left:4px solid var(--ember);background:none;box-shadow:none}
   .ab-log-card .ab-body,.ab-iso .ab-body{font:600 18px/1.5 var(--ui);letter-spacing:-.012em;color:rgba(246,241,234,.96)}
   .ab-note{border-top:1px solid rgba(255,255,255,.2);color:rgba(246,241,234,.7)}
-  .ab-iso-grid{display:flex;flex-direction:column}
+  .ab-iso-grid{display:flex;flex-direction:column;gap:0}
   .ab-isoimg{order:-1}
-  .ab-iso-text{padding:var(--scene-gap) 20px 56px}
+  .ab-iso-text{padding:var(--scene-gap) 20px var(--scene-pb)}
   .ab-iso-text::before{width:64px;height:64px;margin-bottom:20px;box-shadow:none}
   .ab-iso .ab-body{padding-left:18px;border-left:4px solid var(--ember)}
-  .ab-cert{margin-top:24px!important;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);box-shadow:none;color:#f6f1ea}
-  .ab-types{padding:56px 0 64px}
+  .ab-cert{margin-top:24px!important;padding:22px 20px;background:#e9e8e5;border:1px solid #d4d2cd;box-shadow:inset 0 0 0 6px #e9e8e5,inset 0 0 0 7px #cfccc6;color:var(--ink);font:600 16px/1.65 var(--ui);--hl:rgba(255,106,26,.3)}
+  .ab-types{padding:var(--scene-pb) 0}
   .ab-types h2{color:#f6f1ea}
   .type{color:#f6f1ea;border-top-color:rgba(255,255,255,.14)}
   .type:last-child{border-bottom-color:rgba(255,255,255,.14)}
@@ -446,7 +469,7 @@ html.js .ab .rv.in{opacity:1;transform:none}
   html.js .ab-eq-figs .b1 img{object-position:40% 50%}
   html.js .ab-eq-figs .b2 img{object-position:58% 50%}
   html.js .ab-eq-figs .b3 img{object-position:24% 50%}
-  html.js .ab-eq-text{position:absolute;left:20px;right:20px;bottom:22px;top:auto;width:auto;margin:0;transform:none;z-index:3;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.18);background:none}
+  html.js .ab-eq-text{position:absolute;left:20px;right:20px;bottom:var(--scene-pb);top:auto;width:auto;margin:0;transform:none;z-index:3;padding:2px 0 2px 18px;border:0;border-left:4px solid rgba(255,255,255,.18);background:none}
   html.js .ab-eq-text::before{display:block;content:"";position:absolute;left:-4px;right:auto;top:0;bottom:auto;width:4px;height:calc(var(--ep,0) * 100%);background:linear-gradient(180deg,#ff5a0a,#ffb347);box-shadow:0 0 12px rgba(255,106,26,.7)}
   html.js .ab-eq-text::after{display:none}
   html.js .ab-eq .ab-body{font:600 clamp(16px,2.4svh,19px)/1.46 var(--ui);letter-spacing:-.012em}
