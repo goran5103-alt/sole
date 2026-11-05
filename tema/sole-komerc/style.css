@@ -3,7 +3,7 @@ Theme Name: Sole Komerc
 Theme URI: https://sole-komerc.solekomerc.co.rs
 Author: IT Expert
 Description: Tema za Sole Komerc bez page buildera. Tekst i slike strana uređuju se ITX dodatkom, ostalo kroz Opcije teme i WordPress menije.
-Version: 2.8.2
+Version: 2.8.3
 Requires at least: 6.0
 Requires PHP: 7.4
 Text Domain: sole-komerc
@@ -383,12 +383,13 @@ html.js .ab .rv.in{opacity:1;transform:none}
 
 /* ===== telefon: usklađivanje poglavlja (kašika, oprema, rast) sa tamnim scenama ===== */
 @media (max-width:900px){
+  :root{--scene-h:62svh;--scene-fade:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%,rgba(5,4,3,0) 52%,#050403 100%);--scene-gap:30px}
   /* kašika: fotografija ide od vrha (zaglavlje je prekriva), bez crne trake; kašika je u kadru; tekst na dnu preko meke tamne zavese */
   .ab-who{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;padding:0 0 38px}
-  .ab figure.ab-bgimg{position:absolute!important;left:0;right:0;top:0;bottom:auto;width:auto;height:62svh;min-height:0;order:0;margin:0}
+  .ab figure.ab-bgimg{position:absolute!important;left:0;right:0;top:0;bottom:auto;width:auto;height:var(--scene-h);min-height:0;order:0;margin:0}
   .ab figure.ab-bgimg>img{position:absolute;inset:0;object-position:57% 50%}
-  .ab-who::after{display:block;content:"";position:absolute;left:0;right:0;top:0;height:62svh;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 24%,rgba(5,4,3,0) 52%,#050403 100%)}
-  .ab-who .wrap{position:relative;z-index:2;margin-top:calc(62svh - 64px)}
+  .ab-who::after{display:block;content:"";position:absolute;left:0;right:0;top:0;height:var(--scene-h);z-index:1;pointer-events:none;background:var(--scene-fade)}
+  .ab-who .wrap{position:relative;z-index:2;margin-top:calc(var(--scene-h) + var(--scene-gap) - 64px)}
   .ab-state{padding:2px 0 2px 18px;margin:0;border-left:4px solid var(--ember);background:none}
   /* oprema (bez animacije): fotografije u maski sa zasečenim uglovima */
   .ab-eq-figs{margin:0 16px;-webkit-clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px));clip-path:polygon(0 0,calc(100% - 36px) 0,100% 36px,100% 100%,36px 100%,0 calc(100% - 36px))}
@@ -398,9 +399,9 @@ html.js .ab .rv.in{opacity:1;transform:none}
   /* rast: fotografija žara na vrhu, bez zaseka — pretapa se u crnu pozadinu kao kašika; tekst svetao na crnom */
   .ab-story,.ab-story.ab-lt{background:#050403;color:#f6f1ea}
   .ab-story{--hl:rgba(255,106,26,.55);padding-bottom:56px}
-  .ab figure.ab-stage{position:relative;top:auto;z-index:1;height:58svh;min-height:0;aspect-ratio:auto;box-shadow:none;-webkit-clip-path:none;clip-path:none;margin:0;background:#050403}
-  .ab figure.ab-stage::after{background:linear-gradient(180deg,rgba(5,4,3,.55) 0%,rgba(5,4,3,0) 22%,rgba(5,4,3,0) 46%,#050403 100%)}
-  .ab-time{position:relative;z-index:2;margin-top:-72px;padding-top:0}
+  .ab figure.ab-stage{position:relative;top:auto;z-index:1;height:var(--scene-h);min-height:0;aspect-ratio:auto;box-shadow:none;-webkit-clip-path:none;clip-path:none;margin:0;background:#050403}
+  .ab figure.ab-stage::after{background:var(--scene-fade)}
+  .ab-time{position:relative;z-index:2;margin-top:0;padding-top:var(--scene-gap)}
   .ab-node{font:600 20px/1.5 var(--ui);letter-spacing:-.016em;color:#f6f1ea}
   .ab-node::before{background:var(--ico) center/25px no-repeat,#17110c;box-shadow:0 0 0 4px #050403,0 0 0 6px rgba(255,255,255,.18)}
   .ab-node.on::before{background:var(--ico2) center/25px no-repeat,var(--ember);box-shadow:0 0 0 4px #050403,0 6px 20px -4px rgba(255,106,26,.75)}
